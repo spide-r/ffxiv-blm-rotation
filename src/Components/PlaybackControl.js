@@ -147,6 +147,7 @@ function ResourceOverrideDisplay(props) {
 		str = props.override.type;
 		if (props.override.type === ResourceType.LeyLines) str += " (" + (props.override.enabled ? "enabled" : "disabled") + ")";
 		if (props.rscInfo.maxValue > 1) str += " (amount: " + props.override.stacks + ")";
+		//if (this.state.paradoxInfo) info = (isF1B1 && para) ? this.state.paradoxInfo : this.state.statusList[i];
 		if (props.rscInfo.maxTimeout >= 0) str += " drops in " + props.override.timeTillFullOrDrop + "s";
 	}
 	str += " ";

@@ -99,7 +99,6 @@ const skillInfos = [
 	new SkillInfo(SkillName.Amplifier, ResourceType.cd_Amplifier, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
-
 	new SkillInfo(SkillName.Addle, ResourceType.cd_Addle, Aspect.Other, false,
 		0, 0, 0, 0.1),
 	new SkillInfo(SkillName.Swiftcast, ResourceType.cd_Swiftcast, Aspect.Other, false,

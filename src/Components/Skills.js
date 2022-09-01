@@ -258,12 +258,13 @@ class SkillsWindow extends React.Component {
 
 	render() {
 		let skillButtons = [];
-		/*let para = controller.getResourceValue({rscType: ResourceType.Paradox});
 		for (let i = 0; i < displayedSkills.length; i++) {
-			let isF1B1 = displayedSkills[i] === SkillName.Fire || displayedSkills[i] === SkillName.Blizzard;
-			let skillName = (isF1B1 && para) ? SkillName.Paradox : displayedSkills[i];
+			let skillName = displayedSkills[i];
 			let info = undefined;
-			if (this.state.paradoxInfo) info = (isF1B1 && para) ? this.state.paradoxInfo : this.state.statusList[i];
+			//skills are not highlighting due to changes here
+			//todo review this
+			// if (this.state.paradoxInfo) info = (isF1B1 && para) ? this.state.paradoxInfo : this.state.statusList[i];
+
 			let btn = <SkillButton
 				key={i}
 				highlight={info ? info.highlight : false}
@@ -273,7 +274,7 @@ class SkillsWindow extends React.Component {
 				/>
 			skillButtons.push(btn);
 		}
-*/
+
 		let waitUntilHelp = <Help topic="waitUntilInputFormat" content={<div>
 			<div className="paragraph">Examples:</div>
 			<div className="paragraph">
