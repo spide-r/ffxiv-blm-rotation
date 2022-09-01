@@ -45,7 +45,6 @@ export class GameState {
 		this.resources.set(ResourceType.LeyLines, new Resource(ResourceType.LeyLines, 1, 0));
 		this.resources.set(ResourceType.Sharpcast, new Resource(ResourceType.Sharpcast, 1, 0));
 		this.resources.set(ResourceType.Enochian, new Resource(ResourceType.Enochian, 1, 0));
-		this.resources.set(ResourceType.Paradox, new Resource(ResourceType.Paradox, 1, 0));
 		this.resources.set(ResourceType.Firestarter, new Resource(ResourceType.Firestarter, 1, 0));
 		this.resources.set(ResourceType.Thundercloud, new Resource(ResourceType.Thundercloud, 1, 0));
 		this.resources.set(ResourceType.ThunderDoTTick, new Resource(ResourceType.ThunderDoTTick, 1, 0));
@@ -194,23 +193,14 @@ export class GameState {
 		let af = this.resources.get(ResourceType.AstralFire);
 		let ui = this.resources.get(ResourceType.UmbralIce);
 		let uh = this.resources.get(ResourceType.UmbralHeart);
-		let paradox = this.resources.get(ResourceType.Paradox);
 		if (rscType===ResourceType.AstralFire)
 		{
 			af.gain(numStacks);
-			if (ui.available(3) && uh.available(3)) {
-				paradox.gain(1);
-				addLog(LogCategory.Event, "Paradox! (UI -> AF)", this.getDisplayTime());
-			}
 			ui.consume(ui.availableAmount());
 		}
 		else if (rscType===ResourceType.UmbralIce)
 		{
 			ui.gain(numStacks);
-			if (af.available(3)) {
-				paradox.gain(1);
-				addLog(LogCategory.Event, "Paradox! (AF -> UI)", this.getDisplayTime());
-			}
 			af.consume(af.availableAmount());
 		}
 	}
@@ -320,7 +310,7 @@ export class GameState {
 
 				// actually deduct resources (except some special ones like Paradox and Flare that deduct resources in effect fn)
 				if (skillName !== SkillName.Flare) {
-					if (!(skillName===SkillName.Paradox && game.getIceStacks()>0)) game.resources.get(ResourceType.Mana).consume(capturedManaCost);
+					if (!(game.getIceStacks()>0)) game.resources.get(ResourceType.Mana).consume(capturedManaCost);
 					if (uhConsumption > 0) game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);
 				}
 
@@ -374,12 +364,6 @@ export class GameState {
 
 			// animation lock
 			game.resources.takeResourceLock(ResourceType.NotAnimationLocked, game.config.getSkillAnimationLock(skillName));
-		}
-
-		// Paradox made instant via UI
-		if (skillName === SkillName.Paradox && this.getIceStacks() > 0) {
-			instantCast(this, undefined);
-			return;
 		}
 
 		// Swiftcast
@@ -522,13 +506,11 @@ export class GameState {
 		let capturedCastTime = this.captureSpellCastTime(skill.info.aspect, this.config.adjustedCastTime(skill.info.baseCastTime));
 		let instantCastAvailable = this.resources.get(ResourceType.Triplecast).available(1)
 			|| this.resources.get(ResourceType.Swiftcast).available(1)
-			|| (skillName===SkillName.Paradox && this.getIceStacks()>0)
 			|| (skillName===SkillName.Thunder3 && this.resources.get(ResourceType.Thundercloud).available(1))
 			|| (skillName===SkillName.Fire3 && this.resources.get(ResourceType.Firestarter).available((1)));
 		let currentMana = this.resources.get(ResourceType.Mana).availableAmount();
 		let notBlocked = timeTillAvailable <= Debug.epsilon;
 		let enoughMana = capturedManaCost <= currentMana
-			|| (skillName===SkillName.Paradox && this.getIceStacks()>0)
 			|| (skillName===SkillName.Thunder3 && this.resources.get(ResourceType.Thundercloud).available(1))
 			|| (skillName===SkillName.Fire3 && this.resources.get(ResourceType.Firestarter).available((1)));
 		let reqsMet = skill.available();
@@ -544,9 +526,7 @@ export class GameState {
 		// conditions that make the skills show proc
 		let highlight = false;
 
-		if (skillName === SkillName.Paradox) {// paradox
-			highlight = true;
-		} else if (skillName === SkillName.Fire3) {// F3P
+		if (skillName === SkillName.Fire3) {// F3P
 			if (this.resources.get(ResourceType.Firestarter).available(1)) highlight = true;
 		} else if (skillName === SkillName.Thunder3) {// T3P
 			if (this.resources.get(ResourceType.Thundercloud).available(1)) highlight = true;

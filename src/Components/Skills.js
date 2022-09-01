@@ -65,7 +65,6 @@ skillIcons.set(SkillName.Xenoglossy, require("./Asset/xenoglossy.png"));
 skillIcons.set(SkillName.HighFire2, require("./Asset/highFire2.png"));
 skillIcons.set(SkillName.HighBlizzard2, require("./Asset/highBlizzard2.png"));
 skillIcons.set(SkillName.Amplifier, require("./Asset/amplifier.png"));
-skillIcons.set(SkillName.Paradox, require("./Asset/paradox.png"));
 skillIcons.set(SkillName.Addle, require("./Asset/addle.png"));
 skillIcons.set(SkillName.Swiftcast, require("./Asset/swiftcast.png"));
 skillIcons.set(SkillName.LucidDreaming, require("./Asset/lucidDreaming.png"));
@@ -172,7 +171,6 @@ class SkillsWindow extends React.Component {
 		updateSkillButtons = ((statusList)=>{
 			this.setState({
 				statusList: statusList,
-				paradoxInfo: controller.getSkillInfo({game: controller.getDisplayedGame(), skillName: SkillName.Paradox}),
 			});
 		}).bind(this);
 
@@ -244,7 +242,6 @@ class SkillsWindow extends React.Component {
 
 		this.state = {
 			statusList: undefined,
-			paradoxInfo: undefined,
 			tooltipContent: "",
 			waitTime: "1",
 			waitSince: WaitSince.Now,
@@ -256,13 +253,12 @@ class SkillsWindow extends React.Component {
 			statusList: displayedSkills.map(sn=>{
 				return controller.getSkillInfo({game: controller.getDisplayedGame(), skillName: sn});
 			}),
-			paradoxInfo: controller.getSkillInfo({game: controller.getDisplayedGame(), skillName: SkillName.Paradox}),
 		});
 	}
 
 	render() {
 		let skillButtons = [];
-		let para = controller.getResourceValue({rscType: ResourceType.Paradox});
+		/*let para = controller.getResourceValue({rscType: ResourceType.Paradox});
 		for (let i = 0; i < displayedSkills.length; i++) {
 			let isF1B1 = displayedSkills[i] === SkillName.Fire || displayedSkills[i] === SkillName.Blizzard;
 			let skillName = (isF1B1 && para) ? SkillName.Paradox : displayedSkills[i];
@@ -277,7 +273,7 @@ class SkillsWindow extends React.Component {
 				/>
 			skillButtons.push(btn);
 		}
-
+*/
 		let waitUntilHelp = <Help topic="waitUntilInputFormat" content={<div>
 			<div className="paragraph">Examples:</div>
 			<div className="paragraph">

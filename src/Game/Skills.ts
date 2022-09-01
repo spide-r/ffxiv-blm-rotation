@@ -98,8 +98,7 @@ const skillInfos = [
 		3, 800, 140, 1.158),
 	new SkillInfo(SkillName.Amplifier, ResourceType.cd_Amplifier, Aspect.Other, false,
 		0, 0, 0, 0.1),
-	new SkillInfo(SkillName.Paradox, ResourceType.cd_GCD, Aspect.Other, true,
-		2.5, 1600, 500, 0.624),
+
 
 	new SkillInfo(SkillName.Addle, ResourceType.cd_Addle, Aspect.Other, false,
 		0, 0, 0, 0.1),
@@ -675,29 +674,6 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 		));
 
-		// Paradox
-		skillsList.set(SkillName.Paradox, new Skill(SkillName.Paradox,
-			() => {
-				return game.resources.get(ResourceType.Paradox).available(1);
-			},
-			(game, node) => {
-				game.castSpell(SkillName.Paradox, (cap: SkillCaptureCallbackInfo) => {
-					game.resources.get(ResourceType.Paradox).consume(1);
-					// enochian (refresh only
-					if (game.hasEnochian()) {
-						game.startOrRefreshEnochian();
-					}
-					if (game.getIceStacks() > 0) {
-						game.resources.get(ResourceType.UmbralIce).gain(1);
-					}
-					if (game.getFireStacks() > 0) {// firestarter proc
-						game.resources.get(ResourceType.AstralFire).gain(1);
-						potentiallyGainFirestarter(game);
-					}
-				}, (app: SkillApplicationCallbackInfo) => {
-				}, node);
-			}
-		));
 
 		// Addle
 		addResourceAbility(SkillName.Addle, ResourceType.Addle, 10);

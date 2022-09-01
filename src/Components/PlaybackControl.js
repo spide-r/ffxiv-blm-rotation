@@ -146,7 +146,7 @@ function ResourceOverrideDisplay(props) {
 	} else {
 		str = props.override.type;
 		if (props.override.type === ResourceType.LeyLines) str += " (" + (props.override.enabled ? "enabled" : "disabled") + ")";
-		if (props.rscInfo.maxValue > 1 || props.override.type === ResourceType.Paradox) str += " (amount: " + props.override.stacks + ")";
+		if (props.rscInfo.maxValue > 1) str += " (amount: " + props.override.stacks + ")";
 		if (props.rscInfo.maxTimeout >= 0) str += " drops in " + props.override.timeTillFullOrDrop + "s";
 	}
 	str += " ";
@@ -341,7 +341,7 @@ export class Config extends React.Component {
 			return;
 		}
 
-		if ((info.maxValue > 1 || rscType===ResourceType.Paradox) &&
+		if ((info.maxValue > 1) &&
 			(inputOverrideStacks < 0 || inputOverrideStacks > info.maxValue))
 		{
 			window.alert("invalid input amount (must be in range [0, " + info.maxValue + "])");
