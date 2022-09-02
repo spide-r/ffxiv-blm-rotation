@@ -29,14 +29,15 @@ export let displayedSkills = [
 	SkillName.Xenoglossy,
 	SkillName.HighFire2,
 	SkillName.HighBlizzard2,
-	SkillName.Amplifier,
+	// SkillName.Amplifier, // amp doesn't exist at 80
 	//SkillName.Paradox, // display paradox at F1/B1
 	SkillName.Addle,
 	SkillName.Swiftcast,
 	SkillName.LucidDreaming,
 	SkillName.Surecast,
 	SkillName.Tincture,
-	SkillName.Sprint
+	SkillName.Sprint,
+	SkillName.FlareStar
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
@@ -72,7 +73,7 @@ skillIcons.set(SkillName.LucidDreaming, require("./Asset/lucidDreaming.png"));
 skillIcons.set(SkillName.Surecast, require("./Asset/surecast.png"));
 skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
-skillIcons.set(SkillName.FlareStar, require("./Asset/sprint.png"))
+skillIcons.set(SkillName.FlareStar, require("./Asset/paradox.png"))
 
 let setSkillInfoText = (text)=>{};
 function ProgressCircle(props={

@@ -312,6 +312,7 @@ class Controller {
 		// enemy buffs
 		let enemyBuffsData = {
 			DoTCountdown: game.resources.timeTillReady(ResourceType.ThunderDoT),
+			FSDoTCountdown: game.resources.timeTillReady(ResourceType.FlareStarDoT),
 			addleCountdown: game.resources.timeTillReady(ResourceType.Addle)
 		};
 		// self buffs

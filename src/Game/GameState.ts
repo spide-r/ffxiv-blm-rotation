@@ -431,10 +431,6 @@ export class GameState {
 		X = 2.083333...
 		this will set the recast to 5s which should affect the gcd
 		 */
-		if(skillName === SkillName.FlareStar){
-			cd.overrideNextRecastTime(5)
-
-		}
 		// recast
 		cd.useStack(this);
 		//cd.setRecastTimeScale(recastTimeScale)

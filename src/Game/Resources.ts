@@ -77,25 +77,16 @@ export class Resource {
 export class CoolDown extends Resource {
 	readonly #cdPerStack: number;
 	#recastTimeScale: number;
-	overridenRecast = 0;
 	constructor(type: ResourceType, cdPerStack: number, maxStacks: number, initialNumStacks: number) {
 		super(type, maxStacks * cdPerStack, initialNumStacks * cdPerStack);
 		this.#cdPerStack = cdPerStack;
 		this.#recastTimeScale = 1; // effective for the next stack (i.e. 0.85 if captured LL)
 	}
 	currentStackCd() {
-		if(this.overridenRecast !== 0){
-			let newRecast = this.overridenRecast;
-			this.overridenRecast = 0;
-			return newRecast;
-		}
 		return this.#cdPerStack * this.#recastTimeScale;
 
 	}
 	stacksAvailable() { return Math.floor((this.availableAmount() + Debug.epsilon) / this.#cdPerStack); }
-	overrideNextRecastTime(time: number){
-		this.overridenRecast = time;
-	}
 	useStack(game: GameState) {
 		this.consume(this.#cdPerStack);
 		this.#reCaptureRecastTimeScale(game);

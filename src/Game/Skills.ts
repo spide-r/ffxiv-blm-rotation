@@ -83,8 +83,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.Triplecast, ResourceType.cd_Triplecast, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
-	new SkillInfo(SkillName.FlareStar, ResourceType.cd_FlareStar, Aspect.Other, true,
-		0, 9000, 300, 0.1),
+	new SkillInfo(SkillName.FlareStar, ResourceType.cd_GCD, Aspect.Other, true,
+		5, 9000, 1000, 0.1), //flare star will always take 5s
+	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
 
 	new SkillInfo(SkillName.Foul, ResourceType.cd_GCD, Aspect.Other, true,
 		0, 0, 560, 1.158),
