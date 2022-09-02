@@ -51,9 +51,6 @@ export function IntroSection(props: {}) {
 						and you will not be able to use skills. Click on somewhere else on the timeline to cancel.
 					</li>
 				</ul>
-				<div className={"paragraph"}>
-					<span style={{color: "darkolivegreen", cursor: "pointer"}}><u>[these]</u></span> are file download links. You can right click on them to choose save location.
-				</div>
 				<div className="paragraph">
 					Most edits are automatically saved in your browser cache, so it's generally okay to refresh the page
 					and
@@ -80,32 +77,20 @@ export function IntroSection(props: {}) {
 			defaultShow={false}
 			title={"About this tool"}
 			content={<div>
-				<div className="paragraph">This is a FFXIV black mage simulator & rotation planner.</div>
+				<div className="paragraph">This is a FFXIV black mage simulator & rotation planner built for Save the Queen areas.</div>
 				<div className="paragraph">
-					This tool is developed by <b>miyehn (Ellyn Waterford @ Sargatanas)</b> with generous help from their
-					black mage friends and players on The Balance discord. Big shout out to <b>Galahad Donnadieu
-					@ Exodus</b> for teaching me BLM from the ground up, testing the tool, and help collecting data.
-					Also thank <b>Turtle</b> from The Balance for their detailed feedback and bug reports.
+					This tool is developed by <b>A'zhek Silvaire @ Zalera</b> mostly based off of miyehn's fantastic simulator.
 				</div>
 				<div className="paragraph">
-					If you have questions,
-					encountered bugs, or would like to suggest features, you can find me on discord
-					(miyehn#5857) or via email (rainduym@gmail.com). In case of sending me a bug report, attaching the
-					fight record (download "fight.txt" from the right or name it anything else) would be
-					very helpful.
-				</div>
-				<div className="paragraph">Also, consider contributing! I didn't even clear P3S or P4S so it's hard for
-					me to make timeline presets for those fights...
+					Please contact Spider#5879 if you have any questions, comments, or concerns.
 				</div>
 				<div className="paragraph">Some links:</div>
 				<ul>
-					<li><a href={"https://github.com/miyehn/ffxiv-blm-rotation"}>Github repository</a></li>
+					<li><a href={"https://github.com/miyehn/ffxiv-blm-rotation"}> Github repository this was forked from</a></li>
 					<li><a href={"https://na.finalfantasyxiv.com/jobguide/blackmage/"}>Official FFXIV black mage job
 						guide</a></li>
-					<li><a href={"https://discord.com/channels/277897135515762698/592613187245834260"}>
-						BLM resources channel on The Balance (make sure you've already joined the server)</a></li>
 				</ul>
-				<div className="paragraph"><Expandable title={"Implementation notes"} defaultShow={false} content={
+				<div className="paragraph"><Expandable title={"Original Implementation notes"} defaultShow={false} content={
 					<div>
 						<div className="paragraph">
 							Galahad found that slidecast window size is linear with respect to cast time. I made a <a href={"https://github.com/miyehn/ffxiv-blm-rotation/tree/main/scripts"}>script</a>, parsed
