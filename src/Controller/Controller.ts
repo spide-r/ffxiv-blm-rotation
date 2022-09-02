@@ -289,6 +289,7 @@ class Controller {
 			astralFire: game.getFireStacks(),
 			umbralIce: game.getIceStacks(),
 			umbralHearts: game.resources.get(ResourceType.UmbralHeart).availableAmount(),
+			paradox: game.resources.get(ResourceType.Paradox).availableAmount(),
 			polyglotCountdown: eno.available(1) ? game.resources.timeTillReady(ResourceType.Polyglot) : 30,
 			polyglotStacks: game.resources.get(ResourceType.Polyglot).availableAmount()
 		};
@@ -459,6 +460,11 @@ class Controller {
 
 		if (bWaitFirst) {
 			this.#requestTick({deltaTime: status.timeTillAvailable, suppressLog: bSuppressLog});
+			// automatically turn F1/B1 into paradox if conditions are met
+			if ((skillName === SkillName.Fire || skillName === SkillName.Blizzard)
+				&& this.game.resources.get(ResourceType.Paradox).available(1)) {
+				skillName = SkillName.Paradox;
+			}
 			status = this.game.getSkillAvailabilityStatus(skillName);
 			this.lastAttemptedSkill = "";
 		}

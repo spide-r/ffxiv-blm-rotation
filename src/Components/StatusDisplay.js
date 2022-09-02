@@ -271,6 +271,7 @@ function ResourcesDisplay(props) {
 		astralFire: 0,
 		umbralIce: 0,
 		umbralHearts: 0,
+		paradox: 0,
 		polyglotCountdown: 30,
 		polyglotStacks: 0
 	}
@@ -302,6 +303,11 @@ function ResourcesDisplay(props) {
 		color={"#95dae3"}
 		currentStacks={data.umbralHearts}
 		maxStacks={3}/>;
+	let paradox = <ResourceCounter
+		name={"paradox"}
+		color={"#d953ee"}
+		currentStacks={data.paradox}
+		maxStacks={1}/>;
 	let polyTimer = <ResourceBar
 		name={"poly timer"}
 		color={"#d5bbf1"}
