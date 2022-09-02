@@ -61,8 +61,8 @@ export class GameConfig {
         }
     }
 
-    adjustedDoTPotency(inPotency : number) {
-        let dotStrength = (1000 + Math.floor((this.spellSpeed - 400) * 130 / 1900.0)) * 0.001;
+    adjustedDoTPotency(inPotency : number) { //991 is the sps you get in bozja on BLM - haste only affects GCD and not the actual dot tick (allagan studies)
+        let dotStrength = (1000 + Math.floor((991 - 400) * 130 / 1900.0)) * 0.001;
         return inPotency * dotStrength;
     }
 

@@ -77,13 +77,25 @@ export class Resource {
 export class CoolDown extends Resource {
 	readonly #cdPerStack: number;
 	#recastTimeScale: number;
+	overridenRecast = 0;
 	constructor(type: ResourceType, cdPerStack: number, maxStacks: number, initialNumStacks: number) {
 		super(type, maxStacks * cdPerStack, initialNumStacks * cdPerStack);
 		this.#cdPerStack = cdPerStack;
 		this.#recastTimeScale = 1; // effective for the next stack (i.e. 0.85 if captured LL)
 	}
-	currentStackCd() { return this.#cdPerStack * this.#recastTimeScale; }
+	currentStackCd() {
+		if(this.overridenRecast !== 0){
+			let newRecast = this.overridenRecast;
+			this.overridenRecast = 0;
+			return newRecast;
+		}
+		return this.#cdPerStack * this.#recastTimeScale;
+
+	}
 	stacksAvailable() { return Math.floor((this.availableAmount() + Debug.epsilon) / this.#cdPerStack); }
+	overrideNextRecastTime(time: number){
+		this.overridenRecast = time;
+	}
 	useStack(game: GameState) {
 		this.consume(this.#cdPerStack);
 		this.#reCaptureRecastTimeScale(game);
@@ -223,6 +235,7 @@ resourceInfos.set(ResourceType.Paradox, { isCoolDown: false, defaultValue: 0, ma
 resourceInfos.set(ResourceType.Firestarter, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 });
 resourceInfos.set(ResourceType.Thundercloud, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 40 });
 resourceInfos.set(ResourceType.ThunderDoT, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 }); // buff display only
+resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
 resourceInfos.set(ResourceType.Manaward, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 20 });
 resourceInfos.set(ResourceType.Triplecast, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: 15 });
 resourceInfos.set(ResourceType.Addle, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });

@@ -83,6 +83,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.Triplecast, ResourceType.cd_Triplecast, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
+	new SkillInfo(SkillName.FlareStar, ResourceType.cd_FlareStar, Aspect.Other, true,
+		0, 9000, 300, 0.1),
+
 	new SkillInfo(SkillName.Foul, ResourceType.cd_GCD, Aspect.Other, true,
 		0, 0, 560, 1.158),
 	new SkillInfo(SkillName.Despair, ResourceType.cd_GCD, Aspect.Fire, true,
@@ -298,6 +301,51 @@ export class SkillsList extends Map<SkillName, Skill> {
 					}, Color.Thunder);
 			}
 		}
+
+		// called at the time of APPLICATION (not snapshot)
+		let applyFsDot = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
+			// define stuff
+			let recurringFsTick = (remainingTicks: number, capturedTickPotency: number)=> {
+				if (remainingTicks===0) return;
+				game.resources.addResourceEvent(
+					ResourceType.FlareStarDoTTick,
+					"recurring flare star tick " + (numTicks+1-remainingTicks) + "/" + numTicks, 3, (rsc: Resource) =>{
+						game.reportPotency(node, capturedTickPotency, "DoT");
+						game.dealDamage(capturedTickPotency, "DoT");
+						recurringFsTick(remainingTicks - 1, capturedTickPotency);
+					}, Color.Text);
+			};
+			let dot = game.resources.get(ResourceType.FlareStarDoT);
+			let tick = game.resources.get(ResourceType.FlareStarDoTTick);
+			if (tick.pendingChange) {
+				// if already has thunder applied; cancel the remaining ticks now.
+				dot.removeTimer();
+				tick.removeTimer();
+			}
+			// order of events:
+			dot.gain(1);
+			game.resources.addResourceEvent(ResourceType.FlareStarDoT, "drop DoT", 30, (dot: Resource)=>{
+				dot.consume(1);
+			}, Color.Text);
+			recurringFsTick(numTicks, capturedTickPotency);
+		};
+
+		// Flare star
+		skillsList.set(SkillName.FlareStar, new Skill(SkillName.FlareStar,
+			() => {
+				return true;
+			},
+			(game, node) => {
+
+					let capturedTickPotency: number;
+					game.castSpell(SkillName.FlareStar, (cap: SkillCaptureCallbackInfo) => {
+						capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
+					}, (app: SkillApplicationCallbackInfo) => {
+						applyFsDot(game, node, capturedTickPotency, 20); //tick 20 times
+					}, node);
+
+			}
+		));
 
 		// called at the time of APPLICATION (not snapshot)
 		let applyThunderDoT = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {

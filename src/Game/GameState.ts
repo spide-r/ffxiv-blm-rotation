@@ -50,6 +50,8 @@ export class GameState {
 		this.resources.set(ResourceType.Thundercloud, new Resource(ResourceType.Thundercloud, 1, 0));
 		this.resources.set(ResourceType.ThunderDoTTick, new Resource(ResourceType.ThunderDoTTick, 1, 0));
 		this.resources.set(ResourceType.ThunderDoT, new Resource(ResourceType.ThunderDoT, 1, 0));
+		this.resources.set(ResourceType.FlareStarDoTTick, new Resource(ResourceType.FlareStarDoTTick, 1, 0))
+		this.resources.set(ResourceType.FlareStarDoT, new Resource(ResourceType.FlareStarDoT, 1, 0))
 		this.resources.set(ResourceType.Manaward, new Resource(ResourceType.Manaward, 1, 0));
 		this.resources.set(ResourceType.Triplecast, new Resource(ResourceType.Triplecast, 3, 0));
 		this.resources.set(ResourceType.Addle, new Resource(ResourceType.Addle, 1, 0));
@@ -59,6 +61,7 @@ export class GameState {
 		this.resources.set(ResourceType.Surecast, new Resource(ResourceType.Surecast, 1, 0));
 		this.resources.set(ResourceType.Tincture, new Resource(ResourceType.Tincture, 1, 0));
 		this.resources.set(ResourceType.Sprint, new Resource(ResourceType.Sprint, 1, 0));
+
 
 		this.resources.set(ResourceType.Movement, new Resource(ResourceType.Movement, 1, 1));
 		this.resources.set(ResourceType.NotAnimationLocked, new Resource(ResourceType.NotAnimationLocked, 1, 1));
@@ -324,6 +327,8 @@ export class GameState {
 					if (uhConsumption > 0) game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);
 				}
 
+
+
 				if (capturedManaCost > 0)
 					addLog(LogCategory.Event, skillName + " cost " + capturedManaCost + "MP", game.getDisplayTime());
 
@@ -416,6 +421,20 @@ export class GameState {
 			}
 		}));
 
+
+		/*
+		this probably wont work since haste gear will affect the gcd
+		set recast timescale to 2.083333 if using flare star.
+		sps is 991 which is a base gcd of 2.4
+		2.4 * X = 5.0
+		X = 5.0 / 2.4
+		X = 2.083333...
+		this will set the recast to 5s which should affect the gcd
+		 */
+		if(skillName === SkillName.FlareStar){
+			cd.overrideNextRecastTime(5)
+
+		}
 		// recast
 		cd.useStack(this);
 		//cd.setRecastTimeScale(recastTimeScale)

@@ -46,6 +46,14 @@ export const enum SkillName {
 	Surecast = "Surecast",
 	Tincture = "Tincture",
 	Sprint = "Sprint",
+	// Bozja //
+	FlareStar = "Flare Star",
+
+
+
+
+
+
 
 	Never = "Never",
 }
@@ -75,6 +83,8 @@ export const enum ResourceType {
 	Thundercloud = "Thundercloud", // [0, 1]
 	ThunderDoT = "ThunderDoT", // [0, 1] is actually used for display timing only
 	ThunderDoTTick = "ThunderDoTTick", // [0, 1]
+	FlareStarDoT = "FlareStarDoT",
+	FlareStarDoTTick = "FlareStarDoTTick",
 	Manaward = "Manaward", // [0, 1]
 	Addle = "Addle", // [0, 1]
 	Swiftcast = "Swiftcast", // [0, 1]
@@ -91,6 +101,7 @@ export const enum ResourceType {
 
 	// CDs
 	cd_GCD = "cd_GCD", // [0, Constant.gcd]
+	cd_FlareStar = "cd_FlareStar",
 	cd_Transpose = "cd_Transpose", // [0, 1x]
 	cd_Sharpcast = "cd_Sharpcast", // [0, 2x] // TODO = figure out how this works
 	cd_LeyLines = "cd_LeyLines", // [0, 1x]
@@ -106,6 +117,5 @@ export const enum ResourceType {
 	cd_Surecast = "cd_Surecast", // [0, 1x]
 	cd_Tincture = "cd_Tincture", // [0, 1x]
 	cd_Sprint = "cd_Sprint", // [0, 1x]
-
 	Never = "Never",
 }

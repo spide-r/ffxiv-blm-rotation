@@ -72,6 +72,7 @@ skillIcons.set(SkillName.LucidDreaming, require("./Asset/lucidDreaming.png"));
 skillIcons.set(SkillName.Surecast, require("./Asset/surecast.png"));
 skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
+skillIcons.set(SkillName.FlareStar, require("./Asset/sprint.png"))
 
 let setSkillInfoText = (text)=>{};
 function ProgressCircle(props={
