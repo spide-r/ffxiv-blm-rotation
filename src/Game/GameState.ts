@@ -310,7 +310,7 @@ export class GameState {
 
 				// actually deduct resources (except some special ones like Paradox and Flare that deduct resources in effect fn)
 				if (skillName !== SkillName.Flare) {
-					//todo this
+					//todo this might be broken
 					// if (!(skillName===SkillName.Paradox && game.getIceStacks()>0)) game.resources.get(ResourceType.Mana).consume(capturedManaCost);
 					if (!(game.getIceStacks()>0)) game.resources.get(ResourceType.Mana).consume(capturedManaCost);
 					if (uhConsumption > 0) game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);

@@ -170,7 +170,7 @@ class SkillsWindow extends React.Component {
 		super(props);
 		updateSkillButtons = ((statusList)=>{
 			this.setState({
-				statusList: statusList,
+				statusList: statusList
 			});
 		}).bind(this);
 
@@ -252,15 +252,20 @@ class SkillsWindow extends React.Component {
 		this.setState({
 			statusList: displayedSkills.map(sn=>{
 				return controller.getSkillInfo({game: controller.getDisplayedGame(), skillName: sn});
-			}),
+			})
 		});
 	}
 
 	render() {
 		let skillButtons = [];
+		let asdf = controller.getResourceValue({rscType: ResourceType.Sprint});
+		let asdffff = controller.getSkillInfo({game: controller.getDisplayedGame(), skillName: SkillName.Sprint});
+
 		for (let i = 0; i < displayedSkills.length; i++) {
+			console.log("Skill: " + i)
+			console.log(this.state)
 			let skillName = displayedSkills[i];
-			let info = undefined;
+			let info = this.state.statusList[i];
 			//skills are not highlighting due to changes here
 			//todo review this
 			// if (this.state.paradoxInfo) info = (isF1B1 && para) ? this.state.paradoxInfo : this.state.statusList[i];
