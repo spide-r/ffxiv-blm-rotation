@@ -48,6 +48,7 @@ export const enum SkillName {
 	Sprint = "Sprint",
 	// Bozja //
 	FlareStar = "Flare Star",
+	EtherKit = "Ether Kit",
 
 
 
@@ -93,6 +94,7 @@ export const enum ResourceType {
 	Surecast = "Surecast", // [0, 1]
 	Tincture = "Tincture", // [0, 1]
 	Sprint = "Sprint", // [0, 1]
+	EtherKit = "Ether Kit", //[0, 3]
 
 	// special
 	Movement = "Movement", // [0, 1]
@@ -109,6 +111,7 @@ export const enum ResourceType {
 	cd_BetweenTheLines = "cd_BetweenTheLines", // [0, 1x]
 	cd_AetherialManipulation = "cd_AetherialManipulation", // [0, 1x]
 	cd_Triplecast = "cd_Triplecast", // [0, 2x]
+	cd_EtherKit = "cd_Etherkit",
 	cd_Manafont = "cd_Manafont", // [0, 1x]
 	cd_Amplifier = "cd_Amplifier", // [0, 1x]
 	cd_Addle = "cd_Addle", // [0, 1x]

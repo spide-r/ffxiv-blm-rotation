@@ -235,6 +235,7 @@ resourceInfos.set(ResourceType.LucidDreaming, { isCoolDown: false, defaultValue:
 resourceInfos.set(ResourceType.Surecast, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
 resourceInfos.set(ResourceType.Tincture, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 });
 resourceInfos.set(ResourceType.Sprint, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
+resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});
 
 // CDs
 resourceInfos.set(ResourceType.cd_GCD, { isCoolDown: true, maxStacks: 1, cdPerStack: 2.5 });
@@ -245,6 +246,7 @@ resourceInfos.set(ResourceType.cd_Manaward, { isCoolDown: true, maxStacks: 1, cd
 resourceInfos.set(ResourceType.cd_BetweenTheLines, { isCoolDown: true, maxStacks: 1, cdPerStack: 3 });
 resourceInfos.set(ResourceType.cd_AetherialManipulation, { isCoolDown: true, maxStacks: 1, cdPerStack: 10 });
 resourceInfos.set(ResourceType.cd_Triplecast, { isCoolDown: true, maxStacks: 2, cdPerStack: 60 });
+resourceInfos.set(ResourceType.cd_EtherKit, { isCoolDown: true, maxStacks: 1, cdPerStack: 30 });
 resourceInfos.set(ResourceType.cd_Manafont, { isCoolDown: true, maxStacks: 1, cdPerStack: 120 });
 resourceInfos.set(ResourceType.cd_Amplifier, { isCoolDown: true, maxStacks: 1, cdPerStack: 120 });
 resourceInfos.set(ResourceType.cd_Addle, { isCoolDown: true, maxStacks: 1, cdPerStack: 90 });

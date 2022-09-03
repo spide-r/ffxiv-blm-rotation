@@ -37,7 +37,9 @@ export let displayedSkills = [
 	SkillName.Surecast,
 	SkillName.Tincture,
 	SkillName.Sprint,
-	SkillName.FlareStar
+	// Bozja Stuff
+	SkillName.FlareStar,
+	SkillName.EtherKit
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
@@ -74,6 +76,7 @@ skillIcons.set(SkillName.Surecast, require("./Asset/surecast.png"));
 skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
 skillIcons.set(SkillName.FlareStar, require("./Asset/paradox.png"))
+skillIcons.set(SkillName.EtherKit, require("./Asset/tincture.png"))
 
 let setSkillInfoText = (text)=>{};
 function ProgressCircle(props={

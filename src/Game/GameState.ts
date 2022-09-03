@@ -62,6 +62,8 @@ export class GameState {
 		this.resources.set(ResourceType.Tincture, new Resource(ResourceType.Tincture, 1, 0));
 		this.resources.set(ResourceType.Sprint, new Resource(ResourceType.Sprint, 1, 0));
 
+		this.resources.set(ResourceType.EtherKit, new Resource(ResourceType.EtherKit, 9999, 0));
+
 
 		this.resources.set(ResourceType.Movement, new Resource(ResourceType.Movement, 1, 1));
 		this.resources.set(ResourceType.NotAnimationLocked, new Resource(ResourceType.NotAnimationLocked, 1, 1));
@@ -77,6 +79,7 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_BetweenTheLines, new CoolDown(ResourceType.cd_BetweenTheLines, 3, 1, 1));
 		this.cooldowns.set(ResourceType.cd_AetherialManipulation, new CoolDown(ResourceType.cd_AetherialManipulation, 10, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Triplecast, new CoolDown(ResourceType.cd_Triplecast, 60, 2, 2));
+		this.cooldowns.set(ResourceType.cd_EtherKit, new CoolDown(ResourceType.cd_EtherKit, 30, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Manafont, new CoolDown(ResourceType.cd_Manafont, 120, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Amplifier, new CoolDown(ResourceType.cd_Amplifier, 120, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Addle, new CoolDown(ResourceType.cd_Addle, 90, 1, 1));
@@ -323,8 +326,28 @@ export class GameState {
 
 				// actually deduct resources (except some special ones like Paradox and Flare that deduct resources in effect fn)
 				if (skillName !== SkillName.Flare) {
-					if (!(skillName===SkillName.Paradox && game.getIceStacks()>0)) game.resources.get(ResourceType.Mana).consume(capturedManaCost);
-					if (uhConsumption > 0) game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);
+					if (!(skillName===SkillName.Paradox && game.getIceStacks()>0)){ //oops i fucked something here maybe
+						game.resources.get(ResourceType.Mana).consume(capturedManaCost);
+					}
+					if (uhConsumption > 0){
+						game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);
+					}
+
+					if(game.resources.get(ResourceType.EtherKit).available(1)){ //ether kit available
+						console.log("Ether kit available")
+						if(game.resources.get(ResourceType.Mana).availableAmount() < 2000){
+							console.log("mana now below 2000 - adding mp")
+							//burn etherkit - add 5000 MP
+							game.resources.get(ResourceType.EtherKit).consume(1);
+							if(game.resources.get(ResourceType.EtherKit).availableAmount() === 0){
+								game.resources.get(ResourceType.EtherKit).removeTimer();
+							}
+							game.resources.get(ResourceType.Mana).gain(5000);
+
+						}
+
+					}
+
 				}
 
 
@@ -405,6 +428,7 @@ export class GameState {
 			}
 			return;
 		}
+
 
 		// there are no triplecast charges. cast and apply effect
 

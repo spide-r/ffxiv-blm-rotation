@@ -52,10 +52,12 @@ function ResourceCounter(props) {
 }
 const buffIcons = new Map();
 buffIcons.set(ResourceType.Triplecast, require("./Asset/buff_triplecast.png"));
+buffIcons.set(ResourceType.EtherKit, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Sharpcast, require("./Asset/buff_sharpcast.png"));
 buffIcons.set(ResourceType.Firestarter, require("./Asset/buff_firestarter.png"));
 buffIcons.set(ResourceType.Thundercloud, require("./Asset/buff_thundercloud.png"));
 buffIcons.set(ResourceType.ThunderDoTTick, require("./Asset/buff_thunder3.png"));
+buffIcons.set(ResourceType.FlareStarDoTTick, require("./Asset/buff_addle.png"));
 buffIcons.set(ResourceType.LeyLines, require("./Asset/buff_leyLines.png"));
 buffIcons.set(ResourceType.Manaward, require("./Asset/buff_manaward.png"));
 buffIcons.set(ResourceType.Addle, require("./Asset/buff_addle.png"));
@@ -96,9 +98,18 @@ function BuffsDisplay(props) {
 		lucidDreamingCountdown: 0,
 		surecastCountdown: 0,
 		tinctureCountdown: 0,
-		sprintCountdown: 0
+		sprintCountdown: 0,
+		etherKitCountdown: 0
 	};
 	let buffs = [];
+	buffs.push({
+		rscType: ResourceType.EtherKit,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.etherKitCountdown.toFixed(2),
+		className: data.etherKitCountdown > 0 ? "" : "hidden"
+	});
 	buffs.push({
 		rscType: ResourceType.LeyLines,
 		onSelf: true,
@@ -198,6 +209,7 @@ function EnemyBuffsDisplay(props)
 {
 	let data = (props && props.data) ? props.data : {
 		DoTCountdown: 0,
+		FSDoTCountdown: 0,
 		addleCountdown: 0
 	};
 	let buffs = [];
@@ -207,6 +219,13 @@ function EnemyBuffsDisplay(props)
 		stacks:1,
 		timeRemaining: data.DoTCountdown.toFixed(2),
 		className: data.DoTCountdown > 0 ? "" : "hidden"
+	});
+	buffs.push({
+		rscType: ResourceType.FlareStarDoTTick,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.FSDoTCountdown.toFixed(2),
+		className: data.FSDoTCountdown > 0 ? "" : "hidden"
 	});
 	buffs.push({
 		rscType: ResourceType.Addle,

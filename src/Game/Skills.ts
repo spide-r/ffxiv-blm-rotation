@@ -86,6 +86,10 @@ const skillInfos = [
 	new SkillInfo(SkillName.FlareStar, ResourceType.cd_GCD, Aspect.Other, true,
 		5, 9000, 1000, 0.1), //flare star will always take 5s
 	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
+	// THIS IS WRONG AND NEEDS TO BE CHANGED
+
+	new SkillInfo(SkillName.EtherKit, ResourceType.cd_EtherKit, Aspect.Other, false,
+		0, 0, 0, 0.1),
 
 	new SkillInfo(SkillName.Foul, ResourceType.cd_GCD, Aspect.Other, true,
 		0, 0, 560, 1.158),
@@ -319,7 +323,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			let dot = game.resources.get(ResourceType.FlareStarDoT);
 			let tick = game.resources.get(ResourceType.FlareStarDoTTick);
 			if (tick.pendingChange) {
-				// if already has thunder applied; cancel the remaining ticks now.
+				// if already has Flare star applied; cancel the remaining ticks now.
 				dot.removeTimer();
 				tick.removeTimer();
 			}
@@ -521,6 +525,17 @@ export class SkillsList extends Map<SkillName, Skill> {
 					// +3 AF; refresh enochian
 					game.resources.get(ResourceType.AstralFire).gain(3);
 					game.startOrRefreshEnochian();
+					if(game.resources.get(ResourceType.EtherKit).available(1)){ //ether kit available - mana is now 0
+						//burn etherkit - add 5000 MP if below 2000
+						if(mana.availableAmount() < 2000){
+							game.resources.get(ResourceType.EtherKit).consume(1);
+							if(game.resources.get(ResourceType.EtherKit).availableAmount() === 0){
+								game.resources.get(ResourceType.EtherKit).removeTimer();
+							}
+							game.resources.get(ResourceType.Mana).gain(5000);
+						}
+					}
+					// +3
 				}, (app: SkillApplicationCallbackInfo) => {
 				}, node);
 			}
@@ -636,6 +651,14 @@ export class SkillsList extends Map<SkillName, Skill> {
 					let mana = game.resources.get(ResourceType.Mana);
 					// mana
 					mana.consume(mana.availableAmount());
+					if(game.resources.get(ResourceType.EtherKit).available(1)){ //ether kit available - mana is now 0
+							//burn etherkit - add 5000 MP
+						game.resources.get(ResourceType.EtherKit).consume(1);
+						if(game.resources.get(ResourceType.EtherKit).availableAmount() === 0){
+							game.resources.get(ResourceType.EtherKit).removeTimer();
+						}
+						game.resources.get(ResourceType.Mana).gain(5000);
+					}
 					// +3 AF; refresh enochian
 					game.resources.get(ResourceType.AstralFire).gain(3);
 					game.startOrRefreshEnochian();
@@ -835,6 +858,31 @@ export class SkillsList extends Map<SkillName, Skill> {
 
 		// Sprint
 		addResourceAbility(SkillName.Sprint, ResourceType.Sprint, 10);
+
+		// Ether Kit
+		skillsList.set(SkillName.EtherKit, new Skill(SkillName.EtherKit,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.EtherKit,
+					effectFn: () => {
+						let etherKit = game.resources.get(ResourceType.EtherKit);
+						if (etherKit.pendingChange) etherKit.removeTimer(); // should never need this, but just in case
+						etherKit.gain(1); //todo CONFIG THIS
+						game.resources.addResourceEvent(
+							ResourceType.EtherKit,
+							"drop remaining etherkit charges", 10 * 60, (rsc: Resource) => {
+								rsc.consume(rsc.availableAmount());
+							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
 
 		return skillsList;
 	}
