@@ -91,6 +91,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.EtherKit, ResourceType.cd_EtherKit, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
+	new SkillInfo(SkillName.Elixir, ResourceType.cd_Elixir, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
 	new SkillInfo(SkillName.Foul, ResourceType.cd_GCD, Aspect.Other, true,
 		0, 0, 560, 1.158),
 	new SkillInfo(SkillName.Despair, ResourceType.cd_GCD, Aspect.Fire, true,
@@ -876,6 +879,24 @@ export class SkillsList extends Map<SkillName, Skill> {
 							"drop remaining etherkit charges", 10 * 60, (rsc: Resource) => {
 								rsc.consume(rsc.availableAmount());
 							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
+		//Elixir
+		skillsList.set(SkillName.Elixir, new Skill(SkillName.Elixir,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.Elixir,
+					effectFn: () => {
+						let mana = game.resources.get(ResourceType.Mana);
+						mana.overrideCurrentValue(mana.maxValue);
 					},
 					dealDamage: false,
 					node: node

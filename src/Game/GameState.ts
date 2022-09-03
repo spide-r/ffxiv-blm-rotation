@@ -87,6 +87,7 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_LucidDreaming, new CoolDown(ResourceType.cd_LucidDreaming, 60, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Surecast, new CoolDown(ResourceType.cd_Surecast, 120, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Tincture, new CoolDown(ResourceType.cd_Tincture, 270, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Elixir, new CoolDown(ResourceType.cd_Elixir, 90, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Sprint, new CoolDown(ResourceType.cd_Sprint, 60, 1, 1));
 
 		// EVENTS QUEUE (events decide future changes to resources)

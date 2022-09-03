@@ -49,6 +49,7 @@ export const enum SkillName {
 	// Bozja //
 	FlareStar = "Flare Star",
 	EtherKit = "Ether Kit",
+	Elixir = "Resistance Elixir",
 
 
 
@@ -96,6 +97,7 @@ export const enum ResourceType {
 	Sprint = "Sprint", // [0, 1]
 	EtherKit = "Ether Kit", //[0, 3]
 
+
 	// special
 	Movement = "Movement", // [0, 1]
 	NotAnimationLocked = "NotAnimationLocked", // [0, 1]
@@ -119,6 +121,7 @@ export const enum ResourceType {
 	cd_LucidDreaming = "cd_LucidDreaming", // [0, 1x]
 	cd_Surecast = "cd_Surecast", // [0, 1x]
 	cd_Tincture = "cd_Tincture", // [0, 1x]
+	cd_Elixir = "cd_Elixir", // [0, 1x]
 	cd_Sprint = "cd_Sprint", // [0, 1x]
 	Never = "Never",
 }
