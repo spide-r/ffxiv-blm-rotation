@@ -251,7 +251,33 @@ export class GameState {
 		{
 			potency *= mod.damageIce;
 		}
+
+		potency *= this.getEssenceModifier();
+		potency *= this.getBannerModifier();
+		potency *= this.getExternalBuffModifier();
+
 		return potency;
+	}
+
+	getEssenceModifier(){
+		let rsc = this.resources;
+		if(rsc.get(ResourceType.Elder).available(1)){
+			return 1.5;
+		} else if (rsc.get(ResourceType.Reg_Skirmisher).available(1)){
+			return 1.2;
+		} else if (rsc.get(ResourceType.Skirmisher).available(1)){
+			return 1.24;
+		} else {
+			return 1;
+		}
+	}
+
+	getBannerModifier(){ //honored sac & noble ends
+		return 1;
+	}
+
+	getExternalBuffModifier(){ //dervish, bravery, excellence, magic burst, font
+		return 1;
 	}
 
 	captureManaCostAndUHConsumption(aspect: Aspect, baseManaCost: number) {
