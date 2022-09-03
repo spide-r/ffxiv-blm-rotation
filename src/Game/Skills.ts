@@ -128,6 +128,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.Elixir, ResourceType.cd_Elixir, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
+	new SkillInfo(SkillName.Excellence, ResourceType.cd_Excellence, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
 	//Essences
 	new SkillInfo(SkillName.Reg_Skirmisher, ResourceType.cd_Reg_Skirmisher, Aspect.Other, false,
 		0, 0, 0, 0.1),
@@ -973,35 +976,8 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 		));
 
-		/*
-		let addResourceAbility = function(skillName: SkillName, rscType: ResourceType, duration: number) {
-			skillsList.set(skillName, new Skill(skillName,
-				() => {
-					return true;
-				},
-				(game, node) => {
-					game.useInstantSkill({
-						skillName: skillName,
-						effectFn: () => {
-							let resource = game.resources.get(rscType);
-							if (resource.available(1)) {
-								resource.overrideTimer(game, duration);
-							} else {
-								resource.gain(1);
-								game.resources.addResourceEvent(
-									rscType,
-									"drop " + rscType, duration, (rsc: Resource) => {
-										rsc.consume(1);
-									});
-							}
-						},
-						dealDamage: false,
-						node: node
-					});
-				}
-			));
-		}
-		 */
+		addResourceAbility(SkillName.Excellence, ResourceType.Excellence, 60);
+
 
 		function applyEssence(essenceRsc: ResourceType, essenceSkill: SkillName, game: GameState, node: ActionNode) {
 			const essences = [ResourceType.Skirmisher, ResourceType.Gambler, ResourceType.Reg_Skirmisher, ResourceType.Elder, ResourceType.Watcher];

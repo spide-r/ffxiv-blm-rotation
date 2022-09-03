@@ -335,6 +335,7 @@ class Controller {
 			gamblerCountdown: game.resources.timeTillReady(ResourceType.Gambler),
 			elderCountdown: game.resources.timeTillReady(ResourceType.Elder),
 			skirmisherCountdown: game.resources.timeTillReady(ResourceType.Skirmisher),
+			excellenceCountdown: game.resources.timeTillReady(ResourceType.Excellence)
 		};
 		if (typeof updateStatusDisplay !== "undefined") {
 			updateStatusDisplay({

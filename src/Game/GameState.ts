@@ -72,6 +72,7 @@ export class GameState {
 		this.resources.set(ResourceType.Watcher, new Resource(ResourceType.Watcher, 1,0));
 		this.resources.set(ResourceType.Elder, new Resource(ResourceType.Elder, 1,0));
 		this.resources.set(ResourceType.Gambler, new Resource(ResourceType.Gambler, 1,0));
+		this.resources.set(ResourceType.Excellence, new Resource(ResourceType.Excellence, 1,0));
 
 
 		this.resources.set(ResourceType.Movement, new Resource(ResourceType.Movement, 1, 1));
@@ -104,6 +105,7 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_Watcher, new CoolDown(ResourceType.cd_Watcher, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Skirmisher, new CoolDown(ResourceType.cd_Skirmisher, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Reg_Skirmisher, new CoolDown(ResourceType.cd_Reg_Skirmisher, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Excellence, new CoolDown(ResourceType.cd_Excellence, 300, 1, 1));
 
 		// EVENTS QUEUE (events decide future changes to resources)
 		// which might include:
@@ -277,7 +279,12 @@ export class GameState {
 	}
 
 	getExternalBuffModifier(){ //dervish, bravery, excellence, magic burst, font
-		return 1;
+		let rsc = this.resources;
+		let mod = 1;
+		if(rsc.get(ResourceType.Excellence).available(1)){
+			mod *= 1.65;
+		}
+		return mod;
 	}
 
 	captureManaCostAndUHConsumption(aspect: Aspect, baseManaCost: number) {

@@ -261,6 +261,7 @@ resourceInfos.set(ResourceType.cd_Skirmisher,{ isCoolDown: true, maxStacks: 1, c
 resourceInfos.set(ResourceType.cd_Elder,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 resourceInfos.set(ResourceType.cd_Watcher,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 resourceInfos.set(ResourceType.cd_Gambler,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_Excellence,{ isCoolDown: true, maxStacks: 1, cdPerStack: 300 });
 
 resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
 resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});
@@ -269,6 +270,7 @@ resourceInfos.set(ResourceType.Skirmisher, { isCoolDown: false, defaultValue: 0,
 resourceInfos.set(ResourceType.Watcher, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
 resourceInfos.set(ResourceType.Gambler, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
 resourceInfos.set(ResourceType.Elder, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
+resourceInfos.set(ResourceType.Excellence, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 300});
 
 type ResourceOverrideProps = {
 	type: ResourceType,

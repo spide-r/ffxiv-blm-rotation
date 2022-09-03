@@ -42,6 +42,7 @@ export let displayedSkills = [
 	SkillName.FlareStar,
 	SkillName.EtherKit,
 	SkillName.Elixir,
+	SkillName.Excellence,
 
 	//Essence
 	SkillName.Reg_Skirmisher,
@@ -93,6 +94,7 @@ skillIcons.set(SkillName.Skirmisher, require("./Asset/tincture.png"))
 skillIcons.set(SkillName.Watcher, require("./Asset/tincture.png"))
 skillIcons.set(SkillName.Gambler, require("./Asset/tincture.png"))
 skillIcons.set(SkillName.Elder, require("./Asset/tincture.png"))
+skillIcons.set(SkillName.Excellence, require("./Asset/amplifier.png"))
 
 
 

@@ -71,6 +71,7 @@ buffIcons.set(ResourceType.Skirmisher, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Watcher, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Gambler, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Elder, require("./Asset/buff_tincture.png"));
+buffIcons.set(ResourceType.Excellence, require("./Asset/buff_firestarter.png"));
 /*Regular Skirmisher (20% damage increase)
 Deep Skirmisher (24% Damage increase)
 Deep Watcher (only interacts with chain)
@@ -116,7 +117,8 @@ function BuffsDisplay(props) {
 		skirmisherCountdown: 0,
 		watcherCountdown: 0,
 		gamblerCountdown: 0,
-		elderCountdown: 0
+		elderCountdown: 0,
+		excellenceCountdown: 0
 		/*
 		Regular Skirmisher (20% damage increase)
 Deep Skirmisher (24% Damage increase)
@@ -267,6 +269,15 @@ Pure Elder (damage up by 50%)
 		stacks:1,
 		timeRemaining: data.elderCountdown.toFixed(2),
 		className: data.elderCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.Excellence,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.excellenceCountdown.toFixed(2),
+		className: data.excellenceCountdown > 0 ? "" : "hidden"
 	});
 
 
