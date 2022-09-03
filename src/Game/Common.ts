@@ -51,8 +51,12 @@ export const enum SkillName {
 	EtherKit = "Ether Kit",
 	Elixir = "Resistance Elixir",
 
-
-
+	// Essences
+	Reg_Skirmisher = "Regular Skirmisher",
+	Skirmisher = "Skirmisher",
+	Watcher = "Watcher",
+	Gambler = "Gambler",
+	Elder = "Elder",
 
 
 
@@ -85,8 +89,7 @@ export const enum ResourceType {
 	Thundercloud = "Thundercloud", // [0, 1]
 	ThunderDoT = "ThunderDoT", // [0, 1] is actually used for display timing only
 	ThunderDoTTick = "ThunderDoTTick", // [0, 1]
-	FlareStarDoT = "FlareStarDoT",
-	FlareStarDoTTick = "FlareStarDoTTick",
+
 	Manaward = "Manaward", // [0, 1]
 	Addle = "Addle", // [0, 1]
 	Swiftcast = "Swiftcast", // [0, 1]
@@ -95,7 +98,25 @@ export const enum ResourceType {
 	Surecast = "Surecast", // [0, 1]
 	Tincture = "Tincture", // [0, 1]
 	Sprint = "Sprint", // [0, 1]
+
+	//Bozja
+	FlareStarDoT = "FlareStarDoT",
+	FlareStarDoTTick = "FlareStarDoTTick",
 	EtherKit = "Ether Kit", //[0, 3]
+	Reg_Skirmisher = "Regular Skirmisher",
+	Skirmisher = "Skirmisher",
+	Watcher = "Watcher",
+	Gambler = "Gambler",
+	Elder = "Elder",
+	cd_Elixir = "cd_Elixir", // [0, 1x]
+	cd_Essence = "cd_Essence",
+	cd_FlareStar = "cd_FlareStar", //not used yet?
+	cd_Reg_Skirmisher = "cd_Reg_Skirmisher",
+	cd_Skirmisher = "cd_Skirmisher",
+	cd_Watcher = "cd_Watcher",
+	cd_Gambler = "cd_Gambler",
+	cd_Elder = "cd_Gambler",
+
 
 
 	// special
@@ -105,7 +126,6 @@ export const enum ResourceType {
 
 	// CDs
 	cd_GCD = "cd_GCD", // [0, Constant.gcd]
-	cd_FlareStar = "cd_FlareStar",
 	cd_Transpose = "cd_Transpose", // [0, 1x]
 	cd_Sharpcast = "cd_Sharpcast", // [0, 2x] // TODO = figure out how this works
 	cd_LeyLines = "cd_LeyLines", // [0, 1x]
@@ -121,7 +141,6 @@ export const enum ResourceType {
 	cd_LucidDreaming = "cd_LucidDreaming", // [0, 1x]
 	cd_Surecast = "cd_Surecast", // [0, 1x]
 	cd_Tincture = "cd_Tincture", // [0, 1x]
-	cd_Elixir = "cd_Elixir", // [0, 1x]
 	cd_Sprint = "cd_Sprint", // [0, 1x]
 	Never = "Never",
 }

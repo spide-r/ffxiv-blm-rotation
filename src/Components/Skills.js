@@ -4,6 +4,7 @@ import {ResourceType, SkillName, SkillReadyStatus} from "../Game/Common";
 import {controller} from "../Controller/Controller";
 import ReactTooltip from 'react-tooltip';
 import {ActionType} from "../Controller/Record";
+import {Skill} from "../Game/Skills";
 
 export let displayedSkills = [
 	SkillName.Blizzard,
@@ -40,7 +41,14 @@ export let displayedSkills = [
 	// Bozja Stuff
 	SkillName.FlareStar,
 	SkillName.EtherKit,
-	SkillName.Elixir
+	SkillName.Elixir,
+
+	//Essence
+	SkillName.Reg_Skirmisher,
+	SkillName.Skirmisher,
+	SkillName.Watcher,
+	SkillName.Gambler,
+	SkillName.Elder
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
@@ -76,9 +84,17 @@ skillIcons.set(SkillName.LucidDreaming, require("./Asset/lucidDreaming.png"));
 skillIcons.set(SkillName.Surecast, require("./Asset/surecast.png"));
 skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
+// Bozja
 skillIcons.set(SkillName.FlareStar, require("./Asset/paradox.png"))
 skillIcons.set(SkillName.EtherKit, require("./Asset/tincture.png"))
 skillIcons.set(SkillName.Elixir, require("./Asset/tincture.png"))
+skillIcons.set(SkillName.Reg_Skirmisher, require("./Asset/tincture.png"))
+skillIcons.set(SkillName.Skirmisher, require("./Asset/tincture.png"))
+skillIcons.set(SkillName.Watcher, require("./Asset/tincture.png"))
+skillIcons.set(SkillName.Gambler, require("./Asset/tincture.png"))
+skillIcons.set(SkillName.Elder, require("./Asset/tincture.png"))
+
+
 
 let setSkillInfoText = (text)=>{};
 function ProgressCircle(props={

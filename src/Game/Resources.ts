@@ -226,7 +226,6 @@ resourceInfos.set(ResourceType.Paradox, { isCoolDown: false, defaultValue: 0, ma
 resourceInfos.set(ResourceType.Firestarter, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 });
 resourceInfos.set(ResourceType.Thundercloud, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 40 });
 resourceInfos.set(ResourceType.ThunderDoT, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 }); // buff display only
-resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
 resourceInfos.set(ResourceType.Manaward, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 20 });
 resourceInfos.set(ResourceType.Triplecast, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: 15 });
 resourceInfos.set(ResourceType.Addle, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
@@ -235,7 +234,7 @@ resourceInfos.set(ResourceType.LucidDreaming, { isCoolDown: false, defaultValue:
 resourceInfos.set(ResourceType.Surecast, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
 resourceInfos.set(ResourceType.Tincture, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 });
 resourceInfos.set(ResourceType.Sprint, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
-resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});
+
 
 // CDs
 resourceInfos.set(ResourceType.cd_GCD, { isCoolDown: true, maxStacks: 1, cdPerStack: 2.5 });
@@ -254,8 +253,22 @@ resourceInfos.set(ResourceType.cd_Swiftcast, { isCoolDown: true, maxStacks: 1, c
 resourceInfos.set(ResourceType.cd_LucidDreaming, { isCoolDown: true, maxStacks: 1, cdPerStack: 60 });
 resourceInfos.set(ResourceType.cd_Surecast, { isCoolDown: true, maxStacks: 1, cdPerStack: 120 });
 resourceInfos.set(ResourceType.cd_Tincture, { isCoolDown: true, maxStacks: 1, cdPerStack: 270 });
-resourceInfos.set(ResourceType.cd_Elixir, { isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
 resourceInfos.set(ResourceType.cd_Sprint, { isCoolDown: true, maxStacks: 1, cdPerStack: 60 });
+// Bozja
+resourceInfos.set(ResourceType.cd_Elixir, { isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
+resourceInfos.set(ResourceType.cd_Reg_Skirmisher,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_Skirmisher,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_Elder,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_Watcher,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_Gambler,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+
+resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
+resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});
+resourceInfos.set(ResourceType.Reg_Skirmisher, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
+resourceInfos.set(ResourceType.Skirmisher, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
+resourceInfos.set(ResourceType.Watcher, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
+resourceInfos.set(ResourceType.Gambler, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
+resourceInfos.set(ResourceType.Elder, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
 
 type ResourceOverrideProps = {
 	type: ResourceType,

@@ -50,8 +50,6 @@ export class GameState {
 		this.resources.set(ResourceType.Thundercloud, new Resource(ResourceType.Thundercloud, 1, 0));
 		this.resources.set(ResourceType.ThunderDoTTick, new Resource(ResourceType.ThunderDoTTick, 1, 0));
 		this.resources.set(ResourceType.ThunderDoT, new Resource(ResourceType.ThunderDoT, 1, 0));
-		this.resources.set(ResourceType.FlareStarDoTTick, new Resource(ResourceType.FlareStarDoTTick, 1, 0))
-		this.resources.set(ResourceType.FlareStarDoT, new Resource(ResourceType.FlareStarDoT, 1, 0))
 		this.resources.set(ResourceType.Manaward, new Resource(ResourceType.Manaward, 1, 0));
 		this.resources.set(ResourceType.Triplecast, new Resource(ResourceType.Triplecast, 3, 0));
 		this.resources.set(ResourceType.Addle, new Resource(ResourceType.Addle, 1, 0));
@@ -62,7 +60,18 @@ export class GameState {
 		this.resources.set(ResourceType.Tincture, new Resource(ResourceType.Tincture, 1, 0));
 		this.resources.set(ResourceType.Sprint, new Resource(ResourceType.Sprint, 1, 0));
 
+
+
+
+		// Bozja
+		this.resources.set(ResourceType.FlareStarDoTTick, new Resource(ResourceType.FlareStarDoTTick, 1, 0))
+		this.resources.set(ResourceType.FlareStarDoT, new Resource(ResourceType.FlareStarDoT, 1, 0))
 		this.resources.set(ResourceType.EtherKit, new Resource(ResourceType.EtherKit, 9999, 0));
+		this.resources.set(ResourceType.Skirmisher, new Resource(ResourceType.Skirmisher, 1,0));
+		this.resources.set(ResourceType.Reg_Skirmisher, new Resource(ResourceType.Reg_Skirmisher, 1,0));
+		this.resources.set(ResourceType.Watcher, new Resource(ResourceType.Watcher, 1,0));
+		this.resources.set(ResourceType.Elder, new Resource(ResourceType.Elder, 1,0));
+		this.resources.set(ResourceType.Gambler, new Resource(ResourceType.Gambler, 1,0));
 
 
 		this.resources.set(ResourceType.Movement, new Resource(ResourceType.Movement, 1, 1));
@@ -87,8 +96,14 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_LucidDreaming, new CoolDown(ResourceType.cd_LucidDreaming, 60, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Surecast, new CoolDown(ResourceType.cd_Surecast, 120, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Tincture, new CoolDown(ResourceType.cd_Tincture, 270, 1, 1));
-		this.cooldowns.set(ResourceType.cd_Elixir, new CoolDown(ResourceType.cd_Elixir, 90, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Sprint, new CoolDown(ResourceType.cd_Sprint, 60, 1, 1));
+
+		this.cooldowns.set(ResourceType.cd_Elixir, new CoolDown(ResourceType.cd_Elixir, 90, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Elder, new CoolDown(ResourceType.cd_Elder, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Gambler, new CoolDown(ResourceType.cd_Gambler, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Watcher, new CoolDown(ResourceType.cd_Watcher, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Skirmisher, new CoolDown(ResourceType.cd_Skirmisher, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Reg_Skirmisher, new CoolDown(ResourceType.cd_Reg_Skirmisher, 1, 1, 1));
 
 		// EVENTS QUEUE (events decide future changes to resources)
 		// which might include:

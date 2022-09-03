@@ -83,16 +83,7 @@ const skillInfos = [
 	new SkillInfo(SkillName.Triplecast, ResourceType.cd_Triplecast, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
-	new SkillInfo(SkillName.FlareStar, ResourceType.cd_GCD, Aspect.Other, true,
-		5, 9000, 1000, 0.1), //flare star will always take 5s
-	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
-	// THIS IS WRONG AND NEEDS TO BE CHANGED
 
-	new SkillInfo(SkillName.EtherKit, ResourceType.cd_EtherKit, Aspect.Other, false,
-		0, 0, 0, 0.1),
-
-	new SkillInfo(SkillName.Elixir, ResourceType.cd_Elixir, Aspect.Other, false,
-		0, 0, 0, 0.1),
 
 	new SkillInfo(SkillName.Foul, ResourceType.cd_GCD, Aspect.Other, true,
 		0, 0, 560, 1.158),
@@ -123,7 +114,31 @@ const skillInfos = [
 	new SkillInfo(SkillName.Tincture, ResourceType.cd_Tincture, Aspect.Other, false,
 		0, 0, 0, 0.1),
 	new SkillInfo(SkillName.Sprint, ResourceType.cd_Sprint, Aspect.Other, false,
-		0, 0, 0, 0.1)
+		0, 0, 0, 0.1),
+
+
+	//Bozja
+	new SkillInfo(SkillName.FlareStar, ResourceType.cd_GCD, Aspect.Other, true,
+		5, 9000, 1000, 0.1), //flare star will always take 5s
+	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
+	// THIS IS WRONG AND NEEDS TO BE CHANGED
+
+	new SkillInfo(SkillName.EtherKit, ResourceType.cd_EtherKit, Aspect.Other, false,
+		0, 0, 0, 0.1),
+	new SkillInfo(SkillName.Elixir, ResourceType.cd_Elixir, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
+	//Essences
+	new SkillInfo(SkillName.Reg_Skirmisher, ResourceType.cd_Reg_Skirmisher, Aspect.Other, false,
+		0, 0, 0, 0.1),
+	new SkillInfo(SkillName.Skirmisher, ResourceType.cd_Skirmisher, Aspect.Other, false,
+		0, 0, 0, 0.1),
+	new SkillInfo(SkillName.Watcher, ResourceType.cd_Watcher, Aspect.Other, false,
+		0, 0, 0, 0.1),
+	new SkillInfo(SkillName.Gambler, ResourceType.cd_Gambler, Aspect.Other, false,
+		0, 0, 0, 0.1),
+	new SkillInfo(SkillName.Elder, ResourceType.cd_Elder, Aspect.Other, false,
+		0, 0, 0, 0.1),
 ];
 
 const skillInfosMap: Map<SkillName, SkillInfo> = new Map();
@@ -310,50 +325,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 		}
 
-		// called at the time of APPLICATION (not snapshot)
-		let applyFsDot = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
-			// define stuff
-			let recurringFsTick = (remainingTicks: number, capturedTickPotency: number)=> {
-				if (remainingTicks===0) return;
-				game.resources.addResourceEvent(
-					ResourceType.FlareStarDoTTick,
-					"recurring flare star tick " + (numTicks+1-remainingTicks) + "/" + numTicks, 3, (rsc: Resource) =>{
-						game.reportPotency(node, capturedTickPotency, "DoT");
-						game.dealDamage(capturedTickPotency, "DoT");
-						recurringFsTick(remainingTicks - 1, capturedTickPotency);
-					}, Color.Text);
-			};
-			let dot = game.resources.get(ResourceType.FlareStarDoT);
-			let tick = game.resources.get(ResourceType.FlareStarDoTTick);
-			if (tick.pendingChange) {
-				// if already has Flare star applied; cancel the remaining ticks now.
-				dot.removeTimer();
-				tick.removeTimer();
-			}
-			// order of events:
-			dot.gain(1);
-			game.resources.addResourceEvent(ResourceType.FlareStarDoT, "drop DoT", 30, (dot: Resource)=>{
-				dot.consume(1);
-			}, Color.Text);
-			recurringFsTick(numTicks, capturedTickPotency);
-		};
 
-		// Flare star
-		skillsList.set(SkillName.FlareStar, new Skill(SkillName.FlareStar,
-			() => {
-				return true;
-			},
-			(game, node) => {
-
-					let capturedTickPotency: number;
-					game.castSpell(SkillName.FlareStar, (cap: SkillCaptureCallbackInfo) => {
-						capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
-					}, (app: SkillApplicationCallbackInfo) => {
-						applyFsDot(game, node, capturedTickPotency, 20); //tick 20 times
-					}, node);
-
-			}
-		));
 
 		// called at the time of APPLICATION (not snapshot)
 		let applyThunderDoT = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
@@ -862,6 +834,51 @@ export class SkillsList extends Map<SkillName, Skill> {
 		// Sprint
 		addResourceAbility(SkillName.Sprint, ResourceType.Sprint, 10);
 
+		// called at the time of APPLICATION (not snapshot)
+		let applyFsDot = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
+			// define stuff
+			let recurringFsTick = (remainingTicks: number, capturedTickPotency: number)=> {
+				if (remainingTicks===0) return;
+				game.resources.addResourceEvent(
+					ResourceType.FlareStarDoTTick,
+					"recurring flare star tick " + (numTicks+1-remainingTicks) + "/" + numTicks, 3, (rsc: Resource) =>{
+						game.reportPotency(node, capturedTickPotency, "DoT");
+						game.dealDamage(capturedTickPotency, "DoT");
+						recurringFsTick(remainingTicks - 1, capturedTickPotency);
+					}, Color.Text);
+			};
+			let dot = game.resources.get(ResourceType.FlareStarDoT);
+			let tick = game.resources.get(ResourceType.FlareStarDoTTick);
+			if (tick.pendingChange) {
+				// if already has Flare star applied; cancel the remaining ticks now.
+				dot.removeTimer();
+				tick.removeTimer();
+			}
+			// order of events:
+			dot.gain(1);
+			game.resources.addResourceEvent(ResourceType.FlareStarDoT, "drop DoT", 30, (dot: Resource)=>{
+				dot.consume(1);
+			}, Color.Text);
+			recurringFsTick(numTicks, capturedTickPotency);
+		};
+
+		// Flare star
+		skillsList.set(SkillName.FlareStar, new Skill(SkillName.FlareStar,
+			() => {
+				return true;
+			},
+			(game, node) => {
+
+				let capturedTickPotency: number;
+				game.castSpell(SkillName.FlareStar, (cap: SkillCaptureCallbackInfo) => {
+					capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
+				}, (app: SkillApplicationCallbackInfo) => {
+					applyFsDot(game, node, capturedTickPotency, 20); //tick 20 times
+				}, node);
+
+			}
+		));
+
 		// Ether Kit
 		skillsList.set(SkillName.EtherKit, new Skill(SkillName.EtherKit,
 			() => {
@@ -886,6 +903,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 		));
 
+
 		//Elixir
 		skillsList.set(SkillName.Elixir, new Skill(SkillName.Elixir,
 			() => {
@@ -903,6 +921,120 @@ export class SkillsList extends Map<SkillName, Skill> {
 				});
 			}
 		));
+
+
+		// Regular Skirmisher
+		skillsList.set(SkillName.Reg_Skirmisher, new Skill(SkillName.Reg_Skirmisher,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				applyEssence(ResourceType.Reg_Skirmisher, SkillName.Reg_Skirmisher, game, node)
+			}
+		));
+
+		// Gambler
+		skillsList.set(SkillName.Gambler, new Skill(SkillName.Gambler,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				applyEssence(ResourceType.Gambler, SkillName.Skirmisher, game, node)
+			}
+		));
+
+		// Skirmisher
+		skillsList.set(SkillName.Skirmisher, new Skill(SkillName.Skirmisher,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				applyEssence(ResourceType.Skirmisher, SkillName.Skirmisher, game, node)
+			}
+		));
+
+		// Elder
+		skillsList.set(SkillName.Elder, new Skill(SkillName.Elder,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				applyEssence(ResourceType.Elder, SkillName.Elder, game, node )
+			}
+		));
+
+		// Watcher
+		skillsList.set(SkillName.Watcher, new Skill(SkillName.Watcher,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				applyEssence(ResourceType.Watcher, SkillName.Watcher, game, node)
+			}
+		));
+
+		/*
+		let addResourceAbility = function(skillName: SkillName, rscType: ResourceType, duration: number) {
+			skillsList.set(skillName, new Skill(skillName,
+				() => {
+					return true;
+				},
+				(game, node) => {
+					game.useInstantSkill({
+						skillName: skillName,
+						effectFn: () => {
+							let resource = game.resources.get(rscType);
+							if (resource.available(1)) {
+								resource.overrideTimer(game, duration);
+							} else {
+								resource.gain(1);
+								game.resources.addResourceEvent(
+									rscType,
+									"drop " + rscType, duration, (rsc: Resource) => {
+										rsc.consume(1);
+									});
+							}
+						},
+						dealDamage: false,
+						node: node
+					});
+				}
+			));
+		}
+		 */
+
+		function applyEssence(essenceRsc: ResourceType, essenceSkill: SkillName, game: GameState, node: ActionNode) {
+			const essences = [ResourceType.Skirmisher, ResourceType.Gambler, ResourceType.Reg_Skirmisher, ResourceType.Elder, ResourceType.Watcher];
+			essences.forEach(function (essence, index) {
+				if(game.resources.get(essence).availableAmount() > 0){
+					// other essence found - drop it
+					let activeEssence = game.resources.get(essence);
+					activeEssence.removeTimer()
+					activeEssence.consume(activeEssence.availableAmount())
+				}
+			})
+
+					game.useInstantSkill({
+						skillName: essenceSkill,
+						effectFn: () => {
+							let resource = game.resources.get(essenceRsc);
+							if (resource.available(1)) {
+								resource.overrideTimer(game, 10 * 60);
+							} else {
+								resource.gain(1);
+								game.resources.addResourceEvent(
+									essenceRsc,
+									"drop essence charges", 10 * 60, (rsc: Resource) => { // 10 min charge
+										rsc.consume(rsc.availableAmount());
+									});
+							}
+						},
+						dealDamage: false,
+						node: node
+					});
+
+		}
+
 
 
 		return skillsList;

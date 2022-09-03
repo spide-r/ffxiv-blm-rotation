@@ -66,7 +66,19 @@ buffIcons.set(ResourceType.LucidDreaming, require("./Asset/buff_lucidDreaming.pn
 buffIcons.set(ResourceType.Surecast, require("./Asset/buff_surecast.png"));
 buffIcons.set(ResourceType.Tincture, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Sprint, require("./Asset/buff_sprint.png"));
+buffIcons.set(ResourceType.Reg_Skirmisher, require("./Asset/buff_tincture.png"));
+buffIcons.set(ResourceType.Skirmisher, require("./Asset/buff_tincture.png"));
+buffIcons.set(ResourceType.Watcher, require("./Asset/buff_tincture.png"));
+buffIcons.set(ResourceType.Gambler, require("./Asset/buff_tincture.png"));
+buffIcons.set(ResourceType.Elder, require("./Asset/buff_tincture.png"));
+/*Regular Skirmisher (20% damage increase)
+Deep Skirmisher (24% Damage increase)
+Deep Watcher (only interacts with chain)
+Pure gambler (implement when you've added dynamis dice)
+Pure Elder (damage up by 50%)
 
+
+ */
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {
 	return <div title={props.rscType} className={props.className + " buff " + props.rscType}>
@@ -99,7 +111,20 @@ function BuffsDisplay(props) {
 		surecastCountdown: 0,
 		tinctureCountdown: 0,
 		sprintCountdown: 0,
-		etherKitCountdown: 0
+		etherKitCountdown: 0,
+		reg_SkirmisherCountdown: 0,
+		skirmisherCountdown: 0,
+		watcherCountdown: 0,
+		gamblerCountdown: 0,
+		elderCountdown: 0
+		/*
+		Regular Skirmisher (20% damage increase)
+Deep Skirmisher (24% Damage increase)
+Deep Watcher (only interacts with chain)
+Pure gambler (implement when you've added dynamis dice)
+Pure Elder (damage up by 50%)
+
+		 */
 	};
 	let buffs = [];
 	buffs.push({
@@ -198,6 +223,53 @@ function BuffsDisplay(props) {
 		timeRemaining: data.sprintCountdown.toFixed(2),
 		className: data.sprintCountdown > 0 ? "" : "hidden"
 	});
+
+	buffs.push({
+		rscType: ResourceType.Skirmisher,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.skirmisherCountdown.toFixed(2),
+		className: data.skirmisherCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.Reg_Skirmisher,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.reg_SkirmisherCountdown.toFixed(2),
+		className: data.reg_SkirmisherCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.Watcher,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.watcherCountdown.toFixed(2),
+		className: data.watcherCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.Gambler,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.gamblerCountdown.toFixed(2),
+		className: data.gamblerCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.Elder,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.elderCountdown.toFixed(2),
+		className: data.elderCountdown > 0 ? "" : "hidden"
+	});
+
+
 
 	for (let i = 0; i < buffs.length; i++) buffs[i].key=i;
 	return <div className={"buffsDisplay self"}>

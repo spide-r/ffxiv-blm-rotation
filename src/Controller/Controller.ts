@@ -329,7 +329,12 @@ class Controller {
 			surecastCountdown: game.resources.timeTillReady(ResourceType.Surecast),
 			tinctureCountdown: game.resources.timeTillReady(ResourceType.Tincture),
 			sprintCountdown: game.resources.timeTillReady(ResourceType.Sprint),
-			etherKitCountdown: game.resources.timeTillReady(ResourceType.EtherKit)
+			etherKitCountdown: game.resources.timeTillReady(ResourceType.EtherKit),
+			reg_SkirmisherCountdown: game.resources.timeTillReady(ResourceType.Reg_Skirmisher),
+			watcherCountdown: game.resources.timeTillReady(ResourceType.Watcher),
+			gamblerCountdown: game.resources.timeTillReady(ResourceType.Gambler),
+			elderCountdown: game.resources.timeTillReady(ResourceType.Elder),
+			skirmisherCountdown: game.resources.timeTillReady(ResourceType.Skirmisher),
 		};
 		if (typeof updateStatusDisplay !== "undefined") {
 			updateStatusDisplay({
