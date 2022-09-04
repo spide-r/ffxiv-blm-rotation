@@ -60,6 +60,7 @@ export const enum SkillName {
 
 	// Misc bozja actions
 	Excellence = "Excellence",
+	Dervish = "Dervish",
 
 
 
@@ -112,6 +113,8 @@ export const enum ResourceType {
 	Gambler = "Gambler",
 	Elder = "Elder",
 	Excellence = "Excellence",
+	Dervish = "Dervish",
+	cd_Dervish = "Dervish",
 	cd_Excellence = "cd_Excellence",
 	cd_Elixir = "cd_Elixir", // [0, 1x]
 	cd_Essence = "cd_Essence",

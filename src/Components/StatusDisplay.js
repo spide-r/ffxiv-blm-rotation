@@ -72,14 +72,8 @@ buffIcons.set(ResourceType.Watcher, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Gambler, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Elder, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Excellence, require("./Asset/buff_firestarter.png"));
-/*Regular Skirmisher (20% damage increase)
-Deep Skirmisher (24% Damage increase)
-Deep Watcher (only interacts with chain)
-Pure gambler (implement when you've added dynamis dice)
-Pure Elder (damage up by 50%)
+buffIcons.set(ResourceType.Dervish, require("./Asset/buff_addle.png"));
 
-
- */
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {
 	return <div title={props.rscType} className={props.className + " buff " + props.rscType}>
@@ -118,15 +112,8 @@ function BuffsDisplay(props) {
 		watcherCountdown: 0,
 		gamblerCountdown: 0,
 		elderCountdown: 0,
-		excellenceCountdown: 0
-		/*
-		Regular Skirmisher (20% damage increase)
-Deep Skirmisher (24% Damage increase)
-Deep Watcher (only interacts with chain)
-Pure gambler (implement when you've added dynamis dice)
-Pure Elder (damage up by 50%)
-
-		 */
+		excellenceCountdown: 0,
+		dervishCountdown: 0
 	};
 	let buffs = [];
 	buffs.push({
@@ -278,6 +265,15 @@ Pure Elder (damage up by 50%)
 		stacks:1,
 		timeRemaining: data.excellenceCountdown.toFixed(2),
 		className: data.excellenceCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.Dervish,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.dervishCountdown.toFixed(2),
+		className: data.dervishCountdown > 0 ? "" : "hidden"
 	});
 
 
