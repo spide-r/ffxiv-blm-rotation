@@ -61,6 +61,9 @@ export const enum SkillName {
 	// Misc bozja actions
 	Excellence = "Excellence",
 	Dervish = "Dervish",
+	full_uptime_bravery = "Full Uptime Bravery (10%)",
+	five_Bravery = "10 Minute Bravery (5%)",
+	ten_Bravery = "1 Minute Bravery (10%)",
 
 
 
@@ -114,6 +117,9 @@ export const enum ResourceType {
 	Elder = "Elder",
 	Excellence = "Excellence",
 	Dervish = "Dervish",
+	five_Bravery = "5% Bravery", //10 min
+	uptime_Bravery = "Full Uptime 10% Bravery", //10 min
+	ten_Bravery = "10% Bravery", //60s
 	cd_Dervish = "Dervish",
 	cd_Excellence = "cd_Excellence",
 	cd_Elixir = "cd_Elixir", // [0, 1x]
@@ -124,7 +130,9 @@ export const enum ResourceType {
 	cd_Watcher = "cd_Watcher",
 	cd_Gambler = "cd_Gambler",
 	cd_Elder = "cd_Gambler",
-
+	cd_Ten_Bravery = "cd_Ten_Bravery", // 1 min - 10%
+	cd_five_Bravery = "cd_five_Bravery", //10 min - 5%
+	cd_uptime_Bravery = "cd_uptime_Bravery", //10 min - 10%
 
 
 	// special

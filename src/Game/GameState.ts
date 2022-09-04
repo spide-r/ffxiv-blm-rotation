@@ -74,6 +74,9 @@ export class GameState {
 		this.resources.set(ResourceType.Gambler, new Resource(ResourceType.Gambler, 1,0));
 		this.resources.set(ResourceType.Excellence, new Resource(ResourceType.Excellence, 1,0));
 		this.resources.set(ResourceType.Dervish, new Resource(ResourceType.Excellence, 1,0));
+		this.resources.set(ResourceType.five_Bravery, new Resource(ResourceType.five_Bravery, 1,0));
+		this.resources.set(ResourceType.ten_Bravery, new Resource(ResourceType.ten_Bravery, 1,0));
+		this.resources.set(ResourceType.uptime_Bravery, new Resource(ResourceType.uptime_Bravery, 1,0));
 
 
 		this.resources.set(ResourceType.Movement, new Resource(ResourceType.Movement, 1, 1));
@@ -108,6 +111,9 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_Reg_Skirmisher, new CoolDown(ResourceType.cd_Reg_Skirmisher, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Excellence, new CoolDown(ResourceType.cd_Excellence, 300, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Dervish, new CoolDown(ResourceType.cd_Dervish, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_five_Bravery, new CoolDown(ResourceType.cd_five_Bravery, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_uptime_Bravery, new CoolDown(ResourceType.cd_uptime_Bravery, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Ten_Bravery, new CoolDown(ResourceType.cd_Ten_Bravery, 1, 1, 1));
 
 		// EVENTS QUEUE (events decide future changes to resources)
 		// which might include:

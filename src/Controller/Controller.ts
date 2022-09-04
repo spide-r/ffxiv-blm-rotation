@@ -336,7 +336,8 @@ class Controller {
 			elderCountdown: game.resources.timeTillReady(ResourceType.Elder),
 			skirmisherCountdown: game.resources.timeTillReady(ResourceType.Skirmisher),
 			excellenceCountdown: game.resources.timeTillReady(ResourceType.Excellence),
-			dervishCountdown: game.resources.timeTillReady(ResourceType.Dervish)
+			dervishCountdown: game.resources.timeTillReady(ResourceType.Dervish),
+			uptimeBraveryCountdown: game.resources.timeTillReady(ResourceType.uptime_Bravery)
 		};
 		if (typeof updateStatusDisplay !== "undefined") {
 			updateStatusDisplay({

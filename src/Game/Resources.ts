@@ -263,6 +263,9 @@ resourceInfos.set(ResourceType.cd_Watcher,{ isCoolDown: true, maxStacks: 1, cdPe
 resourceInfos.set(ResourceType.cd_Gambler,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 resourceInfos.set(ResourceType.cd_Excellence,{ isCoolDown: true, maxStacks: 1, cdPerStack: 300 });
 resourceInfos.set(ResourceType.cd_Dervish,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_Ten_Bravery,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_uptime_Bravery,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
+resourceInfos.set(ResourceType.cd_five_Bravery,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 
 resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
 resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});
@@ -273,6 +276,9 @@ resourceInfos.set(ResourceType.Gambler, { isCoolDown: false, defaultValue: 0, ma
 resourceInfos.set(ResourceType.Elder, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 * 60});
 resourceInfos.set(ResourceType.Excellence, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 300});
 resourceInfos.set(ResourceType.Dervish, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
+resourceInfos.set(ResourceType.ten_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
+resourceInfos.set(ResourceType.uptime_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
+resourceInfos.set(ResourceType.five_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 
 type ResourceOverrideProps = {
 	type: ResourceType,
