@@ -990,9 +990,9 @@ export class SkillsList extends Map<SkillName, Skill> {
 
 		addResourceAbility(SkillName.Excellence, ResourceType.Excellence, 60);
 		addResourceAbility(SkillName.Dervish, ResourceType.Dervish, 60);
-		addResourceAbility(SkillName.ten_Bravery, ResourceType.uptime_Bravery, 60);
-		addResourceAbility(SkillName.five_Bravery, ResourceType.five_Bravery, 60);
-		addResourceAbility(SkillName.full_uptime_bravery, ResourceType.ten_Bravery, 10 * 60);
+		addResourceAbility(SkillName.ten_Bravery, ResourceType.ten_Bravery, 60);
+		addResourceAbility(SkillName.five_Bravery, ResourceType.five_Bravery, 10 * 60);
+		addResourceAbility(SkillName.full_uptime_bravery, ResourceType.ten_Bravery, 10 * 60); //ten_bravery instead of full_uptime because fuck that
 
 
 		function applyEssence(essenceRsc: ResourceType, essenceSkill: SkillName, game: GameState, node: ActionNode) {

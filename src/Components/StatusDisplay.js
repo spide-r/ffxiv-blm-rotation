@@ -73,6 +73,8 @@ buffIcons.set(ResourceType.Gambler, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Elder, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Excellence, require("./Asset/buff_firestarter.png"));
 buffIcons.set(ResourceType.Dervish, require("./Asset/buff_addle.png"));
+buffIcons.set(ResourceType.five_Bravery, require("./Asset/buff_lucidDreaming.png"));
+buffIcons.set(ResourceType.ten_Bravery, require("./Asset/buff_lucidDreaming.png"));
 
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {
@@ -113,7 +115,9 @@ function BuffsDisplay(props) {
 		gamblerCountdown: 0,
 		elderCountdown: 0,
 		excellenceCountdown: 0,
-		dervishCountdown: 0
+		dervishCountdown: 0,
+		tenBraveryCountdown: 0,
+		fiveBraveryCountdown: 0,
 	};
 	let buffs = [];
 	buffs.push({
@@ -274,6 +278,24 @@ function BuffsDisplay(props) {
 		stacks:1,
 		timeRemaining: data.dervishCountdown.toFixed(2),
 		className: data.dervishCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.five_Bravery,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.fiveBraveryCountdown.toFixed(2),
+		className: data.fiveBraveryCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.ten_Bravery,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.tenBraveryCountdown.toFixed(2),
+		className: data.tenBraveryCountdown > 0 ? "" : "hidden"
 	});
 
 

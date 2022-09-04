@@ -297,6 +297,16 @@ export class GameState {
 			mod *= 1.07;
 		}
 
+		if(rsc.get(ResourceType.ten_Bravery).available(1) && rsc.get(ResourceType.five_Bravery).available(1)){
+			mod *= 1.1; //pick higher number
+		} else if(rsc.get(ResourceType.five_Bravery).available(1)){
+			mod *= 1.05;
+		} else if (rsc.get(ResourceType.ten_Bravery).available(1)){
+			mod *= 1.1;
+		}
+
+
+
 
 		return mod;
 	}
