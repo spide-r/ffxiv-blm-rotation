@@ -325,7 +325,7 @@ class Controller {
 			thundercloudCountdown: game.resources.timeTillReady(ResourceType.Thundercloud),
 			manawardCountdown: game.resources.timeTillReady(ResourceType.Manaward),
 			swiftcastCountdown: game.resources.timeTillReady(ResourceType.Swiftcast),
-			lucidDreamingCountdown: game.resources.timeTillReady(ResourceType.LucidDreaming),
+			lucidDreamingCountdown: game.resources.timeTillReady(ResourceType.LucidDreamingTimerDisplay),
 			surecastCountdown: game.resources.timeTillReady(ResourceType.Surecast),
 			tinctureCountdown: game.resources.timeTillReady(ResourceType.Tincture),
 			sprintCountdown: game.resources.timeTillReady(ResourceType.Sprint),
@@ -338,7 +338,8 @@ class Controller {
 			excellenceCountdown: game.resources.timeTillReady(ResourceType.Excellence),
 			dervishCountdown: game.resources.timeTillReady(ResourceType.Dervish),
 			fiveBraveryCountdown: game.resources.timeTillReady(ResourceType.five_Bravery),
-			tenBraveryCountdown: game.resources.timeTillReady(ResourceType.ten_Bravery)
+			tenBraveryCountdown: game.resources.timeTillReady(ResourceType.ten_Bravery),
+			fomCountdown: game.resources.timeTillReady(ResourceType.FoMTimerDisplay)
 		};
 		if (typeof updateStatusDisplay !== "undefined") {
 			updateStatusDisplay({

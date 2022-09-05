@@ -54,8 +54,8 @@ export class GameState {
 		this.resources.set(ResourceType.Triplecast, new Resource(ResourceType.Triplecast, 3, 0));
 		this.resources.set(ResourceType.Addle, new Resource(ResourceType.Addle, 1, 0));
 		this.resources.set(ResourceType.Swiftcast, new Resource(ResourceType.Swiftcast, 1, 0));
-		this.resources.set(ResourceType.LucidDreaming, new Resource(ResourceType.LucidDreaming, 1, 0));
-		this.resources.set(ResourceType.LucidTick, new Resource(ResourceType.LucidDreaming, 1, 0));
+		this.resources.set(ResourceType.LucidDreamingTimerDisplay, new Resource(ResourceType.LucidDreamingTimerDisplay, 1, 0));
+		this.resources.set(ResourceType.LucidTick, new Resource(ResourceType.LucidDreamingTimerDisplay, 1, 0));
 		this.resources.set(ResourceType.Surecast, new Resource(ResourceType.Surecast, 1, 0));
 		this.resources.set(ResourceType.Tincture, new Resource(ResourceType.Tincture, 1, 0));
 		this.resources.set(ResourceType.Sprint, new Resource(ResourceType.Sprint, 1, 0));
@@ -77,6 +77,9 @@ export class GameState {
 		this.resources.set(ResourceType.five_Bravery, new Resource(ResourceType.five_Bravery, 1,0));
 		this.resources.set(ResourceType.ten_Bravery, new Resource(ResourceType.ten_Bravery, 1,0));
 		this.resources.set(ResourceType.uptime_Bravery, new Resource(ResourceType.uptime_Bravery, 1,0));
+		this.resources.set(ResourceType.FoMTick, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
+		this.resources.set(ResourceType.FoMTimerDisplay, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
+
 
 
 		this.resources.set(ResourceType.Movement, new Resource(ResourceType.Movement, 1, 1));
@@ -114,6 +117,8 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_five_Bravery, new CoolDown(ResourceType.cd_five_Bravery, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_uptime_Bravery, new CoolDown(ResourceType.cd_uptime_Bravery, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Ten_Bravery, new CoolDown(ResourceType.cd_Ten_Bravery, 1, 1, 1));
+		this.cooldowns.set(ResourceType.cd_FoM, new CoolDown(ResourceType.cd_FoM, 120, 1, 1));
+
 
 		// EVENTS QUEUE (events decide future changes to resources)
 		// which might include:
@@ -305,8 +310,9 @@ export class GameState {
 			mod *= 1.1;
 		}
 
-
-
+		if(rsc.get(ResourceType.FoMTick).available(1)){
+			mod *= 1.7; // WHOA MOMMA THATS A BIG BOY BUFF
+		}
 
 		return mod;
 	}

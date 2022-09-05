@@ -62,7 +62,7 @@ buffIcons.set(ResourceType.LeyLines, require("./Asset/buff_leyLines.png"));
 buffIcons.set(ResourceType.Manaward, require("./Asset/buff_manaward.png"));
 buffIcons.set(ResourceType.Addle, require("./Asset/buff_addle.png"));
 buffIcons.set(ResourceType.Swiftcast, require("./Asset/buff_swiftcast.png"));
-buffIcons.set(ResourceType.LucidDreaming, require("./Asset/buff_lucidDreaming.png"));
+buffIcons.set(ResourceType.LucidDreamingTimerDisplay, require("./Asset/buff_lucidDreaming.png"));
 buffIcons.set(ResourceType.Surecast, require("./Asset/buff_surecast.png"));
 buffIcons.set(ResourceType.Tincture, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Sprint, require("./Asset/buff_sprint.png"));
@@ -75,6 +75,7 @@ buffIcons.set(ResourceType.Excellence, require("./Asset/buff_firestarter.png"));
 buffIcons.set(ResourceType.Dervish, require("./Asset/buff_addle.png"));
 buffIcons.set(ResourceType.five_Bravery, require("./Asset/buff_lucidDreaming.png"));
 buffIcons.set(ResourceType.ten_Bravery, require("./Asset/buff_lucidDreaming.png"));
+buffIcons.set(ResourceType.FoMTimerDisplay, require("./Asset/buff_firestarter.png"));
 
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {
@@ -118,6 +119,7 @@ function BuffsDisplay(props) {
 		dervishCountdown: 0,
 		tenBraveryCountdown: 0,
 		fiveBraveryCountdown: 0,
+		fomCountdown: 0
 	};
 	let buffs = [];
 	buffs.push({
@@ -185,7 +187,7 @@ function BuffsDisplay(props) {
 		className: data.swiftcastCountdown > 0 ? "" : "hidden"
 	});
 	buffs.push({
-		rscType: ResourceType.LucidDreaming,
+		rscType: ResourceType.LucidDreamingTimerDisplay,
 		onSelf: true,
 		enabled: true,
 		stacks:1,
@@ -296,6 +298,15 @@ function BuffsDisplay(props) {
 		stacks:1,
 		timeRemaining: data.tenBraveryCountdown.toFixed(2),
 		className: data.tenBraveryCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.FoMTimerDisplay,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.fomCountdown.toFixed(2),
+		className: data.fomCountdown > 0 ? "" : "hidden"
 	});
 
 

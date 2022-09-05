@@ -40,6 +40,7 @@ export let displayedSkills = [
 	SkillName.Sprint,
 	// Bozja Stuff
 	SkillName.FlareStar,
+	SkillName.FoM,
 	SkillName.EtherKit,
 	SkillName.Elixir,
 	SkillName.Excellence,
@@ -91,6 +92,7 @@ skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
 // Bozja
 skillIcons.set(SkillName.FlareStar, require("./Asset/paradox.png"))
+skillIcons.set(SkillName.FoM, require("./Asset/foul.png"))
 skillIcons.set(SkillName.EtherKit, require("./Asset/tincture.png"))
 skillIcons.set(SkillName.Elixir, require("./Asset/tincture.png"))
 skillIcons.set(SkillName.Reg_Skirmisher, require("./Asset/tincture.png"))

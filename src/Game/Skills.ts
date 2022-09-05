@@ -123,6 +123,9 @@ const skillInfos = [
 	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
 	// THIS IS WRONG AND NEEDS TO BE CHANGED
 
+	new SkillInfo(SkillName.FoM, ResourceType.cd_FoM, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
 	new SkillInfo(SkillName.EtherKit, ResourceType.cd_EtherKit, Aspect.Other, false,
 		0, 0, 0, 0.1),
 	new SkillInfo(SkillName.Elixir, ResourceType.cd_Elixir, Aspect.Other, false,
@@ -811,7 +814,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 								}, Color.Text, false);
 						};
 
-						let buff = game.resources.get(ResourceType.LucidDreaming);
+						let buff = game.resources.get(ResourceType.LucidDreamingTimerDisplay);
 						let tick = game.resources.get(ResourceType.LucidTick);
 						if (tick.pendingChange) {
 							// if already has lucid applied; cancel the remaining ticks now.
@@ -821,7 +824,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 						// order of events:
 						buff.gain(1);
 						game.resources.addResourceEvent(
-							ResourceType.LucidDreaming, "drop Lucid", 21, (buff: Resource) => {
+							ResourceType.LucidDreamingTimerDisplay, "drop Lucid", 21, (buff: Resource) => {
 								buff.consume(1);
 							}, Color.ManaTick);
 
@@ -848,6 +851,56 @@ export class SkillsList extends Map<SkillName, Skill> {
 
 		// Sprint
 		addResourceAbility(SkillName.Sprint, ResourceType.Sprint, 10);
+
+		// FoM
+
+		skillsList.set(SkillName.FoM, new Skill(SkillName.FoM,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.FoM,
+					effectFn: () => {
+						const numTicks = 10;
+						let loseMpTick = (remainingTicks: number)=> {
+							if (remainingTicks===0) return;
+							game.resources.addResourceEvent(
+								ResourceType.FoMTick,
+								"recurring FoM MP drain tick " + (numTicks+1-remainingTicks) + "/" + numTicks, 3, (rsc: Resource) =>{
+									game.resources.get(ResourceType.Mana).consume(1045); //lose 1045 MP per dot tick
+									loseMpTick(remainingTicks - 1);
+
+								}, Color.ManaTick);
+						};
+						let dot = game.resources.get(ResourceType.FoMTimerDisplay);
+						let tick = game.resources.get(ResourceType.FoMTick);
+						if (tick.pendingChange) {
+							// if already has FoM applied; cancel the remaining ticks now.
+							dot.removeTimer();
+							tick.removeTimer();
+						}
+						// order of events:
+						dot.gain(1);
+						game.resources.addResourceEvent(ResourceType.FoMTimerDisplay, "drop FoM DoT", 30, (dot: Resource)=>{
+							dot.consume(1);
+						}, Color.ManaTick);
+
+						let startDrainMP = new Event(
+							"first mp drain tick",
+							3,
+							() => {
+								loseMpTick(numTicks);
+							},
+							Color.ManaTick);
+						game.addEvent(startDrainMP);
+					},
+					dealDamage: false,
+					node: node
+				});
+
+			}
+		));
 
 		// called at the time of APPLICATION (not snapshot)
 		let applyFsDot = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
@@ -993,6 +1046,12 @@ export class SkillsList extends Map<SkillName, Skill> {
 		addResourceAbility(SkillName.ten_Bravery, ResourceType.ten_Bravery, 60);
 		addResourceAbility(SkillName.five_Bravery, ResourceType.five_Bravery, 10 * 60);
 		addResourceAbility(SkillName.full_uptime_bravery, ResourceType.ten_Bravery, 10 * 60); //ten_bravery instead of full_uptime because fuck that
+
+		function dummy(){
+			let cd = game.cooldowns.get(ResourceType.cd_Manafont);
+			let currentStackCd = cd.currentStackCd();
+			cd.overrideCurrentValue(currentStackCd); // this should effectively reset the cooldown
+		}
 
 
 		function applyEssence(essenceRsc: ResourceType, essenceSkill: SkillName, game: GameState, node: ActionNode) {

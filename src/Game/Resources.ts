@@ -230,7 +230,7 @@ resourceInfos.set(ResourceType.Manaward, { isCoolDown: false, defaultValue: 0, m
 resourceInfos.set(ResourceType.Triplecast, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: 15 });
 resourceInfos.set(ResourceType.Addle, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
 resourceInfos.set(ResourceType.Swiftcast, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
-resourceInfos.set(ResourceType.LucidDreaming, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 21 }); // buff display only
+resourceInfos.set(ResourceType.LucidDreamingTimerDisplay, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 21 }); // buff display only
 resourceInfos.set(ResourceType.Surecast, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
 resourceInfos.set(ResourceType.Tincture, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 });
 resourceInfos.set(ResourceType.Sprint, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
@@ -254,8 +254,10 @@ resourceInfos.set(ResourceType.cd_LucidDreaming, { isCoolDown: true, maxStacks: 
 resourceInfos.set(ResourceType.cd_Surecast, { isCoolDown: true, maxStacks: 1, cdPerStack: 120 });
 resourceInfos.set(ResourceType.cd_Tincture, { isCoolDown: true, maxStacks: 1, cdPerStack: 270 });
 resourceInfos.set(ResourceType.cd_Sprint, { isCoolDown: true, maxStacks: 1, cdPerStack: 60 });
+
 // Bozja
 resourceInfos.set(ResourceType.cd_Elixir, { isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
+resourceInfos.set(ResourceType.cd_FoM, { isCoolDown: true, maxStacks: 1, cdPerStack: 120 });
 resourceInfos.set(ResourceType.cd_Reg_Skirmisher,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 resourceInfos.set(ResourceType.cd_Skirmisher,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 resourceInfos.set(ResourceType.cd_Elder,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
@@ -279,6 +281,10 @@ resourceInfos.set(ResourceType.Dervish, { isCoolDown: false, defaultValue: 0, ma
 resourceInfos.set(ResourceType.ten_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 resourceInfos.set(ResourceType.uptime_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 resourceInfos.set(ResourceType.five_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
+resourceInfos.set(ResourceType.FoMTimerDisplay, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 }); // buff display only
+
+
+
 
 type ResourceOverrideProps = {
 	type: ResourceType,

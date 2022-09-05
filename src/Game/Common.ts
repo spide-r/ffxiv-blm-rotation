@@ -64,6 +64,7 @@ export const enum SkillName {
 	full_uptime_bravery = "Full Uptime Bravery (10%)",
 	five_Bravery = "10 Minute Bravery (5%)",
 	ten_Bravery = "1 Minute Bravery (10%)",
+	FoM = "Font of Magic",
 
 
 
@@ -100,7 +101,8 @@ export const enum ResourceType {
 	Manaward = "Manaward", // [0, 1]
 	Addle = "Addle", // [0, 1]
 	Swiftcast = "Swiftcast", // [0, 1]
-	LucidDreaming = "Lucid Dreaming", // [0, 1] also just for timing display
+	LucidDreamingTimerDisplay = "Lucid Dreaming", // [0, 1] also just for timing display
+	FoMTimerDisplay = "Font of Magic", // only for timer display
 	LucidTick = "Lucid Tick", // [0, 1]
 	Surecast = "Surecast", // [0, 1]
 	Tincture = "Tincture", // [0, 1]
@@ -120,6 +122,7 @@ export const enum ResourceType {
 	five_Bravery = "5% Bravery", //10 min
 	uptime_Bravery = "Full Uptime 10% Bravery", //10 min
 	ten_Bravery = "10% Bravery", //60s
+	FoMTick = "Font of Magic",
 	cd_Dervish = "Dervish",
 	cd_Excellence = "cd_Excellence",
 	cd_Elixir = "cd_Elixir", // [0, 1x]
@@ -133,6 +136,7 @@ export const enum ResourceType {
 	cd_Ten_Bravery = "cd_Ten_Bravery", // 1 min - 10%
 	cd_five_Bravery = "cd_five_Bravery", //10 min - 5%
 	cd_uptime_Bravery = "cd_uptime_Bravery", //10 min - 10%
+	cd_FoM = "cd_FoM",
 
 
 	// special
