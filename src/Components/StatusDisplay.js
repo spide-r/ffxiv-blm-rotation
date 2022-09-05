@@ -76,6 +76,8 @@ buffIcons.set(ResourceType.Dervish, require("./Asset/buff_addle.png"));
 buffIcons.set(ResourceType.five_Bravery, require("./Asset/buff_lucidDreaming.png"));
 buffIcons.set(ResourceType.ten_Bravery, require("./Asset/buff_lucidDreaming.png"));
 buffIcons.set(ResourceType.FoMTimerDisplay, require("./Asset/buff_firestarter.png"));
+buffIcons.set(ResourceType.Chainspell, require("./Asset/buff_triplecast.png"));
+buffIcons.set(ResourceType.MagicBurst, require("./Asset/buff_manaward.png"));
 
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {
@@ -119,7 +121,9 @@ function BuffsDisplay(props) {
 		dervishCountdown: 0,
 		tenBraveryCountdown: 0,
 		fiveBraveryCountdown: 0,
-		fomCountdown: 0
+		fomCountdown: 0,
+		chainspellCountdown: 0,
+		magicBurstCountdown: 0
 	};
 	let buffs = [];
 	buffs.push({

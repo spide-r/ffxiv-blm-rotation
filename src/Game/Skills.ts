@@ -123,6 +123,9 @@ const skillInfos = [
 	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
 	// THIS IS WRONG AND NEEDS TO BE CHANGED
 
+
+	new SkillInfo(SkillName.Chainspell, ResourceType.cd_Chainspell, Aspect.Other, false,
+		0, 0, 0, 0.1),
 	new SkillInfo(SkillName.FoM, ResourceType.cd_FoM, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
@@ -852,8 +855,63 @@ export class SkillsList extends Map<SkillName, Skill> {
 		// Sprint
 		addResourceAbility(SkillName.Sprint, ResourceType.Sprint, 10);
 
-		// FoM
+		//Chainspell
+		skillsList.set(SkillName.Chainspell, new Skill(SkillName.Chainspell,
+			() => {
+				return true;
+			},
+			(game, node) => {
+			let time = 30;
+				addResourceAbility(SkillName.Chainspell, ResourceType.Chainspell, time);
+				addResourceAbility(SkillName.MagicBurst, ResourceType.MagicBurst, 30);
 
+			}
+		));
+
+		skillsList.set(SkillName.Chainspell, new Skill(SkillName.Chainspell,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.Chainspell,
+					effectFn: () => {
+						let rscType = ResourceType.Chainspell;
+						let chainDuration = 30;
+						if(game.resources.get(ResourceType.Watcher).available(1)){
+							chainDuration = 90;
+						}
+						let resource = game.resources.get(rscType);
+						if (resource.available(1)) {
+							resource.overrideTimer(game, chainDuration);
+						} else {
+							resource.gain(1);
+							game.resources.addResourceEvent(
+								rscType,
+								"drop " + rscType, chainDuration, (rsc: Resource) => {
+									rsc.consume(1);
+								});
+						}
+
+						let mburst = game.resources.get(ResourceType.MagicBurst);
+						if (mburst.available(1)) {
+							mburst.overrideTimer(game, 30);
+						} else {
+							mburst.gain(1);
+							game.resources.addResourceEvent(
+								rscType,
+								"drop " + mburst, 30, (rsc: Resource) => {
+									rsc.consume(1);
+								});
+						}
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
+		// FoM
 		skillsList.set(SkillName.FoM, new Skill(SkillName.FoM,
 			() => {
 				return true;

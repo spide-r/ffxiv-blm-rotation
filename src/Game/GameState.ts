@@ -78,6 +78,10 @@ export class GameState {
 		this.resources.set(ResourceType.ten_Bravery, new Resource(ResourceType.ten_Bravery, 1,0));
 		this.resources.set(ResourceType.uptime_Bravery, new Resource(ResourceType.uptime_Bravery, 1,0));
 		this.resources.set(ResourceType.FoMTick, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
+		this.resources.set(ResourceType.Chainspell, new Resource(ResourceType.Chainspell, 1, 0));
+		this.resources.set(ResourceType.MagicBurst, new Resource(ResourceType.MagicBurst, 1, 0));
+
+
 		this.resources.set(ResourceType.FoMTimerDisplay, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
 
 
@@ -118,6 +122,8 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_uptime_Bravery, new CoolDown(ResourceType.cd_uptime_Bravery, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Ten_Bravery, new CoolDown(ResourceType.cd_Ten_Bravery, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_FoM, new CoolDown(ResourceType.cd_FoM, 120, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Chainspell, new CoolDown(ResourceType.cd_Chainspell, 90, 1, 1));
+
 
 
 		// EVENTS QUEUE (events decide future changes to resources)

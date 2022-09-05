@@ -339,7 +339,9 @@ class Controller {
 			dervishCountdown: game.resources.timeTillReady(ResourceType.Dervish),
 			fiveBraveryCountdown: game.resources.timeTillReady(ResourceType.five_Bravery),
 			tenBraveryCountdown: game.resources.timeTillReady(ResourceType.ten_Bravery),
-			fomCountdown: game.resources.timeTillReady(ResourceType.FoMTimerDisplay)
+			fomCountdown: game.resources.timeTillReady(ResourceType.FoMTimerDisplay),
+			chainspellCountdown: game.resources.timeTillReady(ResourceType.Chainspell),
+			magicBurstCountdown: game.resources.timeTillReady(ResourceType.MagicBurst)
 		};
 		if (typeof updateStatusDisplay !== "undefined") {
 			updateStatusDisplay({
