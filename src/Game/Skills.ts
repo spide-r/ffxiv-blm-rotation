@@ -160,6 +160,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.Dispel, ResourceType.cd_GCD, Aspect.Other, true,
 		2.5, 0, 0, 0.1),
 
+	new SkillInfo(SkillName.Percept, ResourceType.cd_Percept, Aspect.Other, false,
+		1.5, 0, 0, 0.1),
+
 	//Essences
 	new SkillInfo(SkillName.Reg_Skirmisher, ResourceType.cd_Reg_Skirmisher, Aspect.Other, false,
 		0, 0, 0, 0.1),
@@ -1287,6 +1290,21 @@ export class SkillsList extends Map<SkillName, Skill> {
 								rsc.consume(rsc.availableAmount());
 							});
 					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
+
+		skillsList.set(SkillName.Percept, new Skill(SkillName.Percept,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.Percept,
+					effectFn: () => {},
 					dealDamage: false,
 					node: node
 				});

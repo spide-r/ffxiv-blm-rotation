@@ -70,6 +70,7 @@ export const enum SkillName {
 	NobleEnds = "Banner of Noble Ends",
 	HonoredSac = "Banner of Honored Sacrifice",
 	Dispel = "Dispel",
+	Percept = "Perception",
 
 
 
@@ -174,5 +175,6 @@ export const enum ResourceType {
 	cd_Surecast = "cd_Surecast", // [0, 1x]
 	cd_Tincture = "cd_Tincture", // [0, 1x]
 	cd_Sprint = "cd_Sprint", // [0, 1x]
+	cd_Percept = "cd_Sprint", // [0, 1x]
 	Never = "Never",
 }

@@ -128,6 +128,7 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_FoS, new CoolDown(ResourceType.cd_FoS, 300, 1, 1));
 		this.cooldowns.set(ResourceType.cd_HonoredSac, new CoolDown(ResourceType.cd_HonoredSac, 90, 1, 1));
 		this.cooldowns.set(ResourceType.cd_NobleEnds, new CoolDown(ResourceType.cd_NobleEnds, 90, 1, 1));
+		this.cooldowns.set(ResourceType.cd_Percept, new CoolDown(ResourceType.cd_Percept, 1.5, 1, 1));
 
 
 

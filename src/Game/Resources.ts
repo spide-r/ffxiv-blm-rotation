@@ -272,6 +272,7 @@ resourceInfos.set(ResourceType.cd_Chainspell,{ isCoolDown: true, maxStacks: 1, c
 resourceInfos.set(ResourceType.cd_FoS,{ isCoolDown: true, maxStacks: 1, cdPerStack: 300 });
 resourceInfos.set(ResourceType.cd_HonoredSac,{ isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
 resourceInfos.set(ResourceType.cd_NobleEnds,{ isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
+resourceInfos.set(ResourceType.cd_Percept,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1.5 });
 
 resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
 resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});

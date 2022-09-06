@@ -62,7 +62,8 @@ export let displayedSkills = [
 	SkillName.HonoredSac,
 	SkillName.NobleEnds,
 
-	SkillName.Dispel
+	SkillName.Dispel,
+	SkillName.Percept
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
@@ -98,6 +99,7 @@ skillIcons.set(SkillName.LucidDreaming, require("./Asset/lucidDreaming.png"));
 skillIcons.set(SkillName.Surecast, require("./Asset/surecast.png"));
 skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
+
 // Bozja
 skillIcons.set(SkillName.FlareStar, require("./Asset/paradox.png"))
 skillIcons.set(SkillName.FoM, require("./Asset/foul.png"))
@@ -118,6 +120,7 @@ skillIcons.set(SkillName.FoS, require("./Asset/freeze.png"))
 skillIcons.set(SkillName.HonoredSac, require("./Asset/umbralSoul.png"))
 skillIcons.set(SkillName.NobleEnds, require("./Asset/umbralSoul.png"))
 skillIcons.set(SkillName.Dispel, require("./Asset/despair.png"))
+skillIcons.set(SkillName.Percept, require("./Asset/paradox.png"))
 
 
 
