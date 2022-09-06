@@ -142,6 +142,9 @@ export default class Main extends React.Component {
 					}}>
 						<div>
 							<h3 style={{marginBottom: 6}}>Black Mage in the Bozjan Shell</h3>
+							<div style={{marginBottom: 16}}>Last updated: {changelog[0].date} (see <b>About this
+								tool/Changelog</b>)
+							</div>
 							<IntroSection/>
 						</div>
 						<div style={{

@@ -444,9 +444,7 @@ export class GameState {
 					}
 
 					if(game.resources.get(ResourceType.EtherKit).available(1)){ //ether kit available
-						console.log("Ether kit available")
 						if(game.resources.get(ResourceType.Mana).availableAmount() < 2000){
-							console.log("mana now below 2000 - adding mp")
 							//burn etherkit - add 5000 MP
 							game.resources.get(ResourceType.EtherKit).consume(1);
 							if(game.resources.get(ResourceType.EtherKit).availableAmount() === 0){
