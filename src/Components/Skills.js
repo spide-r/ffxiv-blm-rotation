@@ -38,18 +38,6 @@ export let displayedSkills = [
 	SkillName.Surecast,
 	SkillName.Tincture,
 	SkillName.Sprint,
-	// Bozja Stuff
-	SkillName.FlareStar,
-	SkillName.FoM,
-	SkillName.Chainspell,
-	SkillName.EtherKit,
-	SkillName.Elixir,
-	SkillName.Excellence,
-	SkillName.Dervish,
-	SkillName.FoS,
-	SkillName.five_Bravery,
-	SkillName.full_uptime_bravery,
-	SkillName.ten_Bravery,
 
 	//Essence
 	SkillName.Reg_Skirmisher,
@@ -58,12 +46,26 @@ export let displayedSkills = [
 	SkillName.Gambler,
 	SkillName.Elder,
 
-	// Banner
+	// Bozja Stuff
+	SkillName.FlareStar,
+	SkillName.FoM,
+	SkillName.Chainspell,
+	SkillName.Excellence,
+	SkillName.Dervish,
+	SkillName.FoS,
 	SkillName.HonoredSac,
 	SkillName.NobleEnds,
-
+	SkillName.five_Bravery,
+	SkillName.full_uptime_bravery,
+	SkillName.ten_Bravery,
 	SkillName.Dispel,
-	SkillName.Percept
+	SkillName.Percept,
+	SkillName.EtherKit,
+	SkillName.Elixir
+
+
+
+
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
