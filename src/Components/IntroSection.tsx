@@ -32,7 +32,7 @@ export function IntroSection(props: {}) {
 			content={<div>
 				<div className="paragraph">This is a FFXIV black mage simulator & rotation planner built for Save the Queen areas.</div>
 				<div className="paragraph">
-					This tool is maintained by <b>A'zhek Silvaire @ Zalera</b>. This is adapted from miyehn's fantastic simulator.
+					This tool is maintained by <b>A'zhek Silvaire @ Zalera</b>. Adapted from miyehn's fantastic simulator.
 				</div>
 				<div className="paragraph">
 					Please contact Spider#5879 if you have any questions, comments, or concerns.
