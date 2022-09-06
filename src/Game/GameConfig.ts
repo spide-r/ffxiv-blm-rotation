@@ -10,6 +10,7 @@ export class GameConfig {
     timeTillFirstManaTick = 1.2;
     hasteStacks = 0;
     valor = 0;
+    etherCharges = 1;
     rngProcs = true;
     initialResourceOverrides: ResourceOverride[] = [];
 
@@ -22,6 +23,7 @@ export class GameConfig {
         valor: number,
         hasteStacks: number,
         animationLock: number,
+        etherCharges: number,
         timeTillFirstManaTick: number,
         rngProcs: boolean,
         initialResourceOverrides: any[]
@@ -34,6 +36,7 @@ export class GameConfig {
             this.animationLock = props.animationLock;
             this.rngProcs = props.rngProcs;
             this.valor = props.valor;
+            this.etherCharges = props.etherCharges;
             this.hasteStacks = props.hasteStacks;
             if (props.initialResourceOverrides) {
                 this.initialResourceOverrides = props.initialResourceOverrides.map(obj=>{
@@ -61,6 +64,7 @@ export class GameConfig {
                 this.casterTax === other.casterTax &&
                 this.hasteStacks === other.hasteStacks &&
                 this.valor === other.valor &&
+                this.etherCharges === other.etherCharges &&
                 this.animationLock === other.animationLock &&
                 this.timeTillFirstManaTick === other.timeTillFirstManaTick &&
                 this.rngProcs === other.rngProcs;
@@ -100,6 +104,7 @@ export class GameConfig {
             randomSeed: this.randomSeed,
             casterTax: this.casterTax,
             hasteStacks: this.hasteStacks,
+            etherCharges: this.etherCharges,
             valor: this.valor,
             animationLock: this.animationLock,
             timeTillFirstManaTick: this.timeTillFirstManaTick,

@@ -1051,9 +1051,10 @@ export class SkillsList extends Map<SkillName, Skill> {
 				game.useInstantSkill({
 					skillName: SkillName.EtherKit,
 					effectFn: () => {
+						let charges = game.config.etherCharges;
 						let etherKit = game.resources.get(ResourceType.EtherKit);
 						if (etherKit.pendingChange) etherKit.removeTimer(); // should never need this, but just in case
-						etherKit.gain(1); //todo CONFIG THIS
+						etherKit.gain(charges);
 						game.resources.addResourceEvent(
 							ResourceType.EtherKit,
 							"drop remaining etherkit charges", 10 * 60, (rsc: Resource) => {

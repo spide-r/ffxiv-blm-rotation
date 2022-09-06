@@ -170,6 +170,7 @@ export class Config extends React.Component {
 			casterTax: 0,
 			timeTillFirstManaTick: 0,
 			countdown: 0,
+			etherCharges: 0,
 			randomSeed: "",
 			rngProcs: true,
 			initialResourceOverrides: [],
@@ -198,6 +199,7 @@ export class Config extends React.Component {
 					animationLock: this.state.animationLock,
 					casterTax: this.state.casterTax,
 					countdown: this.state.countdown,
+					etherCharges: this.state.etherCharges,
 					timeTillFirstManaTick: this.state.timeTillFirstManaTick,
 					randomSeed: seed,
 					rngProcs: this.state.rngProcs,
@@ -227,6 +229,10 @@ export class Config extends React.Component {
 
 		this.setTimeTillFirstManaTick = (val => {
 			this.setState({timeTillFirstManaTick: val, dirty: true});
+		}).bind(this);
+
+		this.setEtherCharges = (val => {
+			this.setState({etherCharges: val, dirty: true});
 		}).bind(this);
 
 		this.setCountdown = (val => {
@@ -513,6 +519,7 @@ export class Config extends React.Component {
 			isNaN(parseFloat(config.hasteStacks)) ||
 			isNaN(parseFloat(config.valor)) ||
 			isNaN(parseFloat(config.casterTax)) ||
+			isNaN(parseFloat(config.etherCharges)) ||
 			isNaN(parseFloat(config.timeTillFirstManaTick)) ||
 			isNaN(parseFloat(config.countdown))) {
 			window.alert("Some config fields are not numbers!");
@@ -527,6 +534,7 @@ export class Config extends React.Component {
 			valor: parseFloat(config.valor),
 			animationLock: parseFloat(config.animationLock),
 			casterTax: parseFloat(config.casterTax),
+			etherCharges: parseFloat(config.etherCharges),
 			timeTillFirstManaTick: parseFloat(config.timeTillFirstManaTick),
 			countdown: parseFloat(config.countdown),
 			randomSeed: config.randomSeed.trim(),
@@ -545,6 +553,7 @@ export class Config extends React.Component {
 		let editSection = <div>
 			<Input defaultValue={this.state.hasteStacks} description="Haste: " onChange={this.setHaste}/>
 			<Input defaultValue={this.state.valor} description="Rays of Valor: " onChange={this.setValor}/>
+			<Input defaultValue={this.state.etherCharges} description="Ether Kit Charges: " onChange={this.setEtherCharges}/>
 			<Input defaultValue={this.state.animationLock} description="animation lock: " onChange={this.setAnimationLock}/>
 			<Input defaultValue={this.state.casterTax} description="caster tax: " onChange={this.setCasterTax}/>
 			<Input defaultValue={this.state.timeTillFirstManaTick} description="time till first MP tick: " onChange={this.setTimeTillFirstManaTick}/>

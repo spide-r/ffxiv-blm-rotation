@@ -417,6 +417,7 @@ class Controller {
 		countdown: 5,
 		hasteStacks: 0,
 		valor: 0,
+		etherCharges: 1,
 		randomSeed: "hello.",
 		rngProcs: true,
 		initialResourceOverrides: []
