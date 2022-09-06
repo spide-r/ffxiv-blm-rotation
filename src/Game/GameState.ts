@@ -339,6 +339,10 @@ export class GameState {
 		else {
 			manaCost = baseManaCost;
 		}
+
+		if(this.resources.get(ResourceType.MagicBurst).available(1)){
+			manaCost *= 1.3; //Magic Burst MP consumption is 30% more
+		}
 		return [manaCost, uhConsumption];
 	}
 
@@ -495,6 +499,14 @@ export class GameState {
 			return;
 		}
 
+		// Chainspell
+
+		let chain = this.resources.get(ResourceType.Chainspell);
+		if(chain.available(1)){
+			instantCast(this, undefined);
+			return;
+		}
+
 		// Swiftcast
 		let swift = this.resources.get(ResourceType.Swiftcast);
 		if (swift.available(1)) {
@@ -513,6 +525,7 @@ export class GameState {
 			}
 			return;
 		}
+
 
 
 		// there are no triplecast charges. cast and apply effect

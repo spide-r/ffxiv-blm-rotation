@@ -313,6 +313,23 @@ function BuffsDisplay(props) {
 		className: data.fomCountdown > 0 ? "" : "hidden"
 	});
 
+	buffs.push({
+		rscType: ResourceType.Chainspell,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.chainspellCountdown.toFixed(2),
+		className: data.chainspellCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.MagicBurst,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.magicBurstCountdown.toFixed(2),
+		className: data.magicBurstCountdown > 0 ? "" : "hidden"
+	});
 
 
 	for (let i = 0; i < buffs.length; i++) buffs[i].key=i;
