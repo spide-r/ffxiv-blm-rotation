@@ -270,6 +270,8 @@ resourceInfos.set(ResourceType.cd_uptime_Bravery,{ isCoolDown: true, maxStacks: 
 resourceInfos.set(ResourceType.cd_five_Bravery,{ isCoolDown: true, maxStacks: 1, cdPerStack: 1 });
 resourceInfos.set(ResourceType.cd_Chainspell,{ isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
 resourceInfos.set(ResourceType.cd_FoS,{ isCoolDown: true, maxStacks: 1, cdPerStack: 300 });
+resourceInfos.set(ResourceType.cd_HonoredSac,{ isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
+resourceInfos.set(ResourceType.cd_NobleEnds,{ isCoolDown: true, maxStacks: 1, cdPerStack: 90 });
 
 resourceInfos.set(ResourceType.FlareStarDoT, {isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 60}) // buff display
 resourceInfos.set(ResourceType.EtherKit, { isCoolDown: false, defaultValue: 0, maxValue: 9999, maxTimeout: 10 * 60});
@@ -284,6 +286,8 @@ resourceInfos.set(ResourceType.ten_Bravery, { isCoolDown: false, defaultValue: 0
 resourceInfos.set(ResourceType.uptime_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 resourceInfos.set(ResourceType.five_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 resourceInfos.set(ResourceType.FoMTimerDisplay, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 }); // buff display only
+resourceInfos.set(ResourceType.NobleEnds, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 15 });
+resourceInfos.set(ResourceType.HonoredSac, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 15 });
 
 
 

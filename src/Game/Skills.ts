@@ -150,6 +150,13 @@ const skillInfos = [
 	new SkillInfo(SkillName.ten_Bravery, ResourceType.cd_Ten_Bravery, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
+	//Banners
+	new SkillInfo(SkillName.HonoredSac, ResourceType.cd_HonoredSac, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
+	new SkillInfo(SkillName.NobleEnds, ResourceType.cd_NobleEnds, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
 	//Essences
 	new SkillInfo(SkillName.Reg_Skirmisher, ResourceType.cd_Reg_Skirmisher, Aspect.Other, false,
 		0, 0, 0, 0.1),
@@ -1223,6 +1230,54 @@ export class SkillsList extends Map<SkillName, Skill> {
 				cd.overrideCurrentValue(currentStackCd); // this should effectively reset the cooldown
 			})
 		}
+
+		skillsList.set(SkillName.HonoredSac, new Skill(SkillName.HonoredSac,
+			() => {
+				let noble_ends_active = game.resources.get(ResourceType.NobleEnds).available(1);
+				return !noble_ends_active; //if noble ends is not up - fire this off
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.HonoredSac,
+					effectFn: () => {
+						let hsacRSC = game.resources.get(ResourceType.HonoredSac);
+						if (hsacRSC.pendingChange) hsacRSC.removeTimer(); // should never need this, but just in case
+						hsacRSC.gain(1);
+						game.resources.addResourceEvent(
+							ResourceType.HonoredSac,
+							"drop hsac", 15, (rsc: Resource) => {
+								rsc.consume(rsc.availableAmount());
+							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
+		skillsList.set(SkillName.NobleEnds, new Skill(SkillName.NobleEnds,
+			() => {
+				let honored_sac_active = game.resources.get(ResourceType.HonoredSac).available(1);
+				return !honored_sac_active; //if noble ends is not up - fire this off
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.NobleEnds,
+					effectFn: () => {
+						let hsacRSC = game.resources.get(ResourceType.NobleEnds);
+						if (hsacRSC.pendingChange) hsacRSC.removeTimer(); // should never need this, but just in case
+						hsacRSC.gain(1);
+						game.resources.addResourceEvent(
+							ResourceType.NobleEnds,
+							"drop hsac", 15, (rsc: Resource) => {
+								rsc.consume(rsc.availableAmount());
+							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
 
 
 

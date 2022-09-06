@@ -56,7 +56,11 @@ export let displayedSkills = [
 	SkillName.Skirmisher,
 	SkillName.Watcher,
 	SkillName.Gambler,
-	SkillName.Elder
+	SkillName.Elder,
+
+	// Banner
+	SkillName.HonoredSac,
+	SkillName.NobleEnds
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
@@ -109,6 +113,8 @@ skillIcons.set(SkillName.full_uptime_bravery, require("./Asset/betweenTheLines.p
 skillIcons.set(SkillName.five_Bravery, require("./Asset/betweenTheLines.png"))
 skillIcons.set(SkillName.ten_Bravery, require("./Asset/betweenTheLines.png"))
 skillIcons.set(SkillName.FoS, require("./Asset/freeze.png"))
+skillIcons.set(SkillName.HonoredSac, require("./Asset/umbralSoul.png"))
+skillIcons.set(SkillName.NobleEnds, require("./Asset/umbralSoul.png"))
 
 
 

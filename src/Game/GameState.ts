@@ -80,6 +80,8 @@ export class GameState {
 		this.resources.set(ResourceType.FoMTick, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
 		this.resources.set(ResourceType.Chainspell, new Resource(ResourceType.Chainspell, 1, 0));
 		this.resources.set(ResourceType.MagicBurst, new Resource(ResourceType.MagicBurst, 1, 0));
+		this.resources.set(ResourceType.HonoredSac, new Resource(ResourceType.HonoredSac, 1, 0));
+		this.resources.set(ResourceType.NobleEnds, new Resource(ResourceType.NobleEnds, 1, 0));
 
 
 		this.resources.set(ResourceType.FoMTimerDisplay, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
@@ -124,6 +126,8 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_FoM, new CoolDown(ResourceType.cd_FoM, 120, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Chainspell, new CoolDown(ResourceType.cd_Chainspell, 90, 1, 1));
 		this.cooldowns.set(ResourceType.cd_FoS, new CoolDown(ResourceType.cd_FoS, 300, 1, 1));
+		this.cooldowns.set(ResourceType.cd_HonoredSac, new CoolDown(ResourceType.cd_HonoredSac, 90, 1, 1));
+		this.cooldowns.set(ResourceType.cd_NobleEnds, new CoolDown(ResourceType.cd_NobleEnds, 90, 1, 1));
 
 
 
@@ -295,7 +299,15 @@ export class GameState {
 	}
 
 	getBannerModifier(){ //honored sac & noble ends
-		return 1;
+		let rsc = this.resources;
+		let mod = 1;
+		if(rsc.get(ResourceType.NobleEnds).available(1)){
+			mod *= 1.50
+		}
+		if(rsc.get(ResourceType.HonoredSac).available(1)){
+			mod *= 1.55
+		}
+		return mod;
 	}
 
 	getExternalBuffModifier(){ //dervish, bravery, excellence, magic burst, FoM, (high-wire)

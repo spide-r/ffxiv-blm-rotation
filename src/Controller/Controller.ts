@@ -341,7 +341,9 @@ class Controller {
 			tenBraveryCountdown: game.resources.timeTillReady(ResourceType.ten_Bravery),
 			fomCountdown: game.resources.timeTillReady(ResourceType.FoMTimerDisplay),
 			chainspellCountdown: game.resources.timeTillReady(ResourceType.Chainspell),
-			magicBurstCountdown: game.resources.timeTillReady(ResourceType.MagicBurst)
+			magicBurstCountdown: game.resources.timeTillReady(ResourceType.MagicBurst),
+			honoredSacCountdown: game.resources.timeTillReady(ResourceType.HonoredSac),
+			nobleEndsCountdown: game.resources.timeTillReady(ResourceType.NobleEnds)
 		};
 		if (typeof updateStatusDisplay !== "undefined") {
 			updateStatusDisplay({

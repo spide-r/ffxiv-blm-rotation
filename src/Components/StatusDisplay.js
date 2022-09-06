@@ -78,6 +78,8 @@ buffIcons.set(ResourceType.ten_Bravery, require("./Asset/buff_lucidDreaming.png"
 buffIcons.set(ResourceType.FoMTimerDisplay, require("./Asset/buff_firestarter.png"));
 buffIcons.set(ResourceType.Chainspell, require("./Asset/buff_triplecast.png"));
 buffIcons.set(ResourceType.MagicBurst, require("./Asset/buff_manaward.png"));
+buffIcons.set(ResourceType.NobleEnds, require("./Asset/highBlizzard2.png"));
+buffIcons.set(ResourceType.HonoredSac, require("./Asset/highBlizzard2.png"));
 
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {
@@ -123,7 +125,9 @@ function BuffsDisplay(props) {
 		fiveBraveryCountdown: 0,
 		fomCountdown: 0,
 		chainspellCountdown: 0,
-		magicBurstCountdown: 0
+		magicBurstCountdown: 0,
+		honoredSacCountdown: 0,
+		nobleEndsCountdown: 0
 	};
 	let buffs = [];
 	buffs.push({
@@ -329,6 +333,24 @@ function BuffsDisplay(props) {
 		stacks:1,
 		timeRemaining: data.magicBurstCountdown.toFixed(2),
 		className: data.magicBurstCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.HonoredSac,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.honoredSacCountdown.toFixed(2),
+		className: data.honoredSacCountdown > 0 ? "" : "hidden"
+	});
+
+	buffs.push({
+		rscType: ResourceType.NobleEnds,
+		onSelf: true,
+		enabled: true,
+		stacks:1,
+		timeRemaining: data.nobleEndsCountdown.toFixed(2),
+		className: data.nobleEndsCountdown > 0 ? "" : "hidden"
 	});
 
 
