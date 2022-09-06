@@ -60,7 +60,9 @@ export let displayedSkills = [
 
 	// Banner
 	SkillName.HonoredSac,
-	SkillName.NobleEnds
+	SkillName.NobleEnds,
+
+	SkillName.Dispel
 ];
 
 // seems useful: https://na.finalfantasyxiv.com/lodestone/special/fankit/icon/
@@ -115,6 +117,7 @@ skillIcons.set(SkillName.ten_Bravery, require("./Asset/betweenTheLines.png"))
 skillIcons.set(SkillName.FoS, require("./Asset/freeze.png"))
 skillIcons.set(SkillName.HonoredSac, require("./Asset/umbralSoul.png"))
 skillIcons.set(SkillName.NobleEnds, require("./Asset/umbralSoul.png"))
+skillIcons.set(SkillName.Dispel, require("./Asset/despair.png"))
 
 
 

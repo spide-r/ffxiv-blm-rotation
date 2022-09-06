@@ -157,6 +157,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.NobleEnds, ResourceType.cd_NobleEnds, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
+	new SkillInfo(SkillName.Dispel, ResourceType.cd_GCD, Aspect.Other, true,
+		2.5, 0, 0, 0.1),
+
 	//Essences
 	new SkillInfo(SkillName.Reg_Skirmisher, ResourceType.cd_Reg_Skirmisher, Aspect.Other, false,
 		0, 0, 0, 0.1),
@@ -1252,6 +1255,17 @@ export class SkillsList extends Map<SkillName, Skill> {
 					dealDamage: false,
 					node: node
 				});
+			}
+		));
+
+		skillsList.set(SkillName.Dispel, new Skill(SkillName.Dispel,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.castSpell(SkillName.Dispel, (cap: SkillCaptureCallbackInfo) => {
+				}, (app: SkillApplicationCallbackInfo) => {
+				}, node);
 			}
 		));
 

@@ -69,6 +69,7 @@ export const enum SkillName {
 	FoS = "Font of Skill",
 	NobleEnds = "Banner of Noble Ends",
 	HonoredSac = "Banner of Honored Sacrifice",
+	Dispel = "Dispel",
 
 
 
