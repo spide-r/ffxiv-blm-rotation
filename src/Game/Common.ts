@@ -67,6 +67,8 @@ export const enum SkillName {
 	FoM = "Font of Magic",
 	Chainspell = "Chainspell",
 	FoS = "Font of Skill",
+	NobleEnds = "Banner of Noble Ends",
+	HonoredSac = "Banner of Honored Sacrifice",
 
 
 
@@ -128,13 +130,14 @@ export const enum ResourceType {
 	Chainspell = "Chainspell",
 	MagicBurst = "Magic Burst",
 	FoS = "Font of Skill",
+	NobleEnds = "Baner of Noble ends",
+	HonoredSac = "Banner of Honored Sacrifice",
+	cd_NobleEnds = "cd_NobleEnds",
+	cd_HonoredSac = "cd_HonoredSac",
 	cd_Chainspell = "Chainspell",
-	cd_MagicBurst = "Magic Burst",
 	cd_Dervish = "Dervish",
 	cd_Excellence = "cd_Excellence",
 	cd_Elixir = "cd_Elixir", // [0, 1x]
-	cd_Essence = "cd_Essence",
-	cd_FlareStar = "cd_FlareStar", //not used yet?
 	cd_Reg_Skirmisher = "cd_Reg_Skirmisher",
 	cd_Skirmisher = "cd_Skirmisher",
 	cd_Watcher = "cd_Watcher",

@@ -119,9 +119,7 @@ const skillInfos = [
 
 	//Bozja
 	new SkillInfo(SkillName.FlareStar, ResourceType.cd_GCD, Aspect.Other, true,
-		5, 9000, 1000, 0.1), //flare star will always take 5s
-	//potency set to its base on-hit potency of 300 + (350 * 2) due to approx 2 extra dot tick during the simulated "cast" time
-	// THIS IS WRONG AND NEEDS TO BE CHANGED
+		5, 9000, 300, 0.1), //flare star will always take 5s
 
 	new SkillInfo(SkillName.Chainspell, ResourceType.cd_Chainspell, Aspect.Other, false,
 		0, 0, 0, 0.1),
@@ -952,6 +950,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 		));
 
+
 		// called at the time of APPLICATION (not snapshot)
 		let applyFsDot = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
 			// define stuff
@@ -980,19 +979,52 @@ export class SkillsList extends Map<SkillName, Skill> {
 			recurringFsTick(numTicks, capturedTickPotency);
 		};
 
-		// Flare star
+
+
+
+		//Flare Star
 		skillsList.set(SkillName.FlareStar, new Skill(SkillName.FlareStar,
 			() => {
 				return true;
 			},
 			(game, node) => {
 
-				let capturedTickPotency: number;
-				game.castSpell(SkillName.FlareStar, (cap: SkillCaptureCallbackInfo) => {
-					capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
-				}, (app: SkillApplicationCallbackInfo) => {
+			game.useInstantSkill({ skillName: SkillName.FlareStar, effectFn: () => {
+				let capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
+					let skinfo = skillsList.get(SkillName.FlareStar).info
+					hackyDrainMP(skinfo, SkillName.FlareStar)
 					applyFsDot(game, node, capturedTickPotency, 20); //tick 20 times
-				}, node);
+					let cd = game.cooldowns.get(ResourceType.cd_GCD);
+					cd.overrideCurrentValue(-2.6); //magic number to make the GCD cooldown exactly 5 when combined with anim lock
+					//todo this will not work with various haste levels
+			}, dealDamage: true, node: node
+			});
+
+				let hackyDrainMP = function (skillInfo: SkillInfo, skillName: SkillName) {
+					let [capturedManaCost, uhConsumption] = game.captureManaCostAndUHConsumption(Aspect.Other, skillInfo.baseManaCost);
+
+						if (!(skillName === SkillName.Paradox && game.getIceStacks() > 0)) {
+							game.resources.get(ResourceType.Mana).consume(capturedManaCost);
+						}
+						if (uhConsumption > 0) {
+							game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);
+						}
+
+						if (game.resources.get(ResourceType.EtherKit).available(1)) { //ether kit available
+							console.log("Ether kit available")
+							if (game.resources.get(ResourceType.Mana).availableAmount() < 2000) {
+								console.log("mana now below 2000 - adding mp")
+								//burn etherkit - add 5000 MP
+								game.resources.get(ResourceType.EtherKit).consume(1);
+								if (game.resources.get(ResourceType.EtherKit).availableAmount() === 0) {
+									game.resources.get(ResourceType.EtherKit).removeTimer();
+								}
+								game.resources.get(ResourceType.Mana).gain(5000);
+
+							}
+
+						}
+				}
 
 			}
 		));
@@ -1093,9 +1125,77 @@ export class SkillsList extends Map<SkillName, Skill> {
 
 		addResourceAbility(SkillName.Excellence, ResourceType.Excellence, 60);
 		addResourceAbility(SkillName.Dervish, ResourceType.Dervish, 60);
-		addResourceAbility(SkillName.ten_Bravery, ResourceType.ten_Bravery, 60);
-		addResourceAbility(SkillName.five_Bravery, ResourceType.five_Bravery, 10 * 60);
-		addResourceAbility(SkillName.full_uptime_bravery, ResourceType.ten_Bravery, 10 * 60); //ten_bravery instead of full_uptime because fuck that
+
+		skillsList.set(SkillName.ten_Bravery, new Skill(SkillName.ten_Bravery,
+			() => {
+				let five_bravery_used = game.resources.get(ResourceType.five_Bravery).available(1);
+				return !five_bravery_used; //if 5% bravery is not up - fire this off
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.ten_Bravery,
+					effectFn: () => {
+						let braveryRsc = game.resources.get(ResourceType.ten_Bravery);
+						if (braveryRsc.pendingChange) braveryRsc.removeTimer(); // should never need this, but just in case
+						braveryRsc.gain(1);
+						game.resources.addResourceEvent(
+							ResourceType.ten_Bravery,
+							"drop bravery", 60, (rsc: Resource) => {
+								rsc.consume(rsc.availableAmount());
+							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+		skillsList.set(SkillName.five_Bravery, new Skill(SkillName.five_Bravery,
+			() => {
+				let ten_bravery_used = game.resources.get(ResourceType.ten_Bravery).available(1);
+				return !ten_bravery_used; //if 10% bravery is not up - fire this off
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.five_Bravery,
+					effectFn: () => {
+						let braveryRsc = game.resources.get(ResourceType.five_Bravery);
+						if (braveryRsc.pendingChange) braveryRsc.removeTimer(); // should never need this, but just in case
+						braveryRsc.gain(1);
+						game.resources.addResourceEvent(
+							ResourceType.five_Bravery,
+							"drop bravery", 10 * 60, (rsc: Resource) => {
+								rsc.consume(rsc.availableAmount());
+							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
+		skillsList.set(SkillName.full_uptime_bravery, new Skill(SkillName.ten_Bravery,
+			() => {
+			let five_bravery_used = game.resources.get(ResourceType.five_Bravery).available(1);
+				return !five_bravery_used; //if 5% bravery is not up - fire this off
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.full_uptime_bravery,
+					effectFn: () => {
+						let braveryRsc = game.resources.get(ResourceType.ten_Bravery);
+						if (braveryRsc.pendingChange) braveryRsc.removeTimer(); // should never need this, but just in case
+						braveryRsc.gain(1);
+						game.resources.addResourceEvent(
+							ResourceType.ten_Bravery,
+							"drop bravery", 10 * 60, (rsc: Resource) => {
+								rsc.consume(rsc.availableAmount());
+							});
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
 
 		skillsList.set(SkillName.FoS, new Skill(SkillName.FoS,
 			() => {
@@ -1123,6 +1223,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 				cd.overrideCurrentValue(currentStackCd); // this should effectively reset the cooldown
 			})
 		}
+
 
 
 		function applyEssence(essenceRsc: ResourceType, essenceSkill: SkillName, game: GameState, node: ActionNode) {
