@@ -95,9 +95,9 @@ const skillInfos = [
 		0, 0, 760, 0.63),
 
 	new SkillInfo(SkillName.HighFire2, ResourceType.cd_GCD, Aspect.Fire, true,
-		3, 1500, 140, 1.154),
+		3, 1500, 100, 1.154),
 	new SkillInfo(SkillName.HighBlizzard2, ResourceType.cd_GCD, Aspect.Ice, true,
-		3, 800, 140, 1.158),
+		3, 800, 100, 1.158),
 	new SkillInfo(SkillName.Amplifier, ResourceType.cd_Amplifier, Aspect.Other, false,
 		0, 0, 0, 0.1),
 	new SkillInfo(SkillName.Paradox, ResourceType.cd_GCD, Aspect.Other, true,
@@ -1002,8 +1002,8 @@ export class SkillsList extends Map<SkillName, Skill> {
 					hackyDrainMP(skinfo, SkillName.FlareStar)
 					applyFsDot(game, node, capturedTickPotency, 20); //tick 20 times
 					let cd = game.cooldowns.get(ResourceType.cd_GCD);
-					cd.overrideCurrentValue(-2.6); //magic number to make the GCD cooldown exactly 5 when combined with anim lock
-					//todo this will not work with various haste levels
+					let magic_number = -2.3; //magic number to make the GCD cooldown 5-ish (ignoring any sps changes)
+					cd.overrideCurrentValue(magic_number);
 			}, dealDamage: true, node: node
 			});
 

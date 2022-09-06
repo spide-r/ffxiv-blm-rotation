@@ -135,7 +135,7 @@ export class StatsModifier
 		spsMod.castTimeBase = oldCastBase - hasteMod;
 		spsMod.spellRecastTimeScale = oldRecastBase - hasteMod;
 
-		if(resources.get(ResourceType.Dervish).available(1)){ //1% gcd bonus
+		if(resources.get(ResourceType.Dervish).available(1)){ //1% gcd reduction
 			let oldCastBase = spsMod.castTimeBase;
 			let oldRecastBase = spsMod.spellRecastTimeScale;
 			spsMod.castTimeBase = oldCastBase - 0.1;
@@ -147,7 +147,7 @@ export class StatsModifier
 
 		let enoMod = new StatsModifier();
 		if (resources.get(ResourceType.Enochian).available(1) && !Debug.noEnochian) {
-			enoMod.damageBase = 1.2;
+			enoMod.damageBase = 1.15; //lvl 80 eno is 15% increase
 		}
 		modifiers.push(enoMod);
 
