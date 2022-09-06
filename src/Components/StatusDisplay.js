@@ -52,12 +52,10 @@ function ResourceCounter(props) {
 }
 const buffIcons = new Map();
 buffIcons.set(ResourceType.Triplecast, require("./Asset/buff_triplecast.png"));
-buffIcons.set(ResourceType.EtherKit, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Sharpcast, require("./Asset/buff_sharpcast.png"));
 buffIcons.set(ResourceType.Firestarter, require("./Asset/buff_firestarter.png"));
 buffIcons.set(ResourceType.Thundercloud, require("./Asset/buff_thundercloud.png"));
 buffIcons.set(ResourceType.ThunderDoTTick, require("./Asset/buff_thunder3.png"));
-buffIcons.set(ResourceType.FlareStarDoTTick, require("./Asset/buff_addle.png"));
 buffIcons.set(ResourceType.LeyLines, require("./Asset/buff_leyLines.png"));
 buffIcons.set(ResourceType.Manaward, require("./Asset/buff_manaward.png"));
 buffIcons.set(ResourceType.Addle, require("./Asset/buff_addle.png"));
@@ -66,20 +64,24 @@ buffIcons.set(ResourceType.LucidDreamingTimerDisplay, require("./Asset/buff_luci
 buffIcons.set(ResourceType.Surecast, require("./Asset/buff_surecast.png"));
 buffIcons.set(ResourceType.Tincture, require("./Asset/buff_tincture.png"));
 buffIcons.set(ResourceType.Sprint, require("./Asset/buff_sprint.png"));
-buffIcons.set(ResourceType.Reg_Skirmisher, require("./Asset/buff_tincture.png"));
-buffIcons.set(ResourceType.Skirmisher, require("./Asset/buff_tincture.png"));
-buffIcons.set(ResourceType.Watcher, require("./Asset/buff_tincture.png"));
-buffIcons.set(ResourceType.Gambler, require("./Asset/buff_tincture.png"));
-buffIcons.set(ResourceType.Elder, require("./Asset/buff_tincture.png"));
-buffIcons.set(ResourceType.Excellence, require("./Asset/buff_firestarter.png"));
-buffIcons.set(ResourceType.Dervish, require("./Asset/buff_addle.png"));
-buffIcons.set(ResourceType.five_Bravery, require("./Asset/buff_lucidDreaming.png"));
-buffIcons.set(ResourceType.ten_Bravery, require("./Asset/buff_lucidDreaming.png"));
-buffIcons.set(ResourceType.FoMTimerDisplay, require("./Asset/buff_firestarter.png"));
-buffIcons.set(ResourceType.Chainspell, require("./Asset/buff_triplecast.png"));
-buffIcons.set(ResourceType.MagicBurst, require("./Asset/buff_manaward.png"));
-buffIcons.set(ResourceType.NobleEnds, require("./Asset/highBlizzard2.png"));
-buffIcons.set(ResourceType.HonoredSac, require("./Asset/highBlizzard2.png"));
+
+// boszja
+buffIcons.set(ResourceType.EtherKit, require("./Asset/bozja/buffIcons/auto_ether.png"));
+buffIcons.set(ResourceType.FlareStarDoTTick, require("./Asset/bozja/buffIcons/flare_star.png"));
+buffIcons.set(ResourceType.Reg_Skirmisher, require("./Asset/bozja/buffIcons/regular_skirmisher.png"));
+buffIcons.set(ResourceType.Skirmisher, require("./Asset/bozja/buffIcons/pure_essence.png"));
+buffIcons.set(ResourceType.Watcher, require("./Asset/bozja/buffIcons/pure_essence.png"));
+buffIcons.set(ResourceType.Gambler, require("./Asset/bozja/buffIcons/pure_essence.png"));
+buffIcons.set(ResourceType.Elder, require("./Asset/bozja/buffIcons/pure_essence.png"));
+buffIcons.set(ResourceType.Excellence, require("./Asset/bozja/buffIcons/excellence.png"));
+buffIcons.set(ResourceType.Dervish, require("./Asset/bozja/buffIcons/dervish.png"));
+buffIcons.set(ResourceType.five_Bravery, require("./Asset/bozja/buffIcons/bravery.png"));
+buffIcons.set(ResourceType.ten_Bravery, require("./Asset/bozja/buffIcons/bravery.png"));
+buffIcons.set(ResourceType.FoMTimerDisplay, require("./Asset/bozja/buffIcons/font_of_magic.png"));
+buffIcons.set(ResourceType.Chainspell, require("./Asset/bozja/buffIcons/chainspell.png"));
+buffIcons.set(ResourceType.MagicBurst, require("./Asset/bozja/buffIcons/magic_burst.png"));
+buffIcons.set(ResourceType.NobleEnds, require("./Asset/bozja/buffIcons/noble_ends.png"));
+buffIcons.set(ResourceType.HonoredSac, require("./Asset/bozja/buffIcons/hsac.png"));
 
 // rscType, stacks, timeRemaining, onSelf, enabled
 function Buff(props) {

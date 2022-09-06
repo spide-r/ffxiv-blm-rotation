@@ -56,8 +56,8 @@ export let displayedSkills = [
 	SkillName.HonoredSac,
 	SkillName.NobleEnds,
 	SkillName.five_Bravery,
-	SkillName.full_uptime_bravery,
 	SkillName.ten_Bravery,
+	SkillName.full_uptime_bravery,
 	SkillName.Dispel,
 	SkillName.Percept,
 	SkillName.EtherKit,
@@ -103,26 +103,26 @@ skillIcons.set(SkillName.Tincture, require("./Asset/tincture.png"));
 skillIcons.set(SkillName.Sprint, require("./Asset/sprint.png"));
 
 // Bozja
-skillIcons.set(SkillName.FlareStar, require("./Asset/paradox.png"))
-skillIcons.set(SkillName.FoM, require("./Asset/foul.png"))
-skillIcons.set(SkillName.Chainspell, require("./Asset/triplecast.png"))
-skillIcons.set(SkillName.EtherKit, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Elixir, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Reg_Skirmisher, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Skirmisher, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Watcher, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Gambler, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Elder, require("./Asset/tincture.png"))
-skillIcons.set(SkillName.Excellence, require("./Asset/amplifier.png"))
-skillIcons.set(SkillName.Dervish, require("./Asset/blizzard4.png"))
-skillIcons.set(SkillName.full_uptime_bravery, require("./Asset/betweenTheLines.png"))
-skillIcons.set(SkillName.five_Bravery, require("./Asset/betweenTheLines.png"))
-skillIcons.set(SkillName.ten_Bravery, require("./Asset/betweenTheLines.png"))
-skillIcons.set(SkillName.FoS, require("./Asset/freeze.png"))
-skillIcons.set(SkillName.HonoredSac, require("./Asset/umbralSoul.png"))
-skillIcons.set(SkillName.NobleEnds, require("./Asset/umbralSoul.png"))
-skillIcons.set(SkillName.Dispel, require("./Asset/despair.png"))
-skillIcons.set(SkillName.Percept, require("./Asset/paradox.png"))
+skillIcons.set(SkillName.FlareStar, require("./Asset/bozja/flare_star.png"))
+skillIcons.set(SkillName.FoM, require("./Asset/bozja/font_of_magic.png"))
+skillIcons.set(SkillName.Chainspell, require("./Asset/bozja/chainspell.png"))
+skillIcons.set(SkillName.EtherKit, require("./Asset/bozja/ether_kit.png"))
+skillIcons.set(SkillName.Elixir, require("./Asset/bozja/elixir.png"))
+skillIcons.set(SkillName.Reg_Skirmisher, require("./Asset/bozja/regular_skirmisher.png"))
+skillIcons.set(SkillName.Skirmisher, require("./Asset/bozja/skirmisher.png"))
+skillIcons.set(SkillName.Watcher, require("./Asset/bozja/watcher.png"))
+skillIcons.set(SkillName.Gambler, require("./Asset/bozja/gambler.png"))
+skillIcons.set(SkillName.Elder, require("./Asset/bozja/elder.png"))
+skillIcons.set(SkillName.Excellence, require("./Asset/bozja/excellence.png"))
+skillIcons.set(SkillName.Dervish, require("./Asset/bozja/dervish.png"))
+skillIcons.set(SkillName.full_uptime_bravery, require("./Asset/bozja/cure_4.png"))
+skillIcons.set(SkillName.five_Bravery, require("./Asset/bozja/bravery.png"))
+skillIcons.set(SkillName.ten_Bravery, require("./Asset/bozja/bravery.png"))
+skillIcons.set(SkillName.FoS, require("./Asset/bozja/font_of_skill.png"))
+skillIcons.set(SkillName.HonoredSac, require("./Asset/bozja/honored_sacrifice.png"))
+skillIcons.set(SkillName.NobleEnds, require("./Asset/bozja/noble_ends.png"))
+skillIcons.set(SkillName.Dispel, require("./Asset/bozja/dispel.png"))
+skillIcons.set(SkillName.Percept, require("./Asset/bozja/perception.png"))
 
 
 
