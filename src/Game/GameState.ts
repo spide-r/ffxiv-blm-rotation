@@ -289,6 +289,7 @@ export class GameState {
 	getValorModifier(){ //+3% per stack
 		let valor = this.config.valor;
 		let mod = .03 * valor;
+		mod += 1;
 		return mod;
 	}
 
