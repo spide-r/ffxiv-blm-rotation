@@ -77,14 +77,13 @@ export class GameState {
 		this.resources.set(ResourceType.five_Bravery, new Resource(ResourceType.five_Bravery, 1,0));
 		this.resources.set(ResourceType.ten_Bravery, new Resource(ResourceType.ten_Bravery, 1,0));
 		this.resources.set(ResourceType.uptime_Bravery, new Resource(ResourceType.uptime_Bravery, 1,0));
-		this.resources.set(ResourceType.FoMTick, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
 		this.resources.set(ResourceType.Chainspell, new Resource(ResourceType.Chainspell, 1, 0));
 		this.resources.set(ResourceType.MagicBurst, new Resource(ResourceType.MagicBurst, 1, 0));
 		this.resources.set(ResourceType.HonoredSac, new Resource(ResourceType.HonoredSac, 1, 0));
 		this.resources.set(ResourceType.NobleEnds, new Resource(ResourceType.NobleEnds, 1, 0));
 
-
 		this.resources.set(ResourceType.FoMTimerDisplay, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
+		this.resources.set(ResourceType.FoMTick, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
 
 
 

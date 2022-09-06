@@ -819,11 +819,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 						let recurringLucidTick = (remainingTicks: number) => {
 							if (remainingTicks === 0) return;
 							applyLucidTick(numTicks + 1 - remainingTicks);
-							addLog(
-								LogCategory.Event,
-								"recurring lucid tick " + (numTicks + 1 - remainingTicks) + "/" + numTicks,
-								game.getDisplayTime(),
-								Color.ManaTick);
+							addLog( LogCategory.Event, "recurring lucid tick " + (numTicks + 1 - remainingTicks) + "/" + numTicks, game.getDisplayTime(), Color.ManaTick);
 							game.resources.addResourceEvent(
 								ResourceType.LucidTick,
 								"recurring lucid tick", 3, (rsc: Resource) => {
@@ -920,36 +916,42 @@ export class SkillsList extends Map<SkillName, Skill> {
 				return true;
 			},
 			(game, node) => {
+				let skillAppDelay = game.skillsList.get(SkillName.FoM).info.skillApplicationDelay;
+				let timeTillNextManaTick = game.resources.timeTillReady(ResourceType.Mana);
+				let timeTillFirstMpDrainApplies = (timeTillNextManaTick - skillAppDelay) + game.actorTickOffset;
+
 				game.useInstantSkill({
 					skillName: SkillName.FoM,
 					effectFn: () => {
 						const numTicks = 10;
 						let loseMpTick = (remainingTicks: number)=> {
 							if (remainingTicks===0) return;
+							game.resources.get(ResourceType.Mana).consume(1045); //lose 1045 MP per dot tick
 							game.resources.addResourceEvent(
 								ResourceType.FoMTick,
-								"recurring FoM MP drain tick " + (numTicks+1-remainingTicks) + "/" + numTicks, 3, (rsc: Resource) =>{
-									game.resources.get(ResourceType.Mana).consume(1045); //lose 1045 MP per dot tick
+								"recurring FoM MP drain tick ", 3, (rsc: Resource) =>{
 									loseMpTick(remainingTicks - 1);
 
 								}, Color.ManaTick);
 						};
-						let dot = game.resources.get(ResourceType.FoMTimerDisplay);
+
+						let buff = game.resources.get(ResourceType.FoMTimerDisplay);
 						let tick = game.resources.get(ResourceType.FoMTick);
 						if (tick.pendingChange) {
 							// if already has FoM applied; cancel the remaining ticks now.
-							dot.removeTimer();
+							buff.removeTimer();
 							tick.removeTimer();
 						}
 						// order of events:
-						dot.gain(1);
-						game.resources.addResourceEvent(ResourceType.FoMTimerDisplay, "drop FoM DoT", 30, (dot: Resource)=>{
+						buff.gain(1);
+						game.resources.addResourceEvent(
+							ResourceType.FoMTimerDisplay, "drop FoM DoT", 30, (dot: Resource)=>{
 							dot.consume(1);
 						}, Color.ManaTick);
 
 						let startDrainMP = new Event(
 							"first mp drain tick",
-							3,
+							timeTillFirstMpDrainApplies,
 							() => {
 								loseMpTick(numTicks);
 							},

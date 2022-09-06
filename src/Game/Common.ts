@@ -108,7 +108,6 @@ export const enum ResourceType {
 	Addle = "Addle", // [0, 1]
 	Swiftcast = "Swiftcast", // [0, 1]
 	LucidDreamingTimerDisplay = "Lucid Dreaming", // [0, 1] also just for timing display
-	FoMTimerDisplay = "Font of Magic", // only for timer display
 	LucidTick = "Lucid Tick", // [0, 1]
 	Surecast = "Surecast", // [0, 1]
 	Tincture = "Tincture", // [0, 1]
@@ -128,7 +127,8 @@ export const enum ResourceType {
 	five_Bravery = "5% Bravery", //10 min
 	uptime_Bravery = "Full Uptime 10% Bravery", //10 min
 	ten_Bravery = "10% Bravery", //60s
-	FoMTick = "Font of Magic",
+	FoMTick = "Font of Magic Tick",
+	FoMTimerDisplay = "Font of Magic", // only for timer display
 	Chainspell = "Chainspell",
 	MagicBurst = "Magic Burst",
 	FoS = "Font of Skill",
