@@ -140,6 +140,9 @@ const skillInfos = [
 	new SkillInfo(SkillName.Dervish, ResourceType.cd_Dervish, Aspect.Other, false,
 		0, 0, 0, 0.1),
 
+	new SkillInfo(SkillName.FoS, ResourceType.cd_FoS, Aspect.Other, false,
+		0, 0, 0, 0.1),
+
 	new SkillInfo(SkillName.full_uptime_bravery, ResourceType.cd_uptime_Bravery, Aspect.Other, false,
 		0, 0, 0, 0.1), //full uptime c4
 
@@ -1094,10 +1097,31 @@ export class SkillsList extends Map<SkillName, Skill> {
 		addResourceAbility(SkillName.five_Bravery, ResourceType.five_Bravery, 10 * 60);
 		addResourceAbility(SkillName.full_uptime_bravery, ResourceType.ten_Bravery, 10 * 60); //ten_bravery instead of full_uptime because fuck that
 
-		function dummy(){
-			let cd = game.cooldowns.get(ResourceType.cd_Manafont);
-			let currentStackCd = cd.currentStackCd();
-			cd.overrideCurrentValue(currentStackCd); // this should effectively reset the cooldown
+		skillsList.set(SkillName.FoS, new Skill(SkillName.FoS,
+			() => {
+				return true;
+			},
+			(game, node) => {
+				game.useInstantSkill({
+					skillName: SkillName.FoS,
+					effectFn: () => {
+					resetCooldowns();
+					},
+					dealDamage: false,
+					node: node
+				});
+			}
+		));
+
+		function resetCooldowns(){
+			let cooldowns = [ResourceType.cd_LeyLines, ResourceType.cd_Sharpcast, ResourceType.cd_BetweenTheLines,
+				ResourceType.cd_LucidDreaming, ResourceType.cd_Swiftcast, ResourceType.cd_Triplecast, ResourceType.cd_Manafont,
+				ResourceType.cd_Surecast, ResourceType.cd_Addle, ResourceType.cd_Manaward]
+			Object.values(cooldowns).forEach(cc => {
+				let cd = game.cooldowns.get(cc)
+				let currentStackCd = cd.currentStackCd();
+				cd.overrideCurrentValue(currentStackCd); // this should effectively reset the cooldown
+			})
 		}
 
 

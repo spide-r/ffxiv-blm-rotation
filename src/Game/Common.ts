@@ -66,7 +66,7 @@ export const enum SkillName {
 	ten_Bravery = "1 Minute Bravery (10%)",
 	FoM = "Font of Magic",
 	Chainspell = "Chainspell",
-	MagicBurst = "Magic Burst",
+	FoS = "Font of Skill",
 
 
 
@@ -127,6 +127,7 @@ export const enum ResourceType {
 	FoMTick = "Font of Magic",
 	Chainspell = "Chainspell",
 	MagicBurst = "Magic Burst",
+	FoS = "Font of Skill",
 	cd_Chainspell = "Chainspell",
 	cd_MagicBurst = "Magic Burst",
 	cd_Dervish = "Dervish",
@@ -143,6 +144,7 @@ export const enum ResourceType {
 	cd_five_Bravery = "cd_five_Bravery", //10 min - 5%
 	cd_uptime_Bravery = "cd_uptime_Bravery", //10 min - 10%
 	cd_FoM = "cd_FoM",
+	cd_FoS = "cd_FoS",
 
 
 	// special

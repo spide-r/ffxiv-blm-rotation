@@ -46,6 +46,7 @@ export let displayedSkills = [
 	SkillName.Elixir,
 	SkillName.Excellence,
 	SkillName.Dervish,
+	SkillName.FoS,
 	SkillName.five_Bravery,
 	SkillName.full_uptime_bravery,
 	SkillName.ten_Bravery,
@@ -107,6 +108,7 @@ skillIcons.set(SkillName.Dervish, require("./Asset/blizzard4.png"))
 skillIcons.set(SkillName.full_uptime_bravery, require("./Asset/betweenTheLines.png"))
 skillIcons.set(SkillName.five_Bravery, require("./Asset/betweenTheLines.png"))
 skillIcons.set(SkillName.ten_Bravery, require("./Asset/betweenTheLines.png"))
+skillIcons.set(SkillName.FoS, require("./Asset/freeze.png"))
 
 
 

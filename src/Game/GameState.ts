@@ -123,6 +123,7 @@ export class GameState {
 		this.cooldowns.set(ResourceType.cd_Ten_Bravery, new CoolDown(ResourceType.cd_Ten_Bravery, 1, 1, 1));
 		this.cooldowns.set(ResourceType.cd_FoM, new CoolDown(ResourceType.cd_FoM, 120, 1, 1));
 		this.cooldowns.set(ResourceType.cd_Chainspell, new CoolDown(ResourceType.cd_Chainspell, 90, 1, 1));
+		this.cooldowns.set(ResourceType.cd_FoS, new CoolDown(ResourceType.cd_FoS, 300, 1, 1));
 
 
 
@@ -500,7 +501,6 @@ export class GameState {
 		}
 
 		// Chainspell
-
 		let chain = this.resources.get(ResourceType.Chainspell);
 		if(chain.available(1)){
 			instantCast(this, undefined);
