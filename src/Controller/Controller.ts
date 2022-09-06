@@ -410,11 +410,13 @@ class Controller {
 	}
 
 	setConfigAndRestart(props={
-		spellSpeed: 1268,
+		spellSpeed: 911,
 		animationLock: 0.66,
 		casterTax: 0.06,
 		timeTillFirstManaTick: 0.3,
 		countdown: 5,
+		hasteStacks: 0,
+		valor: 0,
 		randomSeed: "hello.",
 		rngProcs: true,
 		initialResourceOverrides: []

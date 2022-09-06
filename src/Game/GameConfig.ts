@@ -2,12 +2,14 @@ import {Debug, SkillName} from "./Common";
 import {ResourceOverride} from "./Resources";
 
 export class GameConfig {
-    spellSpeed = 400;
+    spellSpeed = 911;
     countdown = 0;
     randomSeed = "hello.";
     casterTax = 0.06;
     animationLock = 0.66;
     timeTillFirstManaTick = 1.2;
+    hasteStacks = 0;
+    valor = 0;
     rngProcs = true;
     initialResourceOverrides: ResourceOverride[] = [];
 
@@ -17,18 +19,22 @@ export class GameConfig {
         countdown: number,
         randomSeed: string,
         casterTax: number,
+        valor: number,
+        hasteStacks: number,
         animationLock: number,
         timeTillFirstManaTick: number,
         rngProcs: boolean,
         initialResourceOverrides: any[]
     }) {
         if (props) {
-            this.spellSpeed = props.spellSpeed;
             this.countdown = props.countdown;
+            this.spellSpeed = props.spellSpeed;
             this.randomSeed = props.randomSeed;
             this.casterTax = props.casterTax;
             this.animationLock = props.animationLock;
             this.rngProcs = props.rngProcs;
+            this.valor = props.valor;
+            this.hasteStacks = props.hasteStacks;
             if (props.initialResourceOverrides) {
                 this.initialResourceOverrides = props.initialResourceOverrides.map(obj=>{
                     return new ResourceOverride(obj);
@@ -53,6 +59,8 @@ export class GameConfig {
                 this.countdown === other.countdown &&
                 this.randomSeed === other.randomSeed &&
                 this.casterTax === other.casterTax &&
+                this.hasteStacks === other.hasteStacks &&
+                this.valor === other.valor &&
                 this.animationLock === other.animationLock &&
                 this.timeTillFirstManaTick === other.timeTillFirstManaTick &&
                 this.rngProcs === other.rngProcs;
@@ -91,6 +99,8 @@ export class GameConfig {
             countdown: this.countdown,
             randomSeed: this.randomSeed,
             casterTax: this.casterTax,
+            hasteStacks: this.hasteStacks,
+            valor: this.valor,
             animationLock: this.animationLock,
             timeTillFirstManaTick: this.timeTillFirstManaTick,
             rngProcs: this.rngProcs,

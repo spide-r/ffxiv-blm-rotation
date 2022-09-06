@@ -164,6 +164,8 @@ export class Config extends React.Component {
 		this.state = { // NOT DEFAULTS
 			stepSize : 0,
 			spellSpeed: 0,
+			hasteStacks: 0,
+			valor: 0,
 			animationLock: 0,
 			casterTax: 0,
 			timeTillFirstManaTick: 0,
@@ -190,7 +192,9 @@ export class Config extends React.Component {
 					this.setState({randomSeed: seed});
 				}
 				let config = {
+					hasteStacks: this.state.hasteStacks,
 					spellSpeed: this.state.spellSpeed,
+					valor: this.state.valor,
 					animationLock: this.state.animationLock,
 					casterTax: this.state.casterTax,
 					countdown: this.state.countdown,
@@ -205,8 +209,12 @@ export class Config extends React.Component {
 			event.preventDefault();
 		}).bind(this);
 
-		this.setSpellSpeed = (val => {
-			this.setState({spellSpeed: val, dirty: true});
+		this.setHaste = (val => {
+			this.setState({hasteStacks: val, dirty: true});
+		}).bind(this);
+
+		this.setValor = (val => {
+			this.setState({valor: val, dirty: true});
 		}).bind(this);
 
 		this.setAnimationLock = (val => {
@@ -502,6 +510,8 @@ export class Config extends React.Component {
 	setConfigAndRestart(config) {
 		if (isNaN(parseFloat(config.spellSpeed)) ||
 			isNaN(parseFloat(config.animationLock)) ||
+			isNaN(parseFloat(config.hasteStacks)) ||
+			isNaN(parseFloat(config.valor)) ||
 			isNaN(parseFloat(config.casterTax)) ||
 			isNaN(parseFloat(config.timeTillFirstManaTick)) ||
 			isNaN(parseFloat(config.countdown))) {
@@ -513,6 +523,8 @@ export class Config extends React.Component {
 		}
 		controller.setConfigAndRestart({
 			spellSpeed: parseFloat(config.spellSpeed),
+			hasteStacks: parseFloat(config.hasteStacks),
+			valor: parseFloat(config.valor),
 			animationLock: parseFloat(config.animationLock),
 			casterTax: parseFloat(config.casterTax),
 			timeTillFirstManaTick: parseFloat(config.timeTillFirstManaTick),
@@ -531,7 +543,8 @@ export class Config extends React.Component {
 
 	render() {
 		let editSection = <div>
-			<Input defaultValue={this.state.spellSpeed} description="spell speed: " onChange={this.setSpellSpeed}/>
+			<Input defaultValue={this.state.hasteStacks} description="Haste: " onChange={this.setHaste}/>
+			<Input defaultValue={this.state.valor} description="Rays of Valor: " onChange={this.setValor}/>
 			<Input defaultValue={this.state.animationLock} description="animation lock: " onChange={this.setAnimationLock}/>
 			<Input defaultValue={this.state.casterTax} description="caster tax: " onChange={this.setCasterTax}/>
 			<Input defaultValue={this.state.timeTillFirstManaTick} description="time till first MP tick: " onChange={this.setTimeTillFirstManaTick}/>

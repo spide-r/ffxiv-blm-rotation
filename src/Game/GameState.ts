@@ -281,8 +281,15 @@ export class GameState {
 		potency *= this.getEssenceModifier();
 		potency *= this.getBannerModifier();
 		potency *= this.getExternalBuffModifier();
+		potency *= this.getValorModifier();
 
 		return potency;
+	}
+
+	getValorModifier(){ //+3% per stack
+		let valor = this.config.valor;
+		let mod = .03 * valor;
+		return mod;
 	}
 
 	getEssenceModifier(){

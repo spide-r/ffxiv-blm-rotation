@@ -121,12 +121,29 @@ export class StatsModifier
 
 		// ley lines
 		let ll = resources.get(ResourceType.LeyLines);
-		let llMod = new StatsModifier();
-		if (ll.available(1)) {
-			llMod.castTimeBase = 0.85;
-			llMod.spellRecastTimeScale = 0.85;
+		let spsMod = new StatsModifier();
+		spsMod.castTimeBase = 1;
+		spsMod.spellRecastTimeScale = 1;
+		if (ll.available(1)) { // 15% reduction
+			spsMod.castTimeBase = 0.85;
+			spsMod.spellRecastTimeScale = 0.85;
 		}
-		modifiers.push(llMod);
+
+		let hasteMod = 0.01 * resources.game.config.hasteStacks; //1% gcd reduction per haste level
+		let oldCastBase = spsMod.castTimeBase;
+		let oldRecastBase = spsMod.spellRecastTimeScale;
+		spsMod.castTimeBase = oldCastBase - hasteMod;
+		spsMod.spellRecastTimeScale = oldRecastBase - hasteMod;
+
+		if(resources.get(ResourceType.Dervish).available(1)){ //1% gcd bonus
+			let oldCastBase = spsMod.castTimeBase;
+			let oldRecastBase = spsMod.spellRecastTimeScale;
+			spsMod.castTimeBase = oldCastBase - 0.1;
+			spsMod.spellRecastTimeScale = oldRecastBase - 0.1;
+		}
+
+
+		modifiers.push(spsMod);
 
 		let enoMod = new StatsModifier();
 		if (resources.get(ResourceType.Enochian).available(1) && !Debug.noEnochian) {
