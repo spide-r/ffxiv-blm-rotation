@@ -58,7 +58,7 @@ class Controller {
 		this.gameConfig = new GameConfig();
 		this.gameConfig.spellSpeed = 1532;
 		this.gameConfig.countdown = 5;
-		this.gameConfig.randomSeed = "sup";
+		this.gameConfig.randomSeed = "bozja";
 		this.gameConfig.casterTax = 0.1;
 		this.gameConfig.animationLock = 0.7;
 		this.gameConfig.timeTillFirstManaTick = 1.2;

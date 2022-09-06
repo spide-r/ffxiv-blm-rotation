@@ -25,8 +25,76 @@ function Changelog() {
 export function IntroSection(props: {}) {
 	let smallGap: CSSProperties = { marginBottom: 5 };
 	return <div>
+
 		<Expandable
 			defaultShow={true}
+			title={"About this tool"}
+			content={<div>
+				<div className="paragraph">This is a FFXIV black mage simulator & rotation planner built for Save the Queen areas.</div>
+				<div className="paragraph">
+					This tool is maintained by <b>A'zhek Silvaire @ Zalera</b>. This is adapted from miyehn's fantastic simulator.
+				</div>
+				<div className="paragraph">
+					Please contact Spider#5879 if you have any questions, comments, or concerns.
+				</div>
+				<div className="paragraph">Some links:</div>
+				<ul>
+					<li><a href={"https://github.com/miyehn/ffxiv-blm-rotation"}> Github repository this was forked from</a></li>
+					<li><a href={"https://na.finalfantasyxiv.com/jobguide/blackmage/"}>Official FFXIV black mage job
+						guide</a></li>
+					<li><a href={"https://discord.gg/cem"}>Crystal Exploratory Missions Discord</a></li>
+				</ul>
+				<div className="paragraph"><Expandable title={"Bozja Implementation notes"} defaultShow={false} content={
+					<div>
+						<div className="paragraph">
+							Haste and Rays of Valor can be configured in the "Edit" sidebar.
+						</div>
+						<div className="paragraph">
+							"Ether Kit Charges" is a hacky implementation of both proc luck and Cure 2 Batteries. By default Ether kits will only proc once and then fade.
+							If you feel lucky, you can add additional "charges" which translate to procs where the buff doesn't fall off.
+							If you're calculating with a Cure 2 battery in mind, set the amount to something like 9999.
+						</div>
+
+						<div className="paragraph">
+							I could not find raw numbers on lost action / essence animation lock. If you have accurate numbers, please contact me.
+						</div>
+					</div>
+				}/></div>
+				<div className="paragraph"><Expandable title={"Base Implementation notes"} defaultShow={false} content={
+					<div>
+						<div className="paragraph">
+							Galahad found that slidecast window size is linear with respect to cast time. I made a <a href={"https://github.com/miyehn/ffxiv-blm-rotation/tree/main/scripts"}>script</a>, parsed
+							a few logs and confirmed this. Albeit the slope is tiny (~0.02) so I'm just using 0.5s here
+							for simplicity.
+						</div>
+						<div className="paragraph">
+							Astral fire / umbral ice refresh happens at slidecast timing (0.5s before cast finishes)
+						</div>
+						<div className="paragraph">
+							Skill application delays are fairly accurate for spells (got them from logs), but all abilities
+							except lucid dreaming just use a 0.1s estimate (see the last function
+							argument <a href={"https://github.com/miyehn/ffxiv-blm-rotation/blob/main/src/Game/Skills.ts#L48"}>here</a>).
+							Please contact me if you know how to measure this missing data.
+							These delay times affect when buffs are applied as well as where the red damage marks appear
+							on the timeline.
+						</div>
+						<div className="paragraph">
+							Lucid dreaming ticks happen on actor ticks, which have a random offset relative to MP tick.
+							The earliest first tick time is 0.3s after you press the skill button. It ticks 7 times.
+						</div>
+					</div>
+				}/></div>
+				<Changelog/>
+				<Expandable
+					defaultShow={false}
+					title={"Debug"}
+					content={<DebugOptions/>}
+				/>
+			</div>
+			}
+		/>
+		<Expandable
+			defaultShow={false}
 			title={"instructions"}
 			titleNode={<span>{"Instructions "}
 				<Help topic={"expandable"} content={"click me to expand or collapse"}/></span>}
@@ -72,56 +140,6 @@ export function IntroSection(props: {}) {
 					}/>
 				</div>
 			</div>}
-		/>
-		<Expandable
-			defaultShow={false}
-			title={"About this tool"}
-			content={<div>
-				<div className="paragraph">This is a FFXIV black mage simulator & rotation planner built for Save the Queen areas.</div>
-				<div className="paragraph">
-					This tool is developed by <b>A'zhek Silvaire @ Zalera</b> mostly based off of miyehn's fantastic simulator.
-				</div>
-				<div className="paragraph">
-					Please contact Spider#5879 if you have any questions, comments, or concerns.
-				</div>
-				<div className="paragraph">Some links:</div>
-				<ul>
-					<li><a href={"https://github.com/miyehn/ffxiv-blm-rotation"}> Github repository this was forked from</a></li>
-					<li><a href={"https://na.finalfantasyxiv.com/jobguide/blackmage/"}>Official FFXIV black mage job
-						guide</a></li>
-				</ul>
-				<div className="paragraph"><Expandable title={"Original Implementation notes"} defaultShow={false} content={
-					<div>
-						<div className="paragraph">
-							Galahad found that slidecast window size is linear with respect to cast time. I made a <a href={"https://github.com/miyehn/ffxiv-blm-rotation/tree/main/scripts"}>script</a>, parsed
-							a few logs and confirmed this. Albeit the slope is tiny (~0.02) so I'm just using 0.5s here
-							for simplicity.
-						</div>
-						<div className="paragraph">
-							Astral fire / umbral ice refresh happens at slidecast timing (0.5s before cast finishes)
-						</div>
-						<div className="paragraph">
-							Skill application delays are fairly accurate for spells (got them from logs), but all abilities
-							except lucid dreaming just use a 0.1s estimate (see the last function
-							argument <a href={"https://github.com/miyehn/ffxiv-blm-rotation/blob/main/src/Game/Skills.ts#L48"}>here</a>).
-							Please contact me if you know how to measure this missing data.
-							These delay times affect when buffs are applied as well as where the red damage marks appear
-							on the timeline.
-						</div>
-						<div className="paragraph">
-							Lucid dreaming ticks happen on actor ticks, which have a random offset relative to MP tick.
-							The earliest first tick time is 0.3s after you press the skill button. It ticks 7 times.
-						</div>
-					</div>
-				}/></div>
-				<Changelog/>
-				<Expandable
-					defaultShow={false}
-					title={"Debug"}
-					content={<DebugOptions/>}
-				/>
-			</div>
-			}
 		/>
 	</div>
 }
