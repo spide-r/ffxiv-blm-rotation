@@ -2,7 +2,7 @@ import {Debug, SkillName} from "./Common";
 import {ResourceOverride} from "./Resources";
 
 export class GameConfig {
-    spellSpeed = 911;
+    spellSpeed = 991;
     countdown = 0;
     randomSeed = "hello.";
     casterTax = 0.06;
