@@ -25,7 +25,6 @@ function Changelog() {
 export function IntroSection(props: {}) {
 	let smallGap: CSSProperties = { marginBottom: 5 };
 	return <div>
-
 		<Expandable
 			defaultShow={true}
 			title={"About this tool"}
