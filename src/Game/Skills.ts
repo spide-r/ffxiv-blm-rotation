@@ -926,7 +926,21 @@ export class SkillsList extends Map<SkillName, Skill> {
 						const numTicks = 10;
 						let loseMpTick = (remainingTicks: number)=> {
 							if (remainingTicks===0) return;
-							game.resources.get(ResourceType.Mana).consume(1045); //lose 1045 MP per dot tick
+							let manaAmnt = game.resources.get(ResourceType.Mana).availableAmount();
+							let manaToConsume = Math.min(1045, manaAmnt)
+							game.resources.get(ResourceType.Mana).consume(manaToConsume); //lose 1045 MP per dot tick or however much is left
+							console.log(manaAmnt);
+							if(game.resources.get(ResourceType.Mana).availableAmount() <= 0){ //oops we ran out of mana - drop FoM
+								let buff = game.resources.get(ResourceType.FoMTimerDisplay);
+								let tick = game.resources.get(ResourceType.FoMTick);
+								if (tick.pendingChange) {
+									// if already has FoM applied; cancel the remaining ticks now.
+									buff.consume(1);
+									tick.consume(1)
+									buff.removeTimer();
+									tick.removeTimer();
+								}
+							}
 							game.resources.addResourceEvent(
 								ResourceType.FoMTick,
 								"recurring FoM MP drain tick ", 3, (rsc: Resource) =>{
@@ -1236,6 +1250,10 @@ export class SkillsList extends Map<SkillName, Skill> {
 				let currentStackCd = cd.currentStackCd();
 				cd.overrideCurrentValue(currentStackCd); // this should effectively reset the cooldown
 			})
+			//triplecast needs special case since it has 2 stacks
+			let tc = game.resources.get(ResourceType.cd_Triplecast);
+			let amt = 2;
+			tc.gain(amt);
 		}
 
 		skillsList.set(SkillName.HonoredSac, new Skill(SkillName.HonoredSac,
