@@ -187,10 +187,10 @@ export class Skill {
 	readonly use: (game: GameState, node: ActionNode) => void;
 	info: SkillInfo;
 
-	constructor(name: SkillName, requirementFn: ()=>boolean, effectFn: (game: GameState, node: ActionNode)=>void) {
+	constructor(name: SkillName, requirementFn: ()=>boolean, onApplication: (game: GameState, node: ActionNode)=>void) {
 		this.name = name;
 		this.available = requirementFn;
-		this.use = effectFn;
+		this.use = onApplication;
 		let info = skillInfosMap.get(name);
 		if (!info) {
 			info = skillInfos[0];
@@ -875,7 +875,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.Chainspell,
-					effectFn: () => {
+					onApplication: () => {
 						let chain = ResourceType.Chainspell;
 						let chainDuration = 30;
 						if(game.resources.get(ResourceType.Watcher).available(1)){
@@ -924,7 +924,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 
 				game.useInstantSkill({
 					skillName: SkillName.FoM,
-					effectFn: () => {
+					onApplication: () => {
 						const numTicks = 10;
 						let loseMpTick = (remainingTicks: number)=> {
 							if (remainingTicks===0) return;
@@ -1020,7 +1020,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			},
 			(game, node) => {
 
-			game.useInstantSkill({ skillName: SkillName.FlareStar, effectFn: () => {
+			game.useInstantSkill({ skillName: SkillName.FlareStar, onApplication: () => {
 				let capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
 					let skinfo = skillsList.get(SkillName.FlareStar).info
 					hackyDrainMP(skinfo, SkillName.FlareStar)
@@ -1066,7 +1066,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.EtherKit,
-					effectFn: () => {
+					onApplication: () => {
 						let charges = game.config.etherCharges;
 						let etherKit = game.resources.get(ResourceType.EtherKit);
 						if (etherKit.pendingChange) etherKit.removeTimer(); // should never need this, but just in case
@@ -1092,7 +1092,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.Elixir,
-					effectFn: () => {
+					onApplication: () => {
 						let mana = game.resources.get(ResourceType.Mana);
 						mana.overrideCurrentValue(mana.maxValue);
 					},
@@ -1152,9 +1152,8 @@ export class SkillsList extends Map<SkillName, Skill> {
 				applyEssence(ResourceType.Watcher, SkillName.Watcher, game, node)
 			}
 		));
-
-		addResourceAbility(SkillName.Excellence, ResourceType.Excellence, 60);
-		addResourceAbility(SkillName.Dervish, ResourceType.Dervish, 60);
+		addResourceAbility({skillName: SkillName.Dervish, rscType: ResourceType.Dervish, instant: false, duration: 60});
+		addResourceAbility({skillName: SkillName.Excellence, rscType: ResourceType.Excellence, instant: false, duration: 60});
 
 		skillsList.set(SkillName.ten_Bravery, new Skill(SkillName.ten_Bravery,
 			() => {
@@ -1164,7 +1163,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.ten_Bravery,
-					effectFn: () => {
+					onApplication: () => {
 						let braveryRsc = game.resources.get(ResourceType.ten_Bravery);
 						if (braveryRsc.pendingChange) braveryRsc.removeTimer(); // should never need this, but just in case
 						braveryRsc.gain(1);
@@ -1187,7 +1186,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.five_Bravery,
-					effectFn: () => {
+					onApplication: () => {
 						let braveryRsc = game.resources.get(ResourceType.five_Bravery);
 						if (braveryRsc.pendingChange) braveryRsc.removeTimer(); // should never need this, but just in case
 						braveryRsc.gain(1);
@@ -1211,7 +1210,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.full_uptime_bravery,
-					effectFn: () => {
+					onApplication: () => {
 						let braveryRsc = game.resources.get(ResourceType.ten_Bravery);
 						if (braveryRsc.pendingChange) braveryRsc.removeTimer(); // should never need this, but just in case
 						braveryRsc.gain(1);
@@ -1234,7 +1233,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.FoS,
-					effectFn: () => {
+					onApplication: () => {
 					resetCooldowns();
 					},
 					dealDamage: false,
@@ -1266,7 +1265,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.HonoredSac,
-					effectFn: () => {
+					onApplication: () => {
 						let hsacRSC = game.resources.get(ResourceType.HonoredSac);
 						if (hsacRSC.pendingChange) hsacRSC.removeTimer(); // should never need this, but just in case
 						hsacRSC.gain(1);
@@ -1301,7 +1300,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.NobleEnds,
-					effectFn: () => {
+					onApplication: () => {
 						let hsacRSC = game.resources.get(ResourceType.NobleEnds);
 						if (hsacRSC.pendingChange) hsacRSC.removeTimer(); // should never need this, but just in case
 						hsacRSC.gain(1);
@@ -1325,7 +1324,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			(game, node) => {
 				game.useInstantSkill({
 					skillName: SkillName.Percept,
-					effectFn: () => {},
+					onApplication: () => {},
 					dealDamage: false,
 					node: node
 				});
@@ -1347,7 +1346,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 
 					game.useInstantSkill({
 						skillName: essenceSkill,
-						effectFn: () => {
+						onApplication: () => {
 							let resource = game.resources.get(essenceRsc);
 							if (resource.available(1)) {
 								resource.overrideTimer(game, 10 * 60);
