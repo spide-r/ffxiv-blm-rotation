@@ -928,20 +928,16 @@ export class SkillsList extends Map<SkillName, Skill> {
 						const numTicks = 10;
 						let loseMpTick = (remainingTicks: number)=> {
 							if (remainingTicks===0) return;
-							let manaAmnt = game.resources.get(ResourceType.Mana).availableAmount();
-							let manaToConsume = Math.min(1045, manaAmnt)
-							game.resources.get(ResourceType.Mana).consume(manaToConsume); //lose 1045 MP per dot tick or however much is left
-							console.log(manaAmnt);
-							if(game.resources.get(ResourceType.Mana).availableAmount() <= 0){ //oops we ran out of mana - drop FoM
+							let manaToConsume = 1045;
+							game.resources.get(ResourceType.Mana).consume(manaToConsume); //lose 1045 MP per dot tick
+							if(game.resources.get(ResourceType.Mana).availableAmount() <= 0){  //oops we ran out of mana - drop FoM
 								let buff = game.resources.get(ResourceType.FoMTimerDisplay);
 								let tick = game.resources.get(ResourceType.FoMTick);
-								if (tick.pendingChange) {
 									// if already has FoM applied; cancel the remaining ticks now.
 									buff.consume(1);
 									tick.consume(1)
 									buff.removeTimer();
 									tick.removeTimer();
-								}
 							}
 							game.resources.addResourceEvent(
 								ResourceType.FoMTick,
