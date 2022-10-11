@@ -1004,7 +1004,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 			// order of events:
 			dot.gain(1);
-			game.resources.addResourceEvent(ResourceType.FlareStarDoT, "drop DoT", 30, (dot: Resource)=>{
+			game.resources.addResourceEvent(ResourceType.FlareStarDoT, "drop DoT", 60, (dot: Resource)=>{
 				dot.consume(1);
 			}, Color.Text);
 			recurringFsTick(numTicks, capturedTickPotency);
