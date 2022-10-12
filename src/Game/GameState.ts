@@ -341,6 +341,10 @@ export class GameState {
 			mod *= 1.7; // WHOA MOMMA THATS A BIG BOY BUFF
 		}
 
+		if(rsc.get(ResourceType.MagicBurst).available(1)){
+			mod *= 1.45;
+		}
+
 		return mod;
 	}
 

@@ -942,7 +942,11 @@ export class SkillsList extends Map<SkillName, Skill> {
 							game.resources.addResourceEvent(
 								ResourceType.FoMTick,
 								"recurring FoM MP drain tick ", 3, (rsc: Resource) =>{
-									loseMpTick(remainingTicks - 1);
+									let buff = game.resources.get(ResourceType.FoMTimerDisplay);
+									let tick = game.resources.get(ResourceType.FoMTick);
+									if(buff.available(1) && tick.available(1)){ //if we're still active - fire this off otherwise do nothing
+										loseMpTick(remainingTicks - 1);
+									}
 
 								}, Color.ManaTick);
 						};
@@ -956,6 +960,7 @@ export class SkillsList extends Map<SkillName, Skill> {
 						}
 						// order of events:
 						buff.gain(1);
+						tick.gain(1);
 						game.resources.addResourceEvent(
 							ResourceType.FoMTimerDisplay, "drop FoM DoT", 30, (dot: Resource)=>{
 							dot.consume(1);
