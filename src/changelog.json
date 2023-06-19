@@ -1,8 +1,229 @@
 [
 	{
-		"date": "9/6/22",
+		"date": "6/4/23",
 		"changes": [
-			"Complete overhaul to support Save the Queen features."
+			"additional note about untargetable marker (specifically, you may still get procs from DoT)",
+			"bugfix: untargetable marker was causing some damage statistics error. also why didn't people tell me this earlier D:"
+		]
+	},
+	{
+		"date": "5/23/23",
+		"changes": [
+			"patch 6.4 potency changes: enochian -> 23% buff, xenoglossy -> 880"
+		]
+	},
+	{
+		"date": "5/10/23",
+		"changes": [
+			"bugfix: using T3 consecutively should no longer break (ty moxian for the report!)"
+		]
+	},
+	{
+		"date": "4/3/23",
+		"changes": [
+			"\"Untargetable\" type timeline markers"
+		]
+	},
+	{
+		"date": "4/2/23",
+		"changes": [
+			"updated complete TOP markers by Santa",
+			"fixed selected GCD skills accidentally counting abilities",
+			"fixed another bizarre bug related to timeline editing.."
+		]
+	},
+	{
+		"date": "4/1/23",
+		"changes": [
+			"bugfix: make Between the Lines also available when outside of LL (oops...)"
+		]
+	},
+	{
+		"date": "3/31/23",
+		"changes": [
+			"made Between the Lines only available when there's LL"
+		]
+	},
+	{
+		"date": "3/29/23",
+		"changes": [
+			"rewrote damage statistics section"
+		]
+	},
+	{
+		"date": "3/27/23",
+		"changes": [
+			"always show recast progress bar when cd is not full (for skills with multiple stacks)",
+			"show a warning mark on timeline when polyglot overcaps",
+			"bugfix: another scenario that breaks the editor orz (moving around a sharpcast in a sequence of umbral souls)"
+		]
+	},
+	{
+		"date": "3/14/23",
+		"changes": [
+			"quick patch: put back 'apply changes' button"
+		]
+	},
+	{
+		"date": "3/10/23",
+		"changes": [
+			"negative countdown to start from a specific time",
+			"modified triplecast buff icon to show 2 & 3 stacks"
+		]
+	},
+	{
+		"date": "3/9/23",
+		"changes": [
+			"bugfix: addressed a situation that may cause the timeline editor to incorrectly scream abt invalid edits",
+			"↑ (later today) changed this a bit more: auto-apply valid edits & prevent edits from affecting earlier parts of the timeline",
+			"a few translation updates"
+		]
+	},
+	{
+		"date": "3/6/23",
+		"changes": [
+			"qol: auto scroll editor when clicked on a skill on timeline and vice versa (only works for skills though)",
+			"updated TOP markers from Santa"
+		]
+	},
+	{
+		"date": "3/4/23",
+		"changes": [
+			"dark mode",
+			"changed default proc mode to never (doesn't affect existing files and caches)",
+			"misc rendering bug fixes"
+		]
+	},
+	{
+		"date": "3/3/23",
+		"changes": [
+			"translation updates mostly by Eshiya",
+			"bugfix: previously need to mouseover the timeline to delete skills",
+			"bugfix: couldn't hide F1/B1/Paradox skill description"
+		]
+	},
+	{
+		"date": "2/28/23",
+		"changes": [
+			"updated TOP markers from Santa",
+			"bugfix: lucid dreaming sometimes doesn't tick after deleting stuff from the timeline",
+			"performance optimization: basically rewrote timeline rendering using canvas. Goodbye slow slow html DOM"
+		]
+	},
+	{
+		"date": "2/27/23",
+		"changes": [
+			"performance optimization prep work: move most of timeline rendering to canvas and use DOM only for interaction",
+			"total & selected GCD skills count",
+			"hover on timeline header & markers to see exact time"
+		]
+	},
+	{
+		"date": "2/26/23",
+		"changes": [
+			"fix markers not updating when timeline scale changes"
+		]
+	},
+	{
+		"date": "2/25/23(2)",
+		"changes": [
+			"translation updates by Eshiya",
+			"fix config section showing all 0s",
+			"a bit performance optimization"
+		]
+	},
+	{
+		"date": "2/25/23",
+		"changes": [
+			"let tincture affect potency calculation- display only; not saved to record files",
+			"make the stats orange when showing historical game state",
+			"display damage stats by skill",
+			"can now download damage log as csv file",
+			"remove duplicate markers button",
+			"updated Instructions/Troubleshoot"
+		]
+	},
+	{
+		"date": "2/24/23",
+		"changes": [
+			"hover over mp tick mark to see tick info",
+			"delete key now also deletes timeline actions",
+			"skills implementation: aetherial manip & between the lines animation lock -> 0.8s, manafont skill application delay -> 0.88s",
+			"indicate which spells are covered by LL: when skill is ready and hovered and when it's used on the timeline（with a yellow underline)",
+			"make it an option to proc probabilistically/always/never",
+			"misc bug fixes"
+		]
+	},
+	{
+		"date": "2/23/23",
+		"changes": [
+			"added p5s-p8s markers in Chinese by 不打冰3攻略组. Thank you all!!"
+		]
+	},
+	{
+		"date": "2/18/23",
+		"changes": [
+			"added localization framework; Chinese translation work in progress & added my contact QQ under About in Chinese ver. Was kinda surprised that this tool gets a significant portion of traffic from China :0",
+			"才发现好像国服有人用这个东西:0 本地化在做了在做了，好怪啊我译我自己。。在中文版的关于里放了我的联系QQ。"
+		]
+	},
+	{
+		"date": "2/17/23",
+		"changes": [
+			"updated TOP markers from Santa"
+		]
+	},
+	{
+		"date": "1/24/23",
+		"changes": [
+			"added TOP P1 markers by Santa (thank you!)",
+			"added instruction: you can shift-scroll the timeline",
+			"minimal timeline editing features"
+		]
+	},
+	{
+		"date": "12/20/22",
+		"changes": [
+			"bugfix: misc fixes related to resource overrides (ty sotsu); also can now add override to polyglot timer"
+		]
+	},
+	{
+		"date": "12/16/22",
+		"changes": [
+			"added a checkbox to let a few buffs last slightly longer which is closer to actual game behavior (thank you itu from The Balance). See Config/Edit"
+		]
+	},
+	{
+		"date": "12/15/22",
+		"changes": [
+			"bugfix: Despair consumes umbral heart (it shouldn't)"
+		]
+	},
+	{
+		"date": "12/13/22",
+		"changes": [
+			"display historical game state at the start of the first selected skill",
+			"other miscellaneous ui & code cleanups",
+			"bugfix: broken right click to choose download location",
+			"bugfix: broken resetAll and resetResourceOverrides command links"
+		]
+	},
+	{
+		"date": "10/31/22",
+		"changes": [
+			"6.28 job adjustments: foul & xenoglossy potency increase; enochian buff -> 21%"
+		]
+	},
+	{
+		"date": "10/3/22",
+		"changes": [
+			"when hovered on a skill, show its captured cast time and time till application"
+		]
+	},
+	{
+		"date": "10/2/22",
+		"changes": [
+			"update legacy timeline marker presets and fix not being able to load them from file"
 		]
 	},
 	{
@@ -59,7 +280,7 @@
 		"date": "8/5/22",
 		"changes": [
 			"page refresh and loading from timeline no longer removes wait time at the end",
-			"\"remove trailing wait time\" button",
+			"\"remove trailing idle time\" button",
 			"bugfix: caster tax being dependent on framerate when in real time (if desired, add it to config instead)",
 			"bugfix: hover on skills on the timeline doesn't show potency & lock duration"
 		]

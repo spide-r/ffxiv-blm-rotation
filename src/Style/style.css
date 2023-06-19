@@ -1,152 +1,5 @@
-.textColor {
-    color: #111;
-}
-.fireColor {
-    color: darkorange;
-}
-.iceColor {
-    color: deepskyblue;
-}
-.thunderColor {
-    color: mediumpurple;
-}
-.manaTickColor {
-    color: lightblue;
-}
-.damageColor {
-    color: crimson;
-}
-.greyColor {
-    color: lightgray;
-}
-.successColor {
-    color: mediumseagreen;
-}
-.warningColor {
-    color: darkorange;
-}
-.errorColor {
-    color: red;
-}
-
-/* Overall */
-.__react_component_tooltip {
-    z-index: 10;
-    opacity: 0.96 !important;
-    max-width: 300px;
-}
-.staticScrollbar::-webkit-scrollbar {
-    -webkit-appearance: none;
-    background-color: #e8e8e8;
-    height: 5px;
-    width: 5px;
-}
-.staticScrollbar::-webkit-scrollbar-thumb {
-    background-color: darkgray;
-}
-
-/* Logging */
-
-.logsAll {
-    position: relative;
-    width: 100%;
-}
-
-.logWindow {
-    margin-bottom: 8px;
-    border: 1px solid grey;
-    text-align: left;
-    padding: 0.5em 0.5em 10px;
-    overflow-y: scroll;
-}
-
-.logWindow.actions {
-    height: 100px;
-}
-
-.logWindow.events {
-    height: 300px;
-}
-
-@media(min-width: 768px) {
-
-    .logsAll {
-        height: 400px;
-    }
-
-    .logWindow {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-    }
-
-    .logWindow.actions {
-        left: 0;
-        right: 50.5%;
-        height: 100%;
-    }
-    .logWindow.events {
-        left: 50.5%;
-        right: 0;
-        height: 100%;
-    }
-}
-
-.logEntry {
-    font-family: monospace;
-    font-weight: bold;
-}
 
 /*======== sections ========*/
-
-/* keyboard-controlled area */
-
-.keyboardControlled {
-    display: inline-block;
-    padding: 8px;
-    marginBottom: 16px;
-    outline: 1px solid lightgrey;
-}
-
-.keyboardControlled:focus {
-    outline: mediumpurple solid 2px;
-}
-
-.keyboardControlled.realTime:focus {
-    outline: mediumseagreen solid 2px;
-}
-
-/* playback control */
-
-.timeControl {
-    display: inline-block;
-    margin-bottom: 15px;
-}
-@media(min-width: 768px) {
-    .config,.timeControl {
-    }
-}
-.textInput {
-    outline: none;
-    border: none;
-    border-bottom: 1px solid black;
-}
-.sliderInput {
-    position: relative;
-    top: 4px;
-}
-.tickModeOption {
-    display: inline-block;
-    margin-right: 0.5em;
-}
-.tickModeDescription {
-    padding: 1em 2em;
-}
-.radioButton {
-    position: relative;
-    top: 3px;
-    margin-right: 0.25em;
-}
 
 /* Status display */
 
@@ -167,66 +20,6 @@
     float: right;
     width: 50%;
 }
-/* resource bar & counter */
-.resourceDisplay {
-    text-align: left;
-}
-
-.resourceLocksDisplay {
-    position: absolute;
-}
-
-.resource {
-    margin-bottom: 4px;
-    line-height: 1.5em;
-}
-.resource.hidden {
-    display: none;
-}
-.resource-name, .resource-stacks, .resource-value {
-    display: inline-block;
-    height: 100%;
-}
-.resource-name {
-    width: 108px;
-    horiz-align: left;
-}
-.resource-stacksOrBarAndValue {
-    width: 200px;
-    display: inline-block;
-}
-.resource-stacks {
-}
-.resource>.progressBar {
-    width: 100%;
-}
-.resource-stacks>.resourceStack {
-    position: relative;
-    top: 1px;
-    margin-right: 8px;
-}
-.resource-value {
-    margin-left: 6px;
-}
-/* resource stack */
-.resourceStack {
-    position: relative;
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
-    display: inline-block;
-    border: 1px solid grey;
-    vertical-align: top;
-}
-.resourceStackInner {
-    position: absolute;
-    top: 2px;
-    bottom: 2px;
-    left: 2px;
-    right: 2px;
-    border-radius: inherit;
-}
-
 /* buffs */
 .buffsDisplay {
     height: 54px;
@@ -266,31 +59,6 @@
     user-select: none;
     position: relative;
 }
-.skillIcon {
-    width: 48px;
-    height: 48px;
-    vertical-align: top;
-    position: relative;
-    display: inline-block;
-}
-.skillIcon.notReady {
-    filter: brightness(0.5);
-}
-.skillIcon>img {
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    top: 2px;
-    left: 50%;
-    margin-left: -20px;
-}
-.skillIcon::after {
-    content: "";
-    background: url("https://miyehn.me/ffxiv-blm-rotation/misc/skillIcon_overlay.png") no-repeat;
-    width: 48px;
-    height: 48px;
-    position: absolute;
-}
 .cdProgress {
     position: absolute;
     z-index: 1;
@@ -307,15 +75,6 @@
 }
 .clickable:hover {
     cursor: pointer;
-}
-
-.progressBar {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    border: 1px solid grey;
-    border-radius: 4px;
-    height: 8px;
 }
 
 .paragraph {

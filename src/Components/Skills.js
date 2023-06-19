@@ -1,9 +1,13 @@
 import React from 'react'
 import {Clickable, Help, parseTime} from "./Common";
-import {ResourceType, SkillName, SkillReadyStatus} from "../Game/Common";
+import {Debug, ResourceType, SkillName, SkillReadyStatus} from "../Game/Common";
 import {controller} from "../Controller/Controller";
-import ReactTooltip from 'react-tooltip';
+import {Tooltip as ReactTooltip} from 'react-tooltip';
 import {ActionType} from "../Controller/Record";
+import {localize, localizeSkillName} from "./Localization";
+import {updateTimelineView} from "./Timeline";
+import * as ReactDOMServer from 'react-dom/server';
+import {getCurrentThemeColors} from "./ColorTheme";
 import {Skill} from "../Game/Skills";
 
 export let displayedSkills = [
@@ -126,6 +130,16 @@ skillIcons.set(SkillName.Percept, require("./Asset/bozja/perception.png"))
 
 
 
+export const skillIconImages = new Map();
+skillIcons.forEach((path, skillName)=>{
+	let imgObj = new Image();
+	imgObj.src = path;
+	imgObj.onload = function() {
+		updateTimelineView();
+	}
+	skillIconImages.set(skillName, imgObj);
+});
+
 let setSkillInfoText = (text)=>{};
 function ProgressCircle(props={
 	className: "",
@@ -160,55 +174,126 @@ class SkillButton extends React.Component {
 		this.state = {
 			skillDescription: <div/>
 		};
-		this.handleMouseEnter = ((evt)=>{
+		this.handleMouseEnter = (()=>{
 			let info = controller.getSkillInfo({
 				game: controller.getDisplayedGame(),
 				skillName: this.props.skillName
 			});
-
+			let colors = getCurrentThemeColors();
 			let s = "";
 			if (info.status === SkillReadyStatus.Ready) {
-				s += "ready (" + info.stacksAvailable + " stack";
-				if (info.stacksAvailable > 1) s += "s";
-				s += ")";
+				let en = "ready (" + info.stacksAvailable;
+				let zh = "可释放 (" + info.stacksAvailable;
+				if (info.timeTillNextStackReady > 0) {
+					en += ") (next stack ready in " + info.timeTillNextStackReady.toFixed(2);
+					zh += ") (下一层" + info.timeTillNextStackReady.toFixed(2) + "秒后转好";
+				}
+				en += ")";
+				zh += ")";
+				s = localize({en: en, zh: zh});
 			}
 			else if (info.status === SkillReadyStatus.RequirementsNotMet) {
-				s += " skill requirement(s) not satisfied";
+				s += localize({en: " skill requirement(s) not satisfied", zh: " 未满足释放条件"});
 			} else if (info.status === SkillReadyStatus.NotEnoughMP) {
-				s += " not enough MP (needs " + info.capturedManaCost + ")";
+				s += localize({
+					en: " not enough MP (needs " + info.capturedManaCost + ")",
+					zh: " MP不足（需" + info.capturedManaCost + "）"
+				});
 			} else if (info.status === SkillReadyStatus.Blocked) {
-				s += "possibly ready in " + info.timeTillAvailable.toFixed(2) + " (CD ready in " + info.cdReadyCountdown.toFixed(2) + ")";
+				s += localize({
+					en: "possibly ready in " + info.timeTillAvailable.toFixed(2) + " (next stack ready in " + info.timeTillNextStackReady.toFixed(2) + ")",
+					zh: "预计" + info.timeTillAvailable.toFixed(2) + "秒后可释放（" + info.timeTillNextStackReady.toFixed(2) + "秒后转好下一层CD）"
+				});
 			}
-			let content = <div style={{color: controller.displayingUpToDateGameState ? "white" : "darkorange"}}>
-				<div className="paragraph">{this.props.skillName}</div>
+			// if ready, also show captured cast time & time till damage application
+			let actualCastTime = info.instantCast ? 0 : info.castTime;
+			let infoString = "";
+			if (info.status === SkillReadyStatus.Ready) {
+				infoString += localize({en: "cast: ", zh: "读条："}) + actualCastTime.toFixed(2);
+				if (info.llCovered && actualCastTime > Debug.epsilon) infoString += " (LL)";
+				infoString += localize({en: ", cast+delay: ", zh: " 读条+生效延迟："}) + info.timeTillDamageApplication.toFixed(3);
+			}
+			let content = <div style={{color: controller.displayingUpToDateGameState ? colors.text : colors.historical}}>
+				<div className="paragraph"><b>{localizeSkillName(this.props.skillName)}</b></div>
 				<div className="paragraph">{s}</div>
+				<div className="paragraph">{infoString}</div>
 			</div>;
-			setSkillInfoText(content);
 			this.setState({skillDescription: content});
 		}).bind(this);
 	}
 	render() {
 		let iconPath = skillIcons.get(this.props.skillName);
-		let icon = <div>
-			<div onMouseEnter={this.handleMouseEnter} className={"skillIcon" + (this.props.ready ? "" : " notReady")}><img src={iconPath} alt={this.props.skillName}/></div>
-			<img hidden = {!this.props.highlight} src="https://miyehn.me/ffxiv-blm-rotation/misc/proc.png" style={{
+		let iconStyle = {
+			width: 48,
+			height: 48,
+			verticalAlign: "top",
+			position: "relative",
+			display: "inline-block"
+		};
+		let iconImgStyle = {
+			width: 40,
+			height: 40,
+			position: "absolute",
+			top: 2,
+			left: "50%",
+			marginLeft: -20,
+			//filter: this.props.ready ? "none" : "brightness(0.6)"
+		};
+		let readyOverlay = "transparent";
+		if (!this.props.ready) {
+			readyOverlay = "rgba(0, 0, 0, 0.6)";
+		} else if (this.props.cdProgress !== 1) {
+			//readyOverlay = "radial-gradient(40px, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1))";
+			readyOverlay = "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 85%, rgba(0,0,0,0.6) 100%)"
+		}
+		let icon = <div onMouseEnter={this.handleMouseEnter}>
+			<div className={"skillIcon"} style={iconStyle}>
+				<img style={iconImgStyle} src={iconPath} alt={this.props.skillName}/>
+				<div style={{ // skill icon border
+					position: "absolute",
+					width: 48,
+					height: 48,
+					background: "url('https://miyehn.me/ffxiv-blm-rotation/misc/skillIcon_overlay.png') no-repeat"
+				}}></div>
+				<div style={{ // grey out
+					position: "absolute",
+					width: 40,
+					height: 41,
+					top: 1,
+					left: "50%",
+					marginLeft: -20,
+					borderRadius: 3,
+					zIndex: 1,
+					background: readyOverlay
+				}}></div>
+			</div>
+			<img hidden={!this.props.highlight} src="https://miyehn.me/ffxiv-blm-rotation/misc/proc.png" style={{
 				position: "absolute",
 				width: 44,
 				height: 44,
 				top: 0,
-				left: 2
+				left: 2,
+				zIndex: 1
 			}}/>
 		</div>;
-		let progressCircle = <ProgressCircle className="cdProgress" diameter={40} progress={this.props.cdProgress} color={"rgba(255,255,255,0.7)"}/>;
-		return <span title={this.skillName} className={"skillButton"} data-tip data-for={"skillButton-" + this.props.skillName}>
-			{this.props.cdProgress === 1 ? "" : progressCircle}
-			<Clickable onClickFn={controller.displayingUpToDateGameState ? ()=>{
+		let progressCircle = <ProgressCircle
+			className="cdProgress"
+			diameter={40}
+			progress={this.props.cdProgress}
+			color={this.props.ready ? "rgba(255, 255, 255, 0.7)" : "rgba(255,255,255,0.7)"}/>;
+		return <span
+			title={this.skillName}
+			className={"skillButton"}
+			data-tooltip-offset={3}
+			data-tooltip-html={
+				ReactDOMServer.renderToStaticMarkup(this.state.skillDescription)
+			} data-tooltip-id={"skillButton-" + this.props.skillName}>
+			<Clickable onClickFn={controller.displayingUpToDateGameState ? () => {
 				controller.requestUseSkill({skillName: this.props.skillName});
 				controller.updateAllDisplay();
-			} : undefined} content={icon} style={controller.displayingUpToDateGameState ? {} : { cursor: "not-allowed" }}/>
-			<ReactTooltip id={"skillButton-" + this.props.skillName}>
-				{this.state.skillDescription}
-			</ReactTooltip>
+			} : undefined} content={icon}
+					   style={controller.displayingUpToDateGameState ? {} : {cursor: "not-allowed"}}/>
+			{this.props.cdProgress === 1 ? undefined : progressCircle}
 		</span>
 	}
 }
@@ -219,7 +304,7 @@ const WaitSince = {
 };
 
 export var updateSkillButtons = (statusList)=>{}
-class SkillsWindow extends React.Component {
+export class SkillsWindow extends React.Component {
 	constructor(props) {
 		super(props);
 		updateSkillButtons = ((statusList)=>{
@@ -254,7 +339,7 @@ class SkillsWindow extends React.Component {
 					let stepTime = waitTime - timeSinceLastSkill;
 					if (stepTime <= 0) {
 						window.alert("Invalid input: trying to jump to " + waitTime +
-							"s since the last skill is used, but " + timeSinceLastSkill +
+							"s since the last action, but " + timeSinceLastSkill +
 							"s has already elapsed.");
 					} else {
 						controller.step(stepTime);
@@ -291,7 +376,7 @@ class SkillsWindow extends React.Component {
 			this.setState({waitSince: e.target.value});
 		}).bind(this);
 
-		this.onRemoveTrailingIdleTime = (e=>{
+		this.onRemoveTrailingIdleTime = (()=>{
 			controller.removeTrailingIdleTime();
 		}).bind(this);
 
@@ -326,13 +411,13 @@ class SkillsWindow extends React.Component {
 				highlight={info ? info.highlight : false}
 				skillName={skillName}
 				ready={info ? info.status===SkillReadyStatus.Ready : false}
-				cdProgress={info ? 1 - info.cdReadyCountdown / info.cdRecastTime : 1}
+				cdProgress={info ? 1 - info.timeTillNextStackReady / info.cdRecastTime : 1}
 				/>
 			skillButtons.push(btn);
 		}
 
 		let waitUntilHelp = <Help topic="waitUntilInputFormat" content={<div>
-			<div className="paragraph">Examples:</div>
+			<div className="paragraph">{localize({en: "Examples:", zh: "时间格式举例："})}</div>
 			<div className="paragraph">
 				12 <br/>
 				1.5 <br/>
@@ -348,33 +433,70 @@ class SkillsWindow extends React.Component {
 			//border: "1px solid red",
 		};
 
+		let colors = getCurrentThemeColors();
+		let textInputFieldStyle = {
+			outline: "none",
+			border: "none",
+			borderBottom: "1px solid " + colors.text,
+			borderRadius: 0,
+			background: "transparent",
+			color: colors.text
+		};
 		return <div className={"skillsWindow"}>
-			<div data-tip data-for="SkillDescription" className={"skillIcons"}>
+			<div className={"skillIcons"}>
+				<style>{`
+					.info-tooltip {
+						color: ${colors.text};
+						background-color: ${colors.tipBackground};
+						opacity: 0.98;
+						max-width: 300px;
+						outline: 1px solid ${colors.bgHighContrast};
+						transition: none;
+						font-size: 100%;
+						z-index: 10;
+					}
+					.info-tooltip-arrow { display: none; }
+				`}</style>
 				{skillButtons}
+				<ReactTooltip anchorSelect={".skillButton"} className={"info-tooltip"} classNameArrow={"info-tooltip-arrow"}/>
 				<div style={{margin: "10px 0"}}>
 					<div style={{display: "flex", flexDirection: "row", marginBottom: 6}}>
-						<form onSubmit={this.onWaitTimeSubmit} style={textInputStyle}>
-							Wait until <input type={"text"} style={{
-							width: 30, outline: "none", border: "none", borderBottom: "1px solid black", borderRadius: 0
-						}} value={this.state.waitTime} onChange={this.onWaitTimeChange}/> second(s) since <select
-							style={{display: "inline-block", outline: "none"}}
-							value={this.state.waitSince}
-							onChange={this.onWaitSinceChange}>
-							<option value={WaitSince.Now}>now</option>
-							<option value={WaitSince.LastSkill}>last skill</option>
-						</select> <input type="submit" disabled={!controller.displayingUpToDateGameState} value="GO"/>
-						</form>
+
+						{localize({
+							en: <form onSubmit={this.onWaitTimeSubmit} style={textInputStyle}>
+								Wait until <input type={"text"} style={{
+								...{width: 30}, ...textInputFieldStyle
+							}} value={this.state.waitTime} onChange={this.onWaitTimeChange}/> second(s) since <select
+								style={{display: "inline-block", outline: "none"}}
+								value={this.state.waitSince}
+								onChange={this.onWaitSinceChange}>
+								<option value={WaitSince.Now}>now</option>
+								<option value={WaitSince.LastSkill}>last action</option>
+							</select> <input type="submit" disabled={!controller.displayingUpToDateGameState} value="GO"/>
+							</form>,
+							zh:<form onSubmit={this.onWaitTimeSubmit} style={textInputStyle}>
+								快进至 <select
+									style={{display: "inline-block", outline: "none"}}
+									value={this.state.waitSince}
+									onChange={this.onWaitSinceChange}>
+									<option value={WaitSince.Now}>当前</option>
+									<option value={WaitSince.LastSkill}>上次操作</option>
+								</select> 后的 <input type={"text"} style={{
+								...{width: 30}, ...textInputFieldStyle
+							}} value={this.state.waitTime} onChange={this.onWaitTimeChange}/> 秒 <input type="submit" disabled={!controller.displayingUpToDateGameState} value="GO"/>
+							</form>
+						})}
+
 						<form onSubmit={this.onWaitUntilSubmit} style={textInputStyle}>
-							Wait until {waitUntilHelp} <input type={"text"} style={{
-							width: 60, outline: "none", border: "none", borderBottom: "1px solid black", borderRadius: 0
+							{localize({en: "Wait until", zh: "快进至指定时间"})} {waitUntilHelp} <input type={"text"} style={{
+							...{width: 60}, ...textInputFieldStyle
 						}} value={this.state.waitUntil} onChange={this.onWaitUntilChange}/> <input type="submit" disabled={!controller.displayingUpToDateGameState} value="GO"/>
 						</form>
+
 					</div>
-					<button onClick={this.onRemoveTrailingIdleTime}>remove trailing idle time</button>
+					<button onClick={this.onRemoveTrailingIdleTime}>{localize({en: "remove trailing idle time", zh: "去除时间轴末尾的发呆时间"})}</button>
 				</div>
 			</div>
 		</div>
 	}
 }
-
-export const skillsWindow = <SkillsWindow />;

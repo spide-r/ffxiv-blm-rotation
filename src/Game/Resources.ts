@@ -1,4 +1,3 @@
-import {addLog, Color, LogCategory} from "../Controller/Common";
 import {Debug, ResourceType} from "./Common"
 import {GameState} from "./GameState";
 
@@ -8,19 +7,14 @@ export class Event {
 	delay: number;
 	effectFn: () => void;
 	canceled: boolean;
-	shouldLog: boolean;
-	logColor: Color;
 
 	// effectFn : () -> ()
-	constructor(name: string, delay: number, effectFn: ()=>void, logColor=Color.Text, shouldLog=true)
-	{
+	constructor(name: string, delay: number, effectFn: ()=>void) {
 		this.name = name;
 		this.timeTillEvent = delay;
 		this.delay = delay;
 		this.effectFn = effectFn;
 		this.canceled = false;
-		this.shouldLog = shouldLog;
-		this.logColor = logColor;
 	}
 }
 
@@ -63,7 +57,11 @@ export class Resource {
 		return this.enabled ? this.#currentValue : 0;
 	}
 	consume(amount: number) {
-		if (!this.available(amount)) console.warn("invalid resource consumption: " + this.type);
+		if (this.#currentValue < amount - Debug.epsilon) {
+			console.warn("invalid resource consumption: " + this.type);
+			console.log(amount);
+			console.log(this);
+		}
 		this.#currentValue = Math.max(this.#currentValue - amount, 0);
 	}
 	gain(amount: number) {
@@ -71,6 +69,14 @@ export class Resource {
 	}
 	overrideCurrentValue(amount: number) {
 		this.#currentValue = amount;
+	}
+}
+
+export class LucidDreamingBuff extends Resource {
+	tickCount: number = 0;
+	sourceSkill: string = "(unknown)";
+	constructor(type: ResourceType, maxValue: number, initialValue: number) {
+		super(type, maxValue, initialValue);
 	}
 }
 
@@ -111,9 +117,8 @@ export class CoolDown extends Resource {
 		}
 	}
 	timeTillNextStackAvailable() {
-		let currentStacks = this.stacksAvailable();
-		if (currentStacks > 0) return 0;
-		return (this.#cdPerStack - this.availableAmount()) * this.#recastTimeScale;
+		if (this.availableAmount() === this.maxValue) return 0;
+		return (this.#cdPerStack - this.availableAmount() % this.#cdPerStack) * this.#recastTimeScale;
 	}
 }
 
@@ -143,6 +148,11 @@ export class CoolDownState extends Map<ResourceType, CoolDown> {
 	}
 	timeTillNextStackAvailable(cdName: ResourceType) {
 		let cd = this.get(cdName);
+		return cd.timeTillNextStackAvailable();
+	}
+	timeTillAnyStackAvailable(cdName: ResourceType) {
+		let cd = this.get(cdName);
+		if (cd.stacksAvailable() > 0) return 0;
 		return cd.timeTillNextStackAvailable();
 	}
 }
@@ -176,24 +186,27 @@ export class ResourceState extends Map<ResourceType, Resource> {
 		rscType: ResourceType,
 		name: string,
 		delay: number,
-		fnOnRsc: (rsc: Resource)=>void,
-		logColor=Color.Text, shouldLog=true)
+		fnOnRsc: (rsc: Resource)=>void)
 	{
 		let rsc = this.get(rscType);
-		 let evt = new Event(name, delay, ()=>{
-			 rsc.pendingChange = undefined; // unregister self from resource
-			 fnOnRsc(rsc); // before the scheduled event takes effect
-		 }, logColor, shouldLog);
-		 rsc.pendingChange = evt; // register to resource
-		 this.game.addEvent(evt); // register to events master list
+		/*
+		if (rscType===ResourceType.Mana) {
+			console.log("[" + this.game.getDisplayTime() + "] queue next mana tick after " + delay);
+		}
+		 */
+		let evt = new Event(name, delay, () => {
+			rsc.pendingChange = undefined; // unregister self from resource
+			fnOnRsc(rsc); // before the scheduled event takes effect
+		});
+		rsc.pendingChange = evt; // register to resource
+		this.game.addEvent(evt); // register to events master list
 	}
 
 	// useful for binary resources
 	takeResourceLock(rscType: ResourceType, delay: number) {
 		this.get(rscType).consume(1);
-		addLog(LogCategory.Event, "[resource locked] " + rscType, this.game.getDisplayTime(), Color.Grey);
 		this.addResourceEvent(
-			rscType, "[resource ready] " + rscType, delay, rsc=>{ rsc.gain(1); }, Color.Grey);
+			rscType, "[resource ready] " + rscType, delay, rsc=>{ rsc.gain(1); });
 	}
 }
 
@@ -214,7 +227,7 @@ export const resourceInfos = new Map<ResourceType, ResourceOrCoolDownInfo>();
 
 // resources
 resourceInfos.set(ResourceType.Mana, { isCoolDown: false, defaultValue: 10000, maxValue: 10000, maxTimeout: -1 });
-resourceInfos.set(ResourceType.Polyglot, { isCoolDown: false, defaultValue: 0, maxValue: 2, maxTimeout: -1 });
+resourceInfos.set(ResourceType.Polyglot, { isCoolDown: false, defaultValue: 0, maxValue: 2, maxTimeout: 30 });
 resourceInfos.set(ResourceType.AstralFire, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: -1 });
 resourceInfos.set(ResourceType.UmbralIce, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: -1 });
 resourceInfos.set(ResourceType.UmbralHeart, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: -1 });
@@ -230,7 +243,7 @@ resourceInfos.set(ResourceType.Manaward, { isCoolDown: false, defaultValue: 0, m
 resourceInfos.set(ResourceType.Triplecast, { isCoolDown: false, defaultValue: 0, maxValue: 3, maxTimeout: 15 });
 resourceInfos.set(ResourceType.Addle, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
 resourceInfos.set(ResourceType.Swiftcast, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
-resourceInfos.set(ResourceType.LucidDreamingTimerDisplay, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 21 }); // buff display only
+resourceInfos.set(ResourceType.LucidDreaming, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 21 }); // buff display only
 resourceInfos.set(ResourceType.Surecast, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
 resourceInfos.set(ResourceType.Tincture, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 });
 resourceInfos.set(ResourceType.Sprint, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 10 });
@@ -315,6 +328,24 @@ export class ResourceOverride {
 			a.enabled === b.enabled;
 	}
 
+	static fromGameState(game: GameState)
+	{
+		let overrides: ResourceOverride[] = [];
+		// CDs
+		game.cooldowns.forEach((cd: CoolDown, cdName: ResourceType) => {
+			cd.availableAmount();
+			overrides.push(new ResourceOverride({
+				type: cdName,
+				timeTillFullOrDrop: cd.maxValue - cd.availableAmount(),
+				stacks: 0, // not used
+				enabled: true // not used
+			}));
+		});
+		// other resources: todo
+
+		return overrides;
+	}
+
 	// CDs: time till full
 	// LL: enabled, time till full
 	// Triplecast: stacks, time till drop
@@ -338,7 +369,7 @@ export class ResourceOverride {
 		else {
 			let rsc = game.resources.get(this.props.type);
 
-			let overrideRscTimer = (newTimer: number) => {
+			let overrideDropRscTimer = (newTimer: number) => {
 				rsc.removeTimer();
 				game.resources.addResourceEvent(rsc.type, "drop " + rsc.type, newTimer, (r: Resource) => {
 					if (rsc.type === ResourceType.Enochian) { // since enochian should also take away AF/UI/UH stacks
@@ -354,8 +385,22 @@ export class ResourceOverride {
 			{
 				rsc.consume(rsc.availableAmount());
 				rsc.gain(1);
-				overrideRscTimer(this.props.timeTillFullOrDrop);
+				overrideDropRscTimer(this.props.timeTillFullOrDrop);
 				rsc.enabled = this.props.enabled;
+			}
+
+			// Polyglot (refresh timer + stacks)
+			else if (rsc.type === ResourceType.Polyglot)
+			{
+				// stacks
+				let stacks = this.props.stacks;
+				rsc.consume(rsc.availableAmount());
+				rsc.gain(stacks);
+				// timer
+				let timer = this.props.timeTillFullOrDrop;
+				if (timer > 0) { // timer is set
+					rsc.overrideTimer(game, timer);
+				}
 			}
 
 			// everything else (timer and/or stacks)
@@ -369,7 +414,7 @@ export class ResourceOverride {
 				// timer
 				let timer = this.props.timeTillFullOrDrop;
 				if (stacks > 0 && info.maxTimeout >= 0) { // may expire
-					overrideRscTimer(timer);
+					overrideDropRscTimer(timer);
 				}
 			}
 		}

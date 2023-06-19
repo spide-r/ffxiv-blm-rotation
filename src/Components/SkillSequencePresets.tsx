@@ -1,11 +1,11 @@
 import React from 'react'
-import {Clickable, Expandable, Input, LoadJsonFromFileOrUrl, SaveToFile} from "./Common";
+import {Clickable, Expandable, FileFormat, Input, LoadJsonFromFileOrUrl, SaveToFile} from "./Common";
 import {controller} from "../Controller/Controller";
 import {FileType, ReplayMode} from "../Controller/Common";
 // @ts-ignore
 import {skillIcons} from "./Skills";
-import {ActionType} from "../Controller/Record";
-import {Line} from "../Controller/Record";
+import {ActionType, Line} from "../Controller/Record";
+import {getCurrentThemeColors} from "./ColorTheme";
 
 type Fixme = any;
 
@@ -68,7 +68,7 @@ function PresetLine(props: { line: Line }) {
 	};
 	return <div style={{marginBottom: "8px"}}>
 		<Clickable content={clickableContent} style={addLineStyle} onClickFn={controller.displayingUpToDateGameState ? (() => {
-			controller.tryAddLine(line, ReplayMode.Tight);
+			controller.tryAddLine(line, ReplayMode.SkillSequence);
 			controller.updateAllDisplay();
 			controller.scrollToTime();
 		}) : undefined}/>
@@ -79,7 +79,7 @@ function PresetLine(props: { line: Line }) {
 	</div>
 }
 
-class SkillSequencePresets extends React.Component {
+export class SkillSequencePresets extends React.Component {
 	constructor(props: Readonly<{}>) {
 		super(props);
 		updateSkillSequencePresetsView = this.unboundUpdatePresetsView.bind(this);
@@ -106,7 +106,7 @@ class SkillSequencePresets extends React.Component {
 					}
 				}}/>
 			<div style={{
-				outline: "1px solid lightgrey",
+				outline: "1px solid " + getCurrentThemeColors().bgMediumContrast,
 				margin: "10px 0",
 				padding: "10px",
 			}}>
@@ -115,7 +115,7 @@ class SkillSequencePresets extends React.Component {
 				})}
 				<SaveAsPreset enabled={hasSelection}/>
 				<div style={{marginTop: 16}}>
-					<SaveToFile getContentFn={()=>{
+					<SaveToFile fileFormat={FileFormat.Json} getContentFn={()=>{
 						return controller.serializedPresets();
 					}} filename={"presets"} displayName={"download presets to file"}/>
 				</div>
@@ -127,5 +127,3 @@ class SkillSequencePresets extends React.Component {
 			defaultShow={false}/>
 	}
 }
-
-export let skillSequencePresets = <SkillSequencePresets/>;

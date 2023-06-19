@@ -1,33 +1,71 @@
-import React, {ChangeEvent, CSSProperties, ReactNode} from "react";
+import React, {ChangeEvent, CSSProperties, ReactNode, useEffect, useState} from "react";
 import jQuery from 'jquery';
-import ReactTooltip from "react-tooltip";
+import {localize} from "./Localization";
+import {Tooltip as ReactTooltip} from "react-tooltip";
+import 'react-tooltip/dist/react-tooltip.css';
+import '../Style/tooltip.css';
+import {getCurrentThemeColors} from "./ColorTheme";
+
+export type ContentNode = JSX.Element | string;
 
 function getBlobUrl(content: object) {
 	let blob = new Blob([JSON.stringify(content)], {type: "text/plain;charset=utf-8"});
 	return window.URL.createObjectURL(blob);
 }
 
+function getCsvUrl(rawContent: object) {
+	let csvString = "";
+	let content = rawContent as Array<Array<any>>;
+	content.forEach(row=>{
+		for (let i = 0; i < row.length; i++) {
+			csvString += row[i].toString();
+			if (i < row.length - 1) csvString += ",";
+		}
+		csvString += "\n";
+	})
+	let blob = new Blob([csvString], {type: "text/csv;charset=utf-8"});
+	return window.URL.createObjectURL(blob);
+}
+
+export const enum FileFormat {
+	Json = "JSON",
+	Csv = "CSV"
+}
+
 type SaveToFileProps = {
 	getContentFn: () => object,
 	filename: string,
-	displayName?: string
+	fileFormat: FileFormat,
+	displayName?: ContentNode
 };
 export class SaveToFile extends React.Component{
 	props: SaveToFileProps;
-	state: { content: object }
+	state: { jsonContent: object, csvContent: Array<Array<any>> }
 	constructor(props: SaveToFileProps) {
 		super(props);
 		this.props = props;
 		this.state = {
-			content: {}
+			jsonContent: {},
+			csvContent: []
 		};
 	}
+	updateContent() {
+		let newContent = this.props.getContentFn();
+		if (this.props.fileFormat===FileFormat.Json) this.setState({jsonContent: newContent});
+		else if (this.props.fileFormat===FileFormat.Csv) this.setState({csvContent: newContent});
+		else console.assert(false);
+	}
 	render() {
+		let url = "";
+		if (this.props.fileFormat === FileFormat.Json) url = getBlobUrl(this.state.jsonContent);
+		else if (this.props.fileFormat === FileFormat.Csv) url = getCsvUrl(this.state.csvContent);
+		else (console.assert(false));
 		return <a
-			style={{color: "darkolivegreen", marginRight: 6}}
-			href={getBlobUrl(this.state.content)}
+			style={{color: getCurrentThemeColors().fileDownload, marginRight: 6}}
+			href={url}
 			download={this.props.filename}
-			onClick={()=>{ this.setState({content: this.props.getContentFn()}); }}
+			onClick={()=>{ this.updateContent(); }}
+			onContextMenu={()=>{ this.updateContent(); }}
 		>
 			{"[" + (this.props.displayName===undefined?"download":this.props.displayName) + "]"}
 		</a>
@@ -45,7 +83,21 @@ export function loadFromFile(fileObject: Blob, callback=(content: object)=>{cons
 	fileReader.readAsText(fileObject, "UTF-8");
 }
 
-
+export const StaticFn =  {
+	positionFromTimeAndScale: function(time: number, scale: number): number {
+		return time * scale * 100;
+	},
+	timeFromPositionAndScale: function(x: number, scale: number): number {
+		return x / (scale * 100);
+	},
+	displayTime: function(time: number, fractionDigits: number) {
+		let absTime = Math.abs(time);
+		let minute = Math.floor(absTime / 60);
+		let second = absTime - 60 * minute;
+		return (time < 0 ? "-" : "") +
+			minute.toString() + ":" + (second < 10 ? "0" : "") + second.toFixed(fractionDigits).toString();
+	}
+};
 
 let genericErrorHandler = function(err: object) {
 	console.log("[asyncFetch] some error occurred");
@@ -64,6 +116,7 @@ export function asyncFetch(
 	jQuery.ajax({
 		type: 'GET',
 		url: url,
+		//dataType: "text",
 		success: (data)=>{
 			callback(data);
 			fetchCache.set(url, data);
@@ -95,7 +148,7 @@ type ClickableProps = {
 	style?: CSSProperties
 }
 
-// TODO: bind hotkeys to them?
+// todo: bind hotkeys to them?
 export function Clickable(props: ClickableProps) {
 	return <div
 		className={"clickable"}
@@ -105,65 +158,65 @@ export function Clickable(props: ClickableProps) {
 }
 
 export function ProgressBar(props: {
-	progress?: number,
+	progress: number,
 	backgroundColor?: string,
-	width?: number,
-	label?: string,
+	width: number,
 	labelColor?: string,
-	offsetY?: number,
+	offsetY: number,
 }) {
+	let colors = getCurrentThemeColors();
 	const containerStyle: CSSProperties = {
-		top: `${props.offsetY ?? 0}px`,
-		width: `${props.width ?? 100}px`,
+		position: "relative",
+		display: "inline-block",
+		verticalAlign: "top",
+		border: "1px solid " + colors.bgHighContrast,
+		borderRadius: 4,
+		height: 8,
+		top: props.offsetY,
+		width: props.width
 	};
 	const fillerStyle: CSSProperties = {
 		background: `${props.backgroundColor}`,
 		height: "100%",
 		borderRadius: "inherit",
-		width: `${(props.progress ?? 0.5) * 100}%`,
+		width: `${props.progress * 100}%`,
 	};
-	const labelStyle: CSSProperties = {
-		color: props.labelColor,
-	}
-	return <div className={"progressBar"} style={containerStyle}>
-		<div style={fillerStyle}>
-			<span style={labelStyle}>{props.label}</span>
-		</div>
+	return <div style={containerStyle}>
+		<div style={fillerStyle}/>
 	</div>
 }
 
 type InputProps = {
 	defaultValue?: string,
-	description: ReactNode,
+	description: ContentNode,
 	onChange?: (newVal: string) => void,
 	width?: number,
 	style?: CSSProperties,
 }
-type InputState = {
-	value: string,
-}
 export class Input extends React.Component {
 	props: InputProps;
-	state: InputState;
 	onChange;
 	constructor(inProps : InputProps) {
 		super(inProps);
 		this.props = inProps;
-		this.state = {
-			value: inProps.defaultValue ?? ""
-		}
 		this.onChange = ((e: ChangeEvent<{value: string}>)=>{
-			this.setState({value: e.target.value});
 			if (this.props.onChange) this.props.onChange(e.target.value);
 		}).bind(this);
 	}
 	render() {
 		let width = this.props.width ?? 5;
-		let style = this.props.style;
-		return <div style={style}>
+		let colors = getCurrentThemeColors();
+		let inputStyle: CSSProperties = {
+			color: colors.text,
+			backgroundColor: "transparent",
+			outline: "none",
+			border: "none",
+			borderBottom: "1px solid " + colors.text
+		};
+		let overrideStyle = this.props.style ?? {};
+		return <div style={overrideStyle}>
 			<span>{this.props.description/* + "(" + this.state.value + ")"*/}</span>
-			<input className={"textInput"} size={width} type="text"
-				   value={this.props.defaultValue} onChange={this.onChange}/>
+			<input style={inputStyle} size={width} type="text" value={this.props.defaultValue} onChange={this.onChange}/>
 		</div>
 	}
 }
@@ -171,7 +224,7 @@ export class Input extends React.Component {
 type SliderProps = {
 	onChange?: (e: string) => void,
 	defaultValue?: string,
-	description?: string
+	description?: ContentNode
 }
 type SliderState = {
 	value: string,
@@ -198,16 +251,16 @@ export class Slider extends React.Component {
 		if (typeof this.props.onChange !== "undefined") this.props.onChange(this.state.value);
 	}
 	render() {
-		return <div className={"sliderInputContainer"}>
+		return <div style={{display: "inline-block"}}>
 			<span>{this.props.description ?? ""}</span>
 			<input
-				className={"sliderInput"}
 				size={10} type="range"
 				value={this.state.value}
 				min={0.05}
 				max={1}
 				step={0.05}
-				onChange={this.onChange}/>
+				onChange={this.onChange}
+				style={{position: "relative", outline: "none"}}/>
 		</div>
 	}
 }
@@ -338,15 +391,18 @@ export class LoadJsonFromFileOrUrl extends React.Component {
 		if (this.props.loadUrlOnMount) this.onLoadUrl();
 	}
 	render() {
+		let colors = getCurrentThemeColors();
 		let longInputStyle = {
+			color: colors.text,
+			background: "transparent",
 			outline: "none",
 			border: "none",
-			borderBottom: "1px solid black",
+			borderBottom: "1px solid " + colors.text,
 			width: "30em",
 		};
 		return <div>
 			<div>
-				<span>Load from file: </span>
+				<span>{localize({en: "Load from file: ", zh: "从文件导入："})}</span>
 				<input
 					style={{
 						width: "110px",
@@ -359,53 +415,103 @@ export class LoadJsonFromFileOrUrl extends React.Component {
 			{
 				this.props.allowLoadFromUrl ?
 					<form>
-						<span>Load from URL: </span>
+						<span>{localize({en: "Load from URL: ", zh: "从URL导入："})}</span>
 						<input defaultValue={this.loadUrl} style={longInputStyle}
 							   onChange={this.onLoadUrlChange}/>
 						<span> </span>
 						<button type={"submit"} onClick={e => {
 							this.onLoadUrl();
 							e.preventDefault();
-						}}>load</button>
+						}}>{localize({en: "load", zh: "加载"})}</button>
 					</form> : undefined
 			}
 		</div>
 	}
 }
 
-export function Help(props: {topic: string, content: ReactNode}) {
-	return <span style={{display: "inline-block"}}>
-		<span data-tip data-for={"help-" + props.topic} style={{
-			display: "block",
-			position: "relative",
-			top: 2,
-			width: 12,
-			height: 12,
-			cursor: "help",
-			//background: "#217ff5",
-			background: "#c2c2c2",
-			borderRadius: 6,
-			textAlign: "center",
-			verticalAlign: "middle",
-		}}><span style={{position: "relative", top: -1, color: "white"}}>&#63;</span></span>
-		<ReactTooltip
-			effect={"solid"}
-			border={true}
-			borderColor={"#000"}
-			backgroundColor={"#fff"}
-			arrowColor={"#000"}
-			textColor={"#000"}
-			id={"help-" + props.topic}>
-			{props.content}
-		</ReactTooltip>
-	</span>
-}
-export function ButtonIndicator(props: {text: string}) {
+export function ButtonIndicator(props: {text: ContentNode}) {
+	let colors = getCurrentThemeColors();
 	return <span style={{
-		fontSize: 10,
-		border: "1px solid #444",
+		fontSize: 11,
+		border: "1px solid " + colors.bgHighContrast,
 		borderRadius: 2,
 		padding: "1px 4px",
-		background: "#efefef"
+		background: colors.bgLowContrast,
 	}}>{props.text}</span>
+}
+
+let setGlobalHelpTooltipContent = (newContent: ContentNode)=>{};
+let setGlobalInfoTooltipContent = (newContent: ContentNode)=>{};
+
+export function GlobalHelpTooltip(props: {
+	content: ContentNode
+}) {
+	const [tipContent, setTipContent] = useState(props.content);
+	// hook up update function
+	useEffect(()=>{
+		setGlobalHelpTooltipContent = (newContent: ContentNode)=>{
+			setTipContent(newContent);
+		};
+	}, []);
+
+	let colors = getCurrentThemeColors();
+
+	return <div>
+		<style>{`
+			.help-tooltip {
+				color: ${colors.text};
+				background-color: ${colors.tipBackground};
+				opacity: 0.98;
+				max-width: 300px;
+				outline: 1px solid ${colors.bgHighContrast};
+				transition: none;
+				font-size: 100%;
+				z-index: 10;
+			}
+			.help-tooltip-arrow { display: none; }
+		`}</style>
+		<ReactTooltip anchorSelect=".global-help-tooltip" className="help-tooltip" classNameArrow="help-tooltip-arrow">{tipContent}</ReactTooltip>
+	</div>
+}
+
+export function GlobalInfoTooltip(props: {
+	content: ContentNode
+}) {
+	const [tipContent, setTipContent] = useState(props.content);
+	// hook up update function
+	useEffect(()=>{
+		setGlobalInfoTooltipContent = (newContent: ContentNode)=>{
+			setTipContent(newContent);
+		};
+	}, []);
+
+	return <ReactTooltip anchorSelect=".global-info-tooltip" className="info-tooltip" classNameArrow="info-tooltip-arrow">
+		{tipContent}
+	</ReactTooltip>
+}
+
+export function Help(props: {topic: string, content: ContentNode}) {
+	let colors = getCurrentThemeColors();
+	let style: CSSProperties = {
+		display: "inline-block",
+		position: "relative",
+		width: 12,
+		height: 12,
+		cursor: "help",
+		background: colors.bgHighContrast,
+		borderRadius: 6,
+		textAlign: "center",
+		verticalAlign: "middle",
+	};
+	return <span className="help-icon global-help-tooltip" style={style} data-tooltip-offset={4} onMouseEnter={()=>{
+		setGlobalHelpTooltipContent(props.content);
+	}}>
+		<span style={{position: "relative", top: -1, color: "white"}}>&#63;</span>
+	</span>
+}
+
+export function Info(props: {hoverableNode: ContentNode, getInfoFn: ()=>ContentNode}) {
+	return <div className="global-info-tooltip" data-tooltip-offset={4} onMouseEnter={()=>{
+		setGlobalInfoTooltipContent(props.getInfoFn());
+	}}>{props.hoverableNode}</div>
 }

@@ -1,4 +1,4 @@
-import {Debug, SkillName} from "./Common";
+import {Debug, SkillName, ProcMode} from "./Common";
 import {ResourceOverride} from "./Resources";
 
 export class GameConfig {
@@ -8,6 +8,8 @@ export class GameConfig {
     casterTax = 0.06;
     animationLock = 0.66;
     timeTillFirstManaTick = 1.2;
+    procMode = ProcMode.RNG;
+    extendedBuffTimes = false;
     hasteStacks = 0;
     valor = 0;
     etherCharges = 1;
@@ -25,7 +27,8 @@ export class GameConfig {
         animationLock: number,
         etherCharges: number,
         timeTillFirstManaTick: number,
-        rngProcs: boolean,
+        procMode: ProcMode,
+        extendedBuffTimes: boolean,
         initialResourceOverrides: any[]
     }) {
         if (props) {
@@ -35,10 +38,10 @@ export class GameConfig {
             this.casterTax = props.casterTax;
             this.animationLock = props.animationLock;
             this.timeTillFirstManaTick = props.timeTillFirstManaTick;
-            this.rngProcs = props.rngProcs;
-            this.valor = props.valor;
             this.etherCharges = props.etherCharges;
             this.hasteStacks = props.hasteStacks;
+            this.procMode = props.procMode;
+            this.extendedBuffTimes = props.extendedBuffTimes;
             if (props.initialResourceOverrides) {
                 this.initialResourceOverrides = props.initialResourceOverrides.map(obj=>{
                     return new ResourceOverride(obj);
@@ -68,7 +71,8 @@ export class GameConfig {
                 this.etherCharges === other.etherCharges &&
                 this.animationLock === other.animationLock &&
                 this.timeTillFirstManaTick === other.timeTillFirstManaTick &&
-                this.rngProcs === other.rngProcs;
+                this.procMode === other.procMode &&
+                this.extendedBuffTimes === other.extendedBuffTimes;
         } else {
             return false;
         }
@@ -89,6 +93,8 @@ export class GameConfig {
     getSkillAnimationLock(skillName : SkillName) : number {
         if (skillName === SkillName.Tincture) {
             return 1.16;
+        } else if (skillName === SkillName.AetherialManipulation || skillName === SkillName.BetweenTheLines) {
+            return 0.8; // from: https://nga.178.com/read.php?tid=21233094&rand=761
         } else {
             return this.animationLock;
         }
@@ -109,7 +115,8 @@ export class GameConfig {
             valor: this.valor,
             animationLock: this.animationLock,
             timeTillFirstManaTick: this.timeTillFirstManaTick,
-            rngProcs: this.rngProcs,
+            procMode: this.procMode,
+            extendedBuffTimes: this.extendedBuffTimes,
             initialResourceOverrides: this.initialResourceOverrides.map(override=>{ return override.serialized(); })
         };
     }

@@ -2,8 +2,10 @@ import React from 'react';
 import {controller} from '../Controller/Controller'
 import {ButtonIndicator, Clickable, Expandable, Help, Input} from "./Common";
 import {TickMode} from "../Controller/Common";
-import {ResourceType} from "../Game/Common";
+import {ProcMode, ResourceType} from "../Game/Common";
 import {resourceInfos} from "../Game/Resources";
+import {localize} from "./Localization";
+import {getCurrentThemeColors} from "./ColorTheme";
 
 export class TimeControl extends React.Component {
 	constructor(props) {
@@ -74,51 +76,90 @@ export class TimeControl extends React.Component {
 		controller.setTimeControlSettings({tickMode: this.state.tickMode, timeScale: this.state.timeScale});
 	}
 	render() {
-		return <div className={"timeControl"}>
+		//let colors = getCurrentThemeColors();
+		let radioStyle = {
+			position: "relative",
+			top: 3,
+			marginRight: "0.25em"
+		};
+		let tickModeOptionStyle = {
+			display: "inline-block",
+			marginRight: "0.5em"
+		};
+		return <div style={{display: "inline-block", marginBottom: 15}}>
 			<div style={{marginBottom: 5}}>
-				<div style={{marginBottom: 5}}><b>Control</b></div>
-				<label className={"tickModeOption"}>
-					<input className={"radioButton"} type={"radio"} onChange={this.setTickMode}
+				<div style={{marginBottom: 5}}><b>{localize({en: "Control", zh: "战斗时间控制"})}</b></div>
+				<label style={tickModeOptionStyle}>
+					<input style={radioStyle} type={"radio"} onChange={this.setTickMode}
 						   value={TickMode.RealTime}
 						   checked={this.state.tickMode === TickMode.RealTime}
 						   name={"tick mode"}/>
-					{"real-time"}
+					{localize({
+						en: "real-time",
+						zh: "实时"
+					})}
 				</label>
 				<Help topic={"ctrl-realTime"} content={
 					<div className="toolTip">
-						<div className="paragraph">- click to use a skill</div>
-						<div className="paragraph">- <ButtonIndicator text={"space"}/> to play/pause. game time is elapsing when the main region has a green border</div>
+						{localize({
+							en: <div className="paragraph">- click to use a skill</div>,
+							zh: <div className="paragraph">- 点击图标使用技能</div>,
+						})}
+						{localize({
+							en: <div className="paragraph">- <ButtonIndicator text={"space"}/> to play/pause. game time is elapsing when the main region has a green border</div>,
+							zh: <div className="paragraph">- 按 <ButtonIndicator text={"空格"}/> 来暂停/继续战斗。操作区有绿色边框的时候代表时间轴正在实时前进。</div>
+						})}
 					</div>
 				}/><br/>
-				<label className={"tickModeOption"}>
-					<input className={"radioButton"} type={"radio"} onChange={this.setTickMode}
+				<label style={tickModeOptionStyle}>
+					<input style={radioStyle} type={"radio"} onChange={this.setTickMode}
 						   value={TickMode.RealTimeAutoPause}
 						   checked={this.state.tickMode===TickMode.RealTimeAutoPause}
 						   name={"tick mode"}/>
-					{"real-time auto pause"}
+					{localize({
+						en: "real-time auto pause",
+						zh: "实时(带自动暂停）"
+					})}
 				</label>
 				<Help topic={"ctrl-realTimeAutoPause"} content={
 					<div className="toolTip">
-						<div className="paragraph">*Recommended*</div>
-						<div className="paragraph">- click to use a skill. or if it's not ready, click again to wait then retry</div>
+						{localize({
+							en: <div className="paragraph">*Recommended*</div>,
+							zh: <div className="paragraph">*推荐设置*</div>
+						})}
+						{localize({
+							en: <div className="paragraph">- click to use a skill. or if it's not ready, click again to wait then retry</div>,
+							zh: <div className="paragraph">- 点击图标使用技能; 战斗时间会按下方设置的倍速自动前进直到可释放下一个技能。如果点击的技能CD没有转好，再次点击会快进到它CD转好并重试。</div>
+						})}
 					</div>
 				}/><br/>
-				<label className={"tickModeOption"}>
-					<input className={"radioButton"} type={"radio"} onChange={this.setTickMode}
+				<label style={tickModeOptionStyle}>
+					<input style={radioStyle} type={"radio"} onChange={this.setTickMode}
 						   value={TickMode.Manual}
 						   checked={this.state.tickMode===TickMode.Manual}
 						   name={"tick mode"}/>
-					{"manual"}
+					{localize({
+						en: "manual",
+						zh: "手动"
+					})}
 				</label>
 				<Help topic={"ctrl-manual"} content={
 					<div className="toolTip">
-						<div className="paragraph">- click to use a skill. or if it's not ready, click again to wait then retry</div>
-						<div className="paragraph">- <ButtonIndicator text={"space"}/> to advance game time to the earliest possible time for the next skill</div>
+						{localize({
+							en: <div className="paragraph">- click to use a skill. or if it's not ready, click again to wait then retry</div>,
+							zh: <div className="paragraph">- 点击图标使用技能; 战斗时间会自动快进至可释放下一个技能。如果点击的技能CD没有转好，再次点击可以快进到它CD转好并重试。</div>
+						})}
+						{localize({
+							en:<div className="paragraph">- <ButtonIndicator text={"space"}/> to advance game time to the earliest possible time for the next skill</div>,
+							zh: <div className="paragraph">- 点击 <ButtonIndicator text={"空格"}/> 来快进到下一个可释放技能的时间点。</div>
+						})}
 					</div>
 				}/><br/>
 			</div>
-			<Input defaultValue={this.state.timeScale} description={<span>time scale <Help topic={"timeScale"} content={
-				<div>rate at which game time advances automatically (aka when in real-time)</div>
+			<Input defaultValue={this.state.timeScale} description={<span>{localize({en: "time scale ", zh: "倍速 "})}<Help topic={"timeScale"} content={
+				<div>{localize({
+					en: "rate at which game time advances automatically (aka when in real-time)",
+					zh: "战斗时间自动前进的速度"})}</div>
 			}/>: </span>} onChange={this.setTimeScale}/>
 		</div>
 	}
@@ -127,13 +168,16 @@ export class TimeControl extends React.Component {
 function ConfigSummary(props) {
 	let ct_2_5 = controller.gameConfig.adjustedCastTime(2.5).toFixed(2);
 	let lucidTickOffset = controller.game.actorTickOffset.toFixed(2);
-	let offsetDesc = "The random time offset of actor (lucid dreaming) ticks relative to MP ticks";
-	let rngProc = controller.gameConfig.rngProcs;
+	let offsetDesc = localize({
+		en: "The random time offset of actor (lucid dreaming) ticks relative to MP ticks",
+		zh: "醒梦BUFF期间，每次跳蓝后多久跳醒梦"
+	});
+	let procMode = controller.gameConfig.procMode;
 	let numOverrides = controller.gameConfig.initialResourceOverrides.length;
 	return <div>
 		GCD: {ct_2_5}
-		<br/>Actor tick offset <Help topic={"actorTickOffset"} content={offsetDesc}/>: {lucidTickOffset}
-		{rngProc ? undefined : <span style={{color: "mediumpurple"}}><br/>No rng procs</span>}
+		<br/>{localize({en: "Actor tick offset ", zh: "醒梦&跳蓝时间差 "})}<Help topic={"actorTickOffset"} content={offsetDesc}/>: {lucidTickOffset}
+		{procMode===ProcMode.RNG ? undefined : <span style={{color: "mediumpurple"}}><br/>Procs: {procMode}</span>}
 		{numOverrides === 0 ? undefined : <span style={{color: "mediumpurple"}}><br/>{numOverrides} resource override(s)</span>}
 	</div>
 }
@@ -146,8 +190,14 @@ function ResourceOverrideDisplay(props) {
 	} else {
 		str = props.override.type;
 		if (props.override.type === ResourceType.LeyLines) str += " (" + (props.override.enabled ? "enabled" : "disabled") + ")";
-		if (props.rscInfo.maxValue > 1 || props.override.type === ResourceType.Paradox) str += " (amount: " + props.override.stacks + ")";
-		if (props.rscInfo.maxTimeout >= 0) str += " drops in " + props.override.timeTillFullOrDrop + "s";
+		if (props.rscInfo.maxValue > 1) str += " (amount: " + props.override.stacks + ")";
+		if (props.rscInfo.maxTimeout >= 0) {
+			if (props.override.type === ResourceType.Polyglot) {
+				if (props.override.timeTillFullOrDrop > 0) str += " next stack ready in " + props.override.timeTillFullOrDrop + "s";
+			} else {
+				str += " drops in " + props.override.timeTillFullOrDrop + "s";
+			}
+		}
 	}
 	str += " ";
 	return <div style={{marginTop: 10, color: "mediumpurple"}}>
@@ -172,7 +222,8 @@ export class Config extends React.Component {
 			countdown: 0,
 			etherCharges: 0,
 			randomSeed: "",
-			rngProcs: true,
+			procMode: ProcMode.RNG,
+			extendedBuffTimes: false,
 			initialResourceOverrides: [],
 			/////////
 			selectedOverrideResource: ResourceType.Mana,
@@ -202,11 +253,13 @@ export class Config extends React.Component {
 					etherCharges: this.state.etherCharges,
 					timeTillFirstManaTick: this.state.timeTillFirstManaTick,
 					randomSeed: seed,
-					rngProcs: this.state.rngProcs,
+					procMode: this.state.procMode,
+					extendedBuffTimes: this.state.extendedBuffTimes,
 					initialResourceOverrides: this.state.initialResourceOverrides // info only
 				};
 				this.setConfigAndRestart(config);
 				this.setState({dirty: false});
+				controller.scrollToTime();
 			}
 			event.preventDefault();
 		}).bind(this);
@@ -243,15 +296,24 @@ export class Config extends React.Component {
 			this.setState({randomSeed: val, dirty: true});
 		}).bind(this);
 
-		this.setrngProcs = (evt => {
-			this.setState({rngProcs: evt.target.checked, dirty: true});
+		this.setExtendedBuffTimes = (evt => {
+			this.setState({extendedBuffTimes: evt.target.checked, dirty: true});
 		}).bind(this);
 
-		this.setOverrideTimer = (val=>{
-			this.setState({overrideTimer: val})}).bind(this);
-		this.setOverrideStacks = (val=>{ this.setState({overrideStacks: val}) }).bind(this);
-		this.setOverrideEnabled = (evt=>{ this.setState({overrideEnabled: evt.target.checked}) }).bind(this);
-		this.deleteResourceOverride = (rscType=>{
+		this.setProcMode = (evt => {
+			this.setState({procMode: evt.target.value, dirty: true});
+		}).bind(this);
+
+		this.setOverrideTimer = (val => {
+			this.setState({overrideTimer: val})
+		}).bind(this);
+		this.setOverrideStacks = (val => {
+			this.setState({overrideStacks: val})
+		}).bind(this);
+		this.setOverrideEnabled = (evt => {
+			this.setState({overrideEnabled: evt.target.checked})
+		}).bind(this);
+		this.deleteResourceOverride = (rscType => {
 			let overrides = this.state.initialResourceOverrides;
 			for (let i = 0; i < overrides.length; i++) {
 				if (overrides[i].type === rscType) {
@@ -259,15 +321,15 @@ export class Config extends React.Component {
 					break;
 				}
 			}
-			this.setState({ initialResourceOverrides: overrides, dirty: true });
+			this.setState({initialResourceOverrides: overrides, dirty: true});
 		}).bind(this);
 	}
 
 	// call this whenver the list of options has potentially changed
-	#selectFirstAddable() {
+	#getFirstAddable(overridesList) {
 		let firstAddableRsc = "aba aba";
 		let S = new Set();
-		this.state.initialResourceOverrides.forEach(ov=>{
+		overridesList.forEach(ov=>{
 			S.add(ov.type);
 		});
 		for (let k of resourceInfos.keys()) {
@@ -276,9 +338,7 @@ export class Config extends React.Component {
 				break;
 			}
 		}
-		this.setState({
-			selectedOverrideResource: firstAddableRsc
-		});
+		return firstAddableRsc;
 	}
 
 	componentDidMount() {
@@ -286,8 +346,8 @@ export class Config extends React.Component {
 			this.setState(config);
 			this.setState({
 				dirty: false,
+				selectedOverrideResource: this.#getFirstAddable(config.initialResourceOverrides)
 			});
-			this.#selectFirstAddable();
 		}).bind(this);
 	}
 
@@ -340,6 +400,15 @@ export class Config extends React.Component {
 			}
 		}
 
+		// if polyglot timer is set (>0), must have enochian
+		if (M.has(ResourceType.Polyglot)) {
+			let polyTimer = M.get(ResourceType.Polyglot).timeTillFullOrDrop;
+			if (polyTimer > 0 && !M.has(ResourceType.Enochian)) {
+				window.alert("since a timer for polyglot is set, there must also be Enochian");
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -350,30 +419,58 @@ export class Config extends React.Component {
 		let inputOverrideTimer = parseFloat(this.state.overrideTimer);
 		let inputOverrideStacks = parseInt(this.state.overrideStacks);
 		let inputOverrideEnabled = this.state.overrideEnabled;
+
+		// an exception for polyglot: leave empty := no timer set
+		if (rscType === ResourceType.Polyglot && this.state.overrideTimer === "") {
+			inputOverrideTimer = 0;
+		}
+
 		if (isNaN(inputOverrideStacks) || isNaN(inputOverrideTimer)) {
 			window.alert("some inputs are not numbers!");
 			return;
 		}
 
-		if ((info.maxValue > 1 || rscType===ResourceType.Paradox) &&
-			(inputOverrideStacks < 0 || inputOverrideStacks > info.maxValue))
-		{
-			window.alert("invalid input amount (must be in range [0, " + info.maxValue + "])");
-			return;
-		}
-		if (info.maxTimeout >= 0 &&
-			(inputOverrideTimer < 0 || inputOverrideTimer > info.maxTimeout))
-		{
-			window.alert("invalid input timeout (must be in range [0, " + info.maxTimeout + "])");
-			return;
-		}
+		let props = {};
 
-		let props = {
-			type: rscType,
-			timeTillFullOrDrop: info.maxTimeout >= 0 ? inputOverrideTimer : -1,
-			stacks: info.maxValue > 1 ? inputOverrideStacks : 1,
-			enabled: rscType === ResourceType.LeyLines ? inputOverrideEnabled : true,
-		};
+		if (info.isCoolDown)
+		{
+			let maxTimer = info.maxStacks * info.cdPerStack;
+			if (inputOverrideTimer < 0 || inputOverrideTimer > maxTimer) {
+				window.alert("invalid input timeout (must be in range [0, " + maxTimer + "])");
+				return;
+			}
+
+			props = {
+				type: rscType,
+				timeTillFullOrDrop: inputOverrideTimer,
+				stacks: info.maxValue > 1 ? inputOverrideStacks : 1,
+				enabled: rscType === ResourceType.LeyLines ? inputOverrideEnabled : true,
+			};
+		}
+		else
+		{
+			if ((info.maxValue > 1 && rscType!==ResourceType.Paradox) &&
+				(inputOverrideStacks < 0 || inputOverrideStacks > info.maxValue))
+			{
+				window.alert("invalid input amount (must be in range [0, " + info.maxValue + "])");
+				return;
+			}
+			if (info.maxTimeout >= 0 &&
+				(inputOverrideTimer < 0 || inputOverrideTimer > info.maxTimeout))
+			{
+				window.alert("invalid input timeout (must be in range [0, " + info.maxTimeout + "])");
+				return;
+			}
+
+			props = {
+				type: rscType,
+				timeTillFullOrDrop: info.maxTimeout >= 0 ? inputOverrideTimer : -1,
+				stacks: info.maxValue > 1 ? inputOverrideStacks : 1,
+				enabled: rscType === ResourceType.LeyLines ? inputOverrideEnabled : true,
+			};
+		}
+		// end validation
+
 		let overrides = this.state.initialResourceOverrides;
 		overrides.push(props);
 		this.setState({initialResourceOverrides: overrides, dirty: true});
@@ -384,7 +481,7 @@ export class Config extends React.Component {
 		let S = new Set();
 		this.state.initialResourceOverrides.forEach(override=>{
 			S.add(override.type);
-		})
+		});
 
 		let counter = 0;
 		for (let k of resourceInfos.keys()) {
@@ -430,11 +527,15 @@ export class Config extends React.Component {
 				showEnabled = (rscType === ResourceType.LeyLines);
 			}
 
+			let timerDesc;
+			if (info.isCoolDown) timerDesc = "Time till full: ";
+			else if (rscType === ResourceType.Polyglot) timerDesc = "Time till next stack: ";
+			else timerDesc = "Time till drop: ";
 			inputSection = <div style={{margin: "6px 0"}}>
 
 				{/*timer*/}
 				<div hidden={!showTimer}>
-					<Input description={info.isCoolDown ? "Time till full: " : "Time till drop: "}
+					<Input description={timerDesc}
 						   defaultValue={timerDefaultValue}
 						   onChange={timerOnChange}/>
 				</div>
@@ -462,10 +563,12 @@ export class Config extends React.Component {
 		return <form
 			onSubmit={evt => {
 				this.#addResourceOverride();
-				this.#selectFirstAddable();
+				this.setState({
+					selectedOverrideResource: this.#getFirstAddable(this.state.initialResourceOverrides)
+				});
 				evt.preventDefault();
 			}}
-			style={{marginTop: 16, outline: "1px solid lightgrey", outlineOffset: 6}}>
+			style={{marginTop: 16, outline: "1px solid " + getCurrentThemeColors().bgMediumContrast, outlineOffset: 6}}>
 			<select value={this.state.selectedOverrideResource}
 					onChange={evt => {
 						if (evt.target) {
@@ -499,7 +602,7 @@ export class Config extends React.Component {
 			<Expandable title="overrideInitialResources" titleNode={<span>
 				Override initial resources <Help topic="overrideInitialResources"content={<div>
 				<div className={"paragraph"} style={{color: "orangered"}}><b>Can create invalid game states. Go over Instructions/Troubleshoot first and use carefully at your own risk!</b></div>
-				<div className={"paragraph"}>Also, currently thunder dot and lucid dreaming buffs created with such overrides don't actually tick. They just show remaining buff timers.</div>
+				<div className={"paragraph"}>Also, currently thunder dot buff created this way doesn't actually tick. It just shows the remaining buff timer.</div>
 				<div className={"paragraph"}>I would recommend saving settings (stats, lines presets, timeline markers etc.) to files first, in case invalid game states really mess up the tool and a complete reset is required.</div>
 			</div>}/>
 			</span>} content={<div>
@@ -538,11 +641,11 @@ export class Config extends React.Component {
 			timeTillFirstManaTick: parseFloat(config.timeTillFirstManaTick),
 			countdown: parseFloat(config.countdown),
 			randomSeed: config.randomSeed.trim(),
-			rngProcs: config.rngProcs,
+			procMode: config.procMode,
+			extendedBuffTimes: config.extendedBuffTimes,
 			initialResourceOverrides: config.initialResourceOverrides // info only
 		});
 		controller.updateAllDisplay();
-		controller.updateCumulativeStatsDisplay();
 	}
 
 	componentWillUnmount() {
@@ -551,33 +654,60 @@ export class Config extends React.Component {
 
 	render() {
 		let editSection = <div>
+			<Input defaultValue={this.state.animationLock} description={localize({en: "animation lock: ", zh: "能力技后摇："})} onChange={this.setAnimationLock}/>
+			<Input defaultValue={this.state.casterTax} description={localize({en: "caster tax: ", zh: "读条税："})} onChange={this.setCasterTax}/>
+			<Input defaultValue={this.state.timeTillFirstManaTick} description={localize({en: "time till first MP tick: ", zh: "距首次跳蓝时间："})} onChange={this.setTimeTillFirstManaTick}/>
+			<Input defaultValue={this.state.countdown} description={
+				<span>{
+					localize({en: "countdown ", zh: "倒数时间 "})
+				}<Help topic={"countdown"} content={localize({en: "can use a negative countdown to start from a specific time of fight", zh: "可以是负数，时间轴会从战斗中途某个时间开始显示"})}/>: </span>
+			} onChange={this.setCountdown}/>
 			<Input defaultValue={this.state.hasteStacks} description="Haste: " onChange={this.setHaste}/>
 			<Input defaultValue={this.state.valor} description="Rays of Valor: " onChange={this.setValor}/>
 			<Input defaultValue={this.state.etherCharges} description="Ether Kit Charges: " onChange={this.setEtherCharges}/>
-			<Input defaultValue={this.state.animationLock} description="animation lock: " onChange={this.setAnimationLock}/>
-			<Input defaultValue={this.state.casterTax} description="caster tax: " onChange={this.setCasterTax}/>
-			<Input defaultValue={this.state.timeTillFirstManaTick} description="time till first MP tick: " onChange={this.setTimeTillFirstManaTick}/>
-			<Input defaultValue={this.state.countdown} description="countdown: " onChange={this.setCountdown}/>
 			<Input defaultValue={this.state.randomSeed} description={
-				<span>random seed <Help topic={"randomSeed"} content={
-					"can be anything, or leave empty to get 4 random digits."
+				<span>{localize({en: "random seed ", zh: "随机种子 "})}<Help topic={"randomSeed"} content={
+					localize({
+						en: "can be anything, or leave empty to get 4 random digits.",
+						zh: "可以是任意字符串，或者留空，会获得4个随机数字"
+					})
 				}/>: </span>} onChange={this.setRandomSeed}/>
 			<div>
+				<span>{localize({en: "proc mode ", zh: "随机BUFF获取 "})}<Help topic={"procMode"} content={
+
+					localize({
+					en: "Default RNG: 40% Firestarter, 10% Thundercloud",
+					zh: "RNG会像游戏内一样，相应技能40%概率获得火苗，10%概率获得雷云，Always则每次都会触发火苗/雷云，Never则从不触发。"
+				})
+				}/>: </span>
+				<select style={{outline: "none"}} value={this.state.procMode} onChange={this.setProcMode}>
+					<option key={ProcMode.RNG} value={ProcMode.RNG}>RNG</option>
+					<option key={ProcMode.Never} value={ProcMode.Never}>Never</option>
+					<option key={ProcMode.Always} value={ProcMode.Always}>Always</option>
+				</select>
+			</div>
+			<div>
 				<input type="checkbox" style={{position: "relative", top: 3, marginRight: 5}}
-					   checked={this.state.rngProcs}
-					   onChange={this.setrngProcs}/>
-				<span>rng procs <Help topic={"rngProcs"} content={
-					"turning off rng procs will force you to sharpcast everything."
+					   checked={this.state.extendedBuffTimes}
+					   onChange={this.setExtendedBuffTimes}/>
+				<span>extended buff times <Help topic={"extendedBuffTimes"} content={
+					<div>
+						<div className={"paragraph"}>Many buffs actually last longer than listed in the skill descriptions. I got some rough numbers from logs and screen captures but please contact me if you have more accurate data.</div>
+						<div className={"paragraph"}>Having this checked will give the following duration overrides:</div>
+						<div className={"paragraph"}> - Triplecast: 15.7s</div>
+						<div className={"paragraph"}> - Firestarter: 31s</div>
+						<div className={"paragraph"}> - Thundercloud: 41s</div>
+					</div>
 				}/></span>
 			</div>
 			{this.#resourceOverridesSection()}
-			<button onClick={this.handleSubmit}>apply and reset</button>
+			<button onClick={this.handleSubmit}>{localize({en: "apply and reset", zh: "应用并重置时间轴"})}</button>
 		</div>;
 		return (
 			<div className={"config"} style={{marginBottom: 16}}>
-				<div style={{marginBottom: 5}}><b>Config</b></div>
+				<div style={{marginBottom: 5}}><b>{localize({en: "Config", zh: "设置"})}</b></div>
 				<ConfigSummary/> {/* retrieves data from global controller */}
-				<Expandable title={"Edit" + (this.state.dirty ? "*" : "")} content={editSection}/>
+				<Expandable title={"Edit"} titleNode={localize({en: "Edit", zh: "编辑"}) + (this.state.dirty ? "*" : "")} content={editSection}/>
 			</div>
 		)}
 }

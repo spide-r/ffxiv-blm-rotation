@@ -1,6 +1,7 @@
 import {FileType} from "./Common";
-import {ResourceType, SkillName} from "../Game/Common";
+import {ResourceType, SkillName, SkillReadyStatus} from "../Game/Common";
 import {GameConfig} from "../Game/GameConfig"
+import {Potency} from "../Game/Potency";
 
 export const enum ActionType {
 	Skill = "Skill",
@@ -12,7 +13,6 @@ function verifyActionNode(action: ActionNode) {
 	console.assert(typeof action !== "undefined");
 	if (action.type === ActionType.Skill) {
 		console.assert(typeof action.skillName === "string");
-		console.assert(typeof action.tmp_capturedPotency === "number");
 		return;
 	} else if (action.type === ActionType.Wait) {
 		console.assert(!isNaN(action.waitDuration));
@@ -27,20 +27,30 @@ function verifyActionNode(action: ActionNode) {
 export class ActionNode {
 	static _gNodeIndex: number = 0;
 	#nodeIndex: number;
+	#capturedBuffs: Set<ResourceType>;
+	//#capturedPotency: number;
+	//#resolved: boolean;
+	#potencies: Potency[];
 
 	type: ActionType;
 	waitDuration: number = 0;
 	skillName?: SkillName;
 	buffName? : ResourceType;
+
 	next?: ActionNode = undefined;
+
+	#selected = false;
 
 	tmp_startLockTime?: number;
 	tmp_endLockTime?: number;
-	tmp_capturedPotency?: number;
 
 	constructor(actionType: ActionType) {
 		this.type = actionType;
 		this.#nodeIndex = ActionNode._gNodeIndex;
+		this.#capturedBuffs = new Set<ResourceType>();
+		//this.#capturedPotency = 0;
+		//this.#resolved = false;
+		this.#potencies = [];
 		ActionNode._gNodeIndex++;
 	}
 
@@ -54,8 +64,71 @@ export class ActionNode {
 
 	getNodeIndex() { return this.#nodeIndex; }
 
-	#selected = false;
 	isSelected() { return this.#selected; }
+
+	addBuff(rsc: ResourceType) {
+		this.#capturedBuffs.add(rsc);
+	}
+
+	hasBuff(rsc: ResourceType) {
+		return this.#capturedBuffs.has(rsc);
+	}
+
+	resolveAll(t: number) {
+		this.#potencies.forEach(p=>{
+			p.resolve(t);
+		});
+	}
+
+	// true if empty or any damage is resolved.
+	resolved() {
+		if (this.#potencies.length === 0) return true;
+		if (this.#potencies.length === 1) return this.#potencies[0].hasResolved();
+
+		return this.#potencies[0].hasResolved();
+	}
+
+	hitBoss(untargetable: (t: number) => boolean) {
+		if (this.#potencies.length === 0) return true;
+		if (this.#potencies.length === 1) return this.#potencies[0].hasHitBoss(untargetable);
+
+		return this.#potencies[0].hasHitBoss(untargetable);
+	}
+
+	getPotency(props: {
+		tincturePotencyMultiplier: number,
+		untargetable: (t: number) => boolean
+	}) {
+		let res = {
+			applied: 0,
+			snapshottedButPending: 0
+		};
+		this.#potencies.forEach(p=>{
+			if (p.hasHitBoss(props.untargetable)) {
+				res.applied += p.getAmount(props);
+			} else if (!p.hasResolved() && p.hasSnapshotted()) {
+				res.snapshottedButPending += p.getAmount(props);
+			}
+		});
+		return res;
+	}
+
+	removeUnresolvedPotencies() {
+		for (let i = this.#potencies.length - 1; i >= 0; i--) {
+			if (!this.#potencies[i].hasResolved()) {
+				this.#potencies.splice(i, 1);
+			}
+		}
+	}
+
+	getPotencies() {
+		return this.#potencies;
+	}
+
+	addPotency(p: Potency) {
+		this.#potencies.push(p);
+	}
+
 	select() {
 		this.#selected = true;
 	}
@@ -133,19 +206,30 @@ export class Line {
 	}
 }
 
+export type RecordValidStatus = {
+	isValid: boolean,
+	firstInvalidAction: ActionNode | undefined,
+	invalidReason: SkillReadyStatus | undefined
+};
+
 // information abt a timeline
 export class Record extends Line {
 	selectionStart?: ActionNode;
 	selectionEnd?: ActionNode;
 	config?: GameConfig;
 	getFirstSelection() {
+		if (this.selectionStart) console.assert(this.selectionEnd !== undefined);
 		return this.selectionStart;
 	}
 	getLastSelection() {
+		if (this.selectionEnd) console.assert(this.selectionStart !== undefined);
 		return this.selectionEnd;
 	}
 	addActionNode(actionNode: ActionNode) {
 		verifyActionNode(actionNode);
+		super.addActionNode(actionNode);
+	}
+	addActionNodeWithoutVerify(actionNode: ActionNode) {
 		super.addActionNode(actionNode);
 	}
 
@@ -157,32 +241,11 @@ export class Record extends Line {
 		}
 	}
 
-	#getSelectionStats() {
-		let potency = 0;
-		let duration = 0;
-
-		this.iterateSelected(itr=>{
-			// potency
-			potency += itr.tmp_capturedPotency ?? 0;
-			// duration
-			if (itr !== this.selectionEnd) {
-				duration += itr.waitDuration;
-			} else {
-				duration += (itr.tmp_endLockTime ?? 0) - (itr.tmp_startLockTime ?? 0);
-			}
-		});
-
-		console.assert(!isNaN(potency));
-		console.assert(!isNaN(duration));
-		return [potency, duration];
-	}
-	// assume node is actually in this recording
 	selectSingle(node: ActionNode) {
 		this.unselectAll();
 		node.select();
 		this.selectionStart = node;
 		this.selectionEnd = node;
-		return this.#getSelectionStats();
 	}
 	unselectAll() {
 		this.iterateAll(itr=>{
@@ -193,12 +256,11 @@ export class Record extends Line {
 	}
 	#selectSequence(first: ActionNode, last: ActionNode) {
 		this.unselectAll();
+		this.selectionStart = first;
+		this.selectionEnd = last;
 		this.iterateSelected(itr=>{
 			itr.select();
 		})
-		this.selectionStart = first;
-		this.selectionEnd = last;
-		return this.#getSelectionStats();
 	}
 	selectUntil(node: ActionNode) {
 		// proceed only if there's currently exactly 1 node selected
@@ -206,21 +268,119 @@ export class Record extends Line {
 			let itr: ActionNode | undefined;
 			for (itr = this.selectionStart; itr; itr = itr.next) {
 				if (itr === node) {
-					return this.#selectSequence(this.selectionStart, node);
+					this.#selectSequence(this.selectionStart, node);
+					return;
 				}
 			}
 			// failed to find node from going down the currently selected list
 			for (itr = node; itr; itr = itr.next) {
 				if (itr === this.selectionStart) {
-					return this.#selectSequence(node, this.selectionStart);
+					this.#selectSequence(node, this.selectionStart);
+					return;
 				}
 			}
 			// failed both ways (shouldn't get here)
 			console.assert(false);
-			return [0, 0];
-		} else {
-			return this.selectSingle(node);
 		}
+	}
+	onClickNode(node: ActionNode, bShift: boolean) {
+		if (bShift) {
+			this.selectUntil(node);
+		} else {
+			this.selectSingle(node);
+		}
+	}
+	moveSelected(offset: number) { // positive: move right; negative: move left
+		if (offset === 0) return undefined;
+		let firstSelected = this.getFirstSelection();
+		let lastSelected = this.getLastSelection();
+		if (!firstSelected || !lastSelected) return undefined;
+
+		let oldNodeBeforeSelection: ActionNode | undefined = undefined;
+		let itr = this.getFirstAction();
+		while (itr) {
+			if (itr.next === firstSelected) oldNodeBeforeSelection = itr;
+			itr = itr.next;
+		}
+
+		// stitch together before and after chains
+		if (oldNodeBeforeSelection) {
+			oldNodeBeforeSelection.next = lastSelected.next;
+		}
+		// also update head & tail to without selection
+		if (this.head?.isSelected()) {
+			this.head = lastSelected.next;
+		}
+		if (this.tail?.isSelected()) {
+			this.tail = oldNodeBeforeSelection;
+		}
+
+		// temporarily label the unselected nodes with an index
+		let nodesArray : ActionNode[] = [];
+		let nodeBeforeSelectionIdx = -1;
+
+		let idx = 0;
+		itr = this.getFirstAction();
+		while (itr) {
+			 nodesArray.push(itr);
+			 if (itr === oldNodeBeforeSelection) {
+				  nodeBeforeSelectionIdx = idx;
+			 }
+			itr = itr.next;
+			idx++;
+		}
+
+		// insert back the selection chain
+		let newIndexBeforeSelection = nodeBeforeSelectionIdx + offset;
+		if (newIndexBeforeSelection >= nodesArray.length) newIndexBeforeSelection = nodesArray.length - 1;
+
+		let newNodeBeforeSelection = newIndexBeforeSelection < 0 ? undefined : nodesArray[newIndexBeforeSelection];
+		if (newNodeBeforeSelection) {
+			let newNodeAfterSelection = newNodeBeforeSelection.next;
+			newNodeBeforeSelection.next = firstSelected;
+			lastSelected.next = newNodeAfterSelection;
+			if (!newNodeAfterSelection) this.tail = lastSelected;
+		} else {
+			lastSelected.next = this.head;
+			this.head = firstSelected;
+		}
+		let firstEditedNode;
+		if (offset < 0) firstEditedNode = this.getFirstSelection();
+		else {
+			if (nodeBeforeSelectionIdx >= 0) firstEditedNode = nodesArray[nodeBeforeSelectionIdx].next;
+			else firstEditedNode = this.head;
+		}
+		return firstEditedNode;
+	}
+	deleteSelected() {
+		let firstSelected = this.getFirstSelection();
+		let lastSelected = this.getLastSelection();
+		if (!firstSelected) return undefined;
+		this.unselectAll();
+
+		let firstBeforeSelected : ActionNode | undefined = undefined;
+		let itr = this.getFirstAction();
+		while (itr) {
+			if (itr.next === firstSelected) {
+				firstBeforeSelected = itr;
+				break;
+			}
+			itr = itr.next;
+		}
+
+		if (firstSelected === this.head) {
+			this.head = lastSelected?.next;
+		}
+		if (lastSelected === this.tail) {
+			this.tail = firstBeforeSelected;
+		}
+		if (firstBeforeSelected) {
+			firstBeforeSelected.next = lastSelected?.next;
+		}
+		if (firstBeforeSelected) {
+			return firstBeforeSelected===this.tail ? this.tail : firstBeforeSelected.next;
+		}
+		return this.head;
 	}
 	serialized() {
 		console.assert(this.config);
@@ -232,5 +392,26 @@ export class Record extends Line {
 			actions: base.actions,
 		};
 	}
+
+	// result is potentially invalid
+	getCloneWithSharedConfig() {
+		let copy = new Record();
+		copy.config = this.config;
+		let itr = this.head;
+		while (itr) {
+			let node = itr.getClone();
+			if (itr.isSelected()) node.select();
+			if (itr === this.selectionStart) {
+				copy.selectionStart = node;
+			}
+			if (itr === this.selectionEnd) {
+				copy.selectionEnd = node;
+			}
+			copy.addActionNodeWithoutVerify(node);
+			itr = itr.next;
+		}
+		return copy;
+	}
+
 }
 

@@ -13,6 +13,12 @@ export const enum Aspect {
 	Other = "Other"
 }
 
+export const enum ProcMode {
+	RNG = "RNG",
+	Never = "Never",
+	Always = "Always"
+}
+
 export const enum SkillName {
 	Blizzard = "Blizzard",
 	Fire = "Fire",
@@ -83,6 +89,7 @@ export const enum SkillReadyStatus {
 	Blocked = "blocked by CD, animation lock or caster tax",
 	NotEnoughMP = "not enough MP",
 	RequirementsNotMet = "requirements not met",
+	BuffNoLongerAvailable = "buff no longer available"
 }
 
 export const enum ResourceType {
@@ -107,8 +114,7 @@ export const enum ResourceType {
 	Manaward = "Manaward", // [0, 1]
 	Addle = "Addle", // [0, 1]
 	Swiftcast = "Swiftcast", // [0, 1]
-	LucidDreamingTimerDisplay = "Lucid Dreaming", // [0, 1] also just for timing display
-	LucidTick = "Lucid Tick", // [0, 1]
+	LucidDreaming = "Lucid Dreaming", // [0, 1] also just for timing display
 	Surecast = "Surecast", // [0, 1]
 	Tincture = "Tincture", // [0, 1]
 	Sprint = "Sprint", // [0, 1]
@@ -160,7 +166,7 @@ export const enum ResourceType {
 	// CDs
 	cd_GCD = "cd_GCD", // [0, Constant.gcd]
 	cd_Transpose = "cd_Transpose", // [0, 1x]
-	cd_Sharpcast = "cd_Sharpcast", // [0, 2x] // TODO = figure out how this works
+	cd_Sharpcast = "cd_Sharpcast", // [0, 2x]
 	cd_LeyLines = "cd_LeyLines", // [0, 1x]
 	cd_Manaward = "cd_Manaward", // [0, 1x]
 	cd_BetweenTheLines = "cd_BetweenTheLines", // [0, 1x]
@@ -177,4 +183,8 @@ export const enum ResourceType {
 	cd_Sprint = "cd_Sprint", // [0, 1x]
 	cd_Percept = "cd_Sprint", // [0, 1x]
 	Never = "Never",
+}
+
+export const enum WarningType {
+	PolyglotOvercap = "polyglot overcap"
 }
