@@ -1,7 +1,7 @@
 import {Aspect, ProcMode, ResourceType, SkillName} from './Common'
 // @ts-ignore
 import {controller} from "../Controller/Controller";
-import {LucidDreamingBuff, Resource} from "./Resources";
+import {FoMBuff, LucidDreamingBuff, Resource} from "./Resources";
 import {ActionNode} from "../Controller/Record";
 import {GameState} from "./GameState";
 import {getPotencyModifiersFromResourceState, Potency} from "./Potency";
@@ -931,152 +931,121 @@ export class SkillsList extends Map<SkillName, Skill> {
 			}
 		));
 
+
 		// FoM
 		skillsList.set(SkillName.FoM, new Skill(SkillName.FoM,
-			() => {
-				return true;
-			},
+			() => { return true; },
 			(game, node) => {
-				let skillAppDelay = game.skillsList.get(SkillName.FoM).info.skillApplicationDelay;
-				let timeTillNextManaTick = game.resources.timeTillReady(ResourceType.Mana);
-				let timeTillFirstMpDrainApplies = (timeTillNextManaTick - skillAppDelay) + game.actorTickOffset;
-
+				const skillTime = game.getDisplayTime();
 				game.useInstantSkill({
 					skillName: SkillName.FoM,
 					onApplication: () => {
-						const numTicks = 10;
-						let loseMpTick = (remainingTicks: number)=> {
-							if (remainingTicks===0) return;
-							let manaToConsume = 1045;
-							game.resources.get(ResourceType.Mana).consume(manaToConsume); //lose 1045 MP per dot tick
-							if(game.resources.get(ResourceType.Mana).availableAmount() <= 0){  //oops, we ran out of mana - drop FoM
-								let buff = game.resources.get(ResourceType.FoMTimerDisplay);
-								let tick = game.resources.get(ResourceType.FoMTick);
-									// if already has FoM applied; cancel the remaining ticks now.
-									buff.consume(1);
-									tick.consume(1)
-									buff.removeTimer();
-									tick.removeTimer();
-							}
+						let FoM = game.resources.get(ResourceType.FoM) as FoMBuff;
+						if (FoM.available(1)) {
+							FoM.overrideTimer(game, 21);
+						} else {
+							FoM.gain(1);
 							game.resources.addResourceEvent(
-								ResourceType.FoMTick,
-								"recurring FoM MP drain tick ", 3, (rsc: Resource) =>{
-									let buff = game.resources.get(ResourceType.FoMTimerDisplay);
-									let tick = game.resources.get(ResourceType.FoMTick);
-									if(buff.available(1) && tick.available(1)){ //if we're still active - fire this off otherwise do nothing
-										loseMpTick(remainingTicks - 1);
-									}
-
-								};
-						};
-
-						let buff = game.resources.get(ResourceType.FoMTimerDisplay);
-						let tick = game.resources.get(ResourceType.FoMTick);
-						if (tick.pendingChange) {
-							// if already has FoM applied; cancel the remaining ticks now.
-							buff.removeTimer();
-							tick.removeTimer();
+								ResourceType.FoM,
+								"drop FoM", 21, (rsc: Resource) => {
+									rsc.consume(1);
+								});
 						}
-						// order of events:
-						buff.gain(1);
-						tick.gain(1);
-						game.resources.addResourceEvent(
-							ResourceType.FoMTimerDisplay, "drop FoM DoT", 30, (dot: Resource)=>{
-							dot.consume(1);
-						});
-
-						let startDrainMP = new Event(
-							"first mp drain tick",
-							timeTillFirstMpDrainApplies,
-							() => {
-								loseMpTick(numTicks);
-							});
-						game.addEvent(startDrainMP);
+						FoM.sourceSkill = "FoM@"+skillTime.toFixed(2);
+						FoM.tickCount = 0;
 					},
 					dealDamage: false,
 					node: node
 				});
+				node.resolveAll(game.time);
+			}))
 
+
+
+		//FlareStar
+		let addFSPotencies = function(node: ActionNode, includeInitial: boolean) {
+			let mods = getPotencyModifiersFromResourceState(game.resources, Aspect.Other);
+			if (includeInitial) {
+				// initial potency
+				let pInitial = new Potency({
+					sourceTime: game.time,
+					sourceSkill: SkillName.FlareStar,
+					aspect: Aspect.Other,
+					basePotency: 350,
+					snapshotTime: undefined,
+				});
+				pInitial.modifiers = mods;
+				node.addPotency(pInitial);
 			}
-		));
-
-
-		// called at the time of APPLICATION (not snapshot)
-		let applyFsDot = function(game: GameState, node: ActionNode, capturedTickPotency: number, numTicks: number) {
-			// define stuff
-			let recurringFsTick = (remainingTicks: number, capturedTickPotency: number)=> {
-				if (remainingTicks===0) return;
-				game.resources.addResourceEvent(
-					ResourceType.FlareStarDoTTick,
-					"recurring flare star tick " + (numTicks+1-remainingTicks) + "/" + numTicks, 3, (rsc: Resource) =>{
-						game.reportPotency(node, capturedTickPotency, "DoT");
-						game.dealDamage(capturedTickPotency, "DoT");
-						recurringFsTick(remainingTicks - 1, capturedTickPotency);
-					});
-			};
-			let dot = game.resources.get(ResourceType.FlareStarDoT);
-			let tick = game.resources.get(ResourceType.FlareStarDoTTick);
-			if (tick.pendingChange) {
-				// if already has Flare star applied; cancel the remaining ticks now.
-				dot.removeTimer();
-				tick.removeTimer();
+			// dots
+			for (let i = 0; i < 20; i++) { //60s = 20 ticks
+				let pDot = new Potency({
+					sourceTime: game.time,
+					sourceSkill: SkillName.FlareStar,
+					aspect: Aspect.Other,
+					basePotency: game.config.adjustedDoTPotency(350),
+					snapshotTime: undefined,
+					description: "FSDoT " + (i+1) + "/20"
+				});
+				pDot.modifiers = mods;
+				node.addPotency(pDot);
 			}
-			// order of events:
-			dot.gain(1);
-			game.resources.addResourceEvent(ResourceType.FlareStarDoT, "drop DoT", 60, (dot: Resource)=>{
-				dot.consume(1);
-			});
-			recurringFsTick(numTicks, capturedTickPotency);
-		};
+		}
 
 
-
-
-		//Flare Star
 		skillsList.set(SkillName.FlareStar, new Skill(SkillName.FlareStar,
 			() => {
 				return true;
 			},
 			(game, node) => {
+				if (game.resources.get(ResourceType.Thundercloud).available(1)) // made instant via thundercloud
+				{
+					// potency
+					addFSPotencies(node, true);
+					let p0 = node.getPotencies()[0];
+					p0.base = 350;
+					node.getPotencies().forEach(p=>{ p.snapshotTime = game.time; });
 
-			//todo - new way to capture dot tick potencies - you need to port this code over to the new system
-			game.useInstantSkill({ skillName: SkillName.FlareStar, onApplication: () => {
-				let capturedTickPotency = game.captureDamage(Aspect.Other, game.config.adjustedDoTPotency(350));
-					let skillInfo = skillsList.get(SkillName.FlareStar).info
-					hackyDrainMP(skillInfo, SkillName.FlareStar)
-					applyFsDot(game, node, capturedTickPotency, 20); //tick 20 times
-					let cd = game.cooldowns.get(ResourceType.cd_GCD);
-					let magic_number = -2.3; //magic number to make the GCD cooldown 5-ish (ignoring any sps changes)
-					cd.overrideCurrentValue(magic_number);
-			}, dealDamage: true, node: node
-			});
+					// tincture
+					if (game.resources.get(ResourceType.Tincture).available(1)) {
+						node.addBuff(ResourceType.Tincture);
+					}
+					hackyDrainMP(9000, SkillName.FlareStar)
+					game.useInstantSkill({
+						skillName: SkillName.FlareStar,
+						onApplication: () => {
+							controller.resolvePotency(p0);
+							applyThunderDoT(game, node);
+						},
+						dealDamage: false,
+						node: node
+					});
+				}
+			}
 
-				let hackyDrainMP = function (skillInfo: SkillInfo, skillName: SkillName) {
-					let [capturedManaCost, uhConsumption] = game.captureManaCostAndUHConsumption(Aspect.Other, skillInfo.baseManaCost);
+		));
 
-						if (!(skillName === SkillName.Paradox && game.getIceStacks() > 0)) {
-							game.resources.get(ResourceType.Mana).consume(capturedManaCost);
-						}
-						if (uhConsumption > 0) {
-							game.resources.get(ResourceType.UmbralHeart).consume(uhConsumption);
-						}
+		let hackyDrainMP = function (baseManaCost: number, skillName: SkillName) {
+			let [capturedManaCost, uhConsumption] = game.captureManaCostAndUHConsumption(Aspect.Other, baseManaCost);
 
-						if (game.resources.get(ResourceType.EtherKit).available(1)) { //ether kit available
-							if (game.resources.get(ResourceType.Mana).availableAmount() < 2000) {
-								//burn etherkit - add 5000 MP
-								game.resources.get(ResourceType.EtherKit).consume(1);
-								if (game.resources.get(ResourceType.EtherKit).availableAmount() === 0) {
-									game.resources.get(ResourceType.EtherKit).removeTimer();
-								}
-								game.resources.get(ResourceType.Mana).gain(5000);
+			if (!(skillName === SkillName.Paradox && game.getIceStacks() > 0)) {
+				game.resources.get(ResourceType.Mana).consume(capturedManaCost);
+			}
 
-							}
+			if (game.resources.get(ResourceType.EtherKit).available(1)) { //ether kit available
+				if (game.resources.get(ResourceType.Mana).availableAmount() < 2000) {
+					//burn etherkit - add 5000 MP
+					game.resources.get(ResourceType.EtherKit).consume(1);
+					if (game.resources.get(ResourceType.EtherKit).availableAmount() === 0) {
+						game.resources.get(ResourceType.EtherKit).removeTimer();
+					}
+					game.resources.get(ResourceType.Mana).gain(5000);
 
-						}
 				}
 
 			}
-		));
+		}
+
 
 		// Ether Kit
 		skillsList.set(SkillName.EtherKit, new Skill(SkillName.EtherKit,

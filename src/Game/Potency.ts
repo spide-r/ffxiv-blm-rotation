@@ -127,7 +127,7 @@ function getExternalBuffModifier(rsc: ResourceState){ //dervish, bravery, excell
 		mod *= 1.1;
 	}
 
-	if(rsc.get(ResourceType.FoMTick).available(1)){
+	if(rsc.get(ResourceType.FoM).available(1)){
 		mod *= 1.7; // WHOA MOMMA THAT'S A BIG BOY BUFF
 	}
 

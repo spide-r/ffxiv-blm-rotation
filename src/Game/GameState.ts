@@ -2,7 +2,7 @@ import {Aspect, Debug, ResourceType, SkillName, SkillReadyStatus, WarningType} f
 import {GameConfig} from "./GameConfig"
 import {StatsModifier} from "./StatsModifier";
 import {SkillApplicationCallbackInfo, SkillCaptureCallbackInfo, SkillsList} from "./Skills"
-import {CoolDown, CoolDownState, Event, LucidDreamingBuff, Resource, ResourceState} from "./Resources"
+import {CoolDown, CoolDownState, Event, FoMBuff, LucidDreamingBuff, Resource, ResourceState} from "./Resources"
 
 import {controller} from "../Controller/Controller";
 import {ActionNode} from "../Controller/Record";
@@ -81,8 +81,7 @@ export class GameState {
 		this.resources.set(ResourceType.HonoredSac, new Resource(ResourceType.HonoredSac, 1, 0));
 		this.resources.set(ResourceType.NobleEnds, new Resource(ResourceType.NobleEnds, 1, 0));
 
-		this.resources.set(ResourceType.FoMTimerDisplay, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
-		this.resources.set(ResourceType.FoMTick, new Resource(ResourceType.FoMTimerDisplay, 1, 0));
+		this.resources.set(ResourceType.FoM, new Resource(ResourceType.FoM, 1, 0));
 
 
 
@@ -180,6 +179,17 @@ export class GameState {
 					if (lucid.sourceSkill !== "(unknown)") msg += " (" + lucid.tickCount + "/7)";
 					msg += " (MP=" + mana.availableAmount() + ")";
 					controller.reportLucidTick(this.time, msg);
+				}
+			}
+			let FoM = this.resources.get(ResourceType.FoM) as FoMBuff;
+			if(FoM.available(1)){
+				FoM.tickCount++;
+				let manaToConsume = 1045;
+				game.resources.get(ResourceType.Mana).consume(manaToConsume); //lose 1045 MP per dot tick
+				if(game.resources.get(ResourceType.Mana).availableAmount() <= 0){  //oops, we ran out of mana - drop FoM
+					// if already has FoM applied; cancel the remaining ticks now.
+					FoM.consume(1);
+					FoM.removeTimer();
 				}
 			}
 			// queue the next tick

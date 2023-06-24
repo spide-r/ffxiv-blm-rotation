@@ -95,7 +95,7 @@ buffIcons.set(ResourceType.Excellence, require("./Asset/bozja/buffIcons/excellen
 buffIcons.set(ResourceType.Dervish, require("./Asset/bozja/buffIcons/dervish.png"));
 buffIcons.set(ResourceType.five_Bravery, require("./Asset/bozja/buffIcons/bravery.png"));
 buffIcons.set(ResourceType.ten_Bravery, require("./Asset/bozja/buffIcons/bravery.png"));
-buffIcons.set(ResourceType.FoMTimerDisplay, require("./Asset/bozja/buffIcons/font_of_magic.png"));
+buffIcons.set(ResourceType.FoM, require("./Asset/bozja/buffIcons/font_of_magic.png"));
 buffIcons.set(ResourceType.Chainspell, require("./Asset/bozja/buffIcons/chainspell.png"));
 buffIcons.set(ResourceType.MagicBurst, require("./Asset/bozja/buffIcons/magic_burst.png"));
 buffIcons.set(ResourceType.NobleEnds, require("./Asset/bozja/buffIcons/noble_ends.png"));
@@ -338,7 +338,7 @@ function BuffsDisplay(props) {
 	});
 
 	buffs.push({
-		rscType: ResourceType.FoMTimerDisplay,
+		rscType: ResourceType.FoM,
 		onSelf: true,
 		enabled: true,
 		stacks:1,

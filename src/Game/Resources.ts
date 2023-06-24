@@ -80,6 +80,14 @@ export class LucidDreamingBuff extends Resource {
 	}
 }
 
+export class FoMBuff extends Resource {
+	tickCount: number = 0;
+	sourceSkill: string = "(unknown)";
+	constructor(type: ResourceType, maxValue: number, initialValue: number) {
+		super(type, maxValue, initialValue);
+	}
+}
+
 export class CoolDown extends Resource {
 	readonly #cdPerStack: number;
 	#recastTimeScale: number;
@@ -299,7 +307,7 @@ resourceInfos.set(ResourceType.Dervish, { isCoolDown: false, defaultValue: 0, ma
 resourceInfos.set(ResourceType.ten_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 resourceInfos.set(ResourceType.uptime_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
 resourceInfos.set(ResourceType.five_Bravery, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 1});
-resourceInfos.set(ResourceType.FoMTimerDisplay, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 }); // buff display only
+resourceInfos.set(ResourceType.FoM, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 30 }); // buff display only
 resourceInfos.set(ResourceType.NobleEnds, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 15 });
 resourceInfos.set(ResourceType.HonoredSac, { isCoolDown: false, defaultValue: 0, maxValue: 1, maxTimeout: 15 });
 

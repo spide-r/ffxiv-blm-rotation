@@ -133,8 +133,7 @@ export const enum ResourceType {
 	five_Bravery = "5% Bravery", //10 min
 	uptime_Bravery = "Full Uptime 10% Bravery", //10 min
 	ten_Bravery = "10% Bravery", //60s
-	FoMTick = "Font of Magic Tick",
-	FoMTimerDisplay = "Font of Magic", // only for timer display
+	FoM = "Font of Magic", // only for timer display
 	Chainspell = "Chainspell",
 	MagicBurst = "Magic Burst",
 	FoS = "Font of Skill",

@@ -9,7 +9,7 @@ import {
 	SelectedStatisticsData
 } from "../Components/DamageStatistics";
 import {PotencyModifier, PotencyModifierType} from "../Game/Potency";
-//todo we'll need to add the new skills here
+
 const AFUISkills = new Set<SkillName>([
 	SkillName.Blizzard,
 	SkillName.Fire,
@@ -27,7 +27,8 @@ const AFUISkills = new Set<SkillName>([
 const enoSkills = new Set<SkillName>([
 	SkillName.Foul,
 	SkillName.Xenoglossy,
-	SkillName.Paradox
+	SkillName.Paradox,
+	SkillName.FlareStar
 ]);
 
 const abilities = new Set<SkillName>([
@@ -46,7 +47,26 @@ const abilities = new Set<SkillName>([
 	SkillName.LucidDreaming,
 	SkillName.Surecast,
 	SkillName.Tincture,
-	SkillName.Sprint
+	SkillName.Sprint,
+	SkillName.FoM,
+	SkillName.Chainspell,
+	SkillName.Excellence,
+	SkillName.Dervish,
+	SkillName.FoS,
+	SkillName.HonoredSac,
+	SkillName.NobleEnds,
+	SkillName.five_Bravery,
+	SkillName.full_uptime_bravery,
+	SkillName.ten_Bravery,
+	SkillName.Dispel,
+	SkillName.Percept,
+	SkillName.EtherKit,
+	SkillName.Elixir,
+	SkillName.Skirmisher,
+	SkillName.Reg_Skirmisher,
+	SkillName.Watcher,
+	SkillName.Gambler,
+	SkillName.Elder
 ]);
 
 type ExpandedNode = {
